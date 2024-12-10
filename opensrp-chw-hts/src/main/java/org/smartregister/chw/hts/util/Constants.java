@@ -6,7 +6,7 @@ public interface Constants {
     String ENCOUNTER_TYPE = "encounter_type";
     String STEP_ONE = "step1";
     String STEP_TWO = "step2";
-    String SKELETON_VISIT_GROUP = "hts_visit_group";
+    String Hts_VISIT_GROUP = "hts_visit_group";
 
 
     interface JSON_FORM_EXTRA {
@@ -16,34 +16,34 @@ public interface Constants {
     }
 
     interface EVENT_TYPE {
-        String SKELETON_ENROLLMENT = "Skeleton Enrollment";
-        String SKELETON_SERVICES = "Skeleton Services";
-        String SKELETON_FOLLOW_UP_VISIT = "Skeleton Follow-up Visit";
+        String HTS_ENROLLMENT = "Hts Enrollment";
+        String HTS_SERVICES = "Hts Services";
+        String HTS_FOLLOW_UP_VISIT = "Hts Follow-up Visit";
         String VOID_EVENT = "Void Event";
-        String CLOSE_SKELETON_SERVICE = "Close Skeleton Service";
+        String CLOSE_HTS_SERVICE = "Close Hts Service";
 
     }
 
     interface FORMS {
-        String SKELETON_REGISTRATION = "hts_enrollment";
-        String SKELETON_FOLLOW_UP_VISIT = "hts_followup_visit";
+        String Hts_REGISTRATION = "hts_enrollment";
+        String Hts_FOLLOW_UP_VISIT = "hts_followup_visit";
     }
 
-    interface SKELETON_FOLLOWUP_FORMS {
+    interface Hts_FOLLOWUP_FORMS {
         String MEDICAL_HISTORY = "hts_service_medical_history";
         String PHYSICAL_EXAMINATION = "hts_service_physical_examination";
         String HTS = "hts_service_hts";
     }
 
     interface TABLES {
-        String SKELETON_ENROLLMENT = "ec_hts_enrollment";
-        String SKELETON_SERVICE = "ec_hts_services";
+        String Hts_ENROLLMENT = "ec_hts_enrollment";
+        String Hts_SERVICE = "ec_hts_services";
     }
 
     interface ACTIVITY_PAYLOAD {
         String BASE_ENTITY_ID = "BASE_ENTITY_ID";
         String FAMILY_BASE_ENTITY_ID = "FAMILY_BASE_ENTITY_ID";
-        String SKELETON_FORM_NAME = "SKELETON_FORM_NAME";
+        String Hts_FORM_NAME = "Hts_FORM_NAME";
         String MEMBER_PROFILE_OBJECT = "MemberObject";
         String EDIT_MODE = "editMode";
         String PROFILE_TYPE = "profile_type";
@@ -56,15 +56,15 @@ public interface Constants {
     }
 
     interface CONFIGURATION {
-        String SKELETON_ENROLLMENT = "hts_enrollment";
+        String Hts_ENROLLMENT = "hts_enrollment";
     }
 
-    interface SKELETON_MEMBER_OBJECT {
+    interface Hts_MEMBER_OBJECT {
         String MEMBER_OBJECT = "memberObject";
     }
 
     interface PROFILE_TYPES {
-        String SKELETON_PROFILE = "hts_profile";
+        String Hts_PROFILE = "hts_profile";
     }
 
     interface VALUES {

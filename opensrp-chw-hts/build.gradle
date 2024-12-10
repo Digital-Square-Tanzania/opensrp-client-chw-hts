@@ -15,7 +15,7 @@ plugins {
     id 'maven-publish'
 }
 
-description = 'OpenSRP CHW SKELETON library'
+description = 'OpenSRP CHW HTS library'
 
 jacoco {
     toolVersion = "0.7.9"
@@ -220,7 +220,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:3.12.4'
     testImplementation 'org.robolectric:robolectric:4.3.1'
-    testImplementation project(path: ':opensrp-chw-skeleton')
+    testImplementation project(path: ':opensrp-chw-hts')
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
     androidTestImplementation 'androidx.annotation:annotation:1.0.0'

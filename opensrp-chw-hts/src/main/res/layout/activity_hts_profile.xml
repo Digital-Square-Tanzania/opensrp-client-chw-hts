@@ -26,7 +26,7 @@
                     android:id="@+id/collapsing_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:theme="@style/SkeletonTheme.AppBarOverlay.Light"
+                    android:theme="@style/HtsTheme.AppBarOverlay.Light"
                     app:contentInsetEnd="0dp"
                     app:contentInsetLeft="0dp"
                     app:contentInsetRight="0dp"

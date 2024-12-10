@@ -22,10 +22,10 @@ public class MemberObject implements Serializable {
     private String dob;
     private String relationalid;
     private String details;
-    private String dateChwSkeletonTest;
-    private String feverSkeletonChw;
+    private String dateChwHtsTest;
+    private String feverHtsChw;
     private String feverDuration;
-    private String dateHfSkeletonTest;
+    private String dateHfHtsTest;
     private Date htsTestDate;
     private String htsTreat;
     private String famLlin;
@@ -138,20 +138,20 @@ public class MemberObject implements Serializable {
         this.details = details;
     }
 
-    public String getDateChwSkeletonTest() {
-        return dateChwSkeletonTest;
+    public String getDateChwHtsTest() {
+        return dateChwHtsTest;
     }
 
-    public void setDateChwSkeletonTest(String dateChwSkeletonTest) {
-        this.dateChwSkeletonTest = dateChwSkeletonTest;
+    public void setDateChwHtsTest(String dateChwHtsTest) {
+        this.dateChwHtsTest = dateChwHtsTest;
     }
 
-    public String getFeverSkeletonChw() {
-        return feverSkeletonChw;
+    public String getFeverHtsChw() {
+        return feverHtsChw;
     }
 
-    public void setFeverSkeletonChw(String feverSkeletonChw) {
-        this.feverSkeletonChw = feverSkeletonChw;
+    public void setFeverHtsChw(String feverHtsChw) {
+        this.feverHtsChw = feverHtsChw;
     }
 
     public String getFeverDuration() {
@@ -162,27 +162,27 @@ public class MemberObject implements Serializable {
         this.feverDuration = feverDuration;
     }
 
-    public String getDateHfSkeletonTest() {
-        return dateHfSkeletonTest;
+    public String getDateHfHtsTest() {
+        return dateHfHtsTest;
     }
 
-    public void setDateHfSkeletonTest(String dateHfSkeletonTest) {
-        this.dateHfSkeletonTest = dateHfSkeletonTest;
+    public void setDateHfHtsTest(String dateHfHtsTest) {
+        this.dateHfHtsTest = dateHfHtsTest;
     }
 
-    public Date getSkeletonTestDate() {
+    public Date getHtsTestDate() {
         return htsTestDate;
     }
 
-    public void setSkeletonTestDate(Date htsTestDate) {
+    public void setHtsTestDate(Date htsTestDate) {
         this.htsTestDate = htsTestDate;
     }
 
-    public String getSkeletonTreat() {
+    public String getHtsTreat() {
         return htsTreat;
     }
 
-    public void setSkeletonTreat(String htsTreat) {
+    public void setHtsTreat(String htsTreat) {
         this.htsTreat = htsTreat;
     }
 
@@ -210,11 +210,11 @@ public class MemberObject implements Serializable {
         this.llinCondition = llinCondition;
     }
 
-    public String getSkeletonEduChw() {
+    public String getHtsEduChw() {
         return htsEduChw;
     }
 
-    public void setSkeletonEduChw(String htsEduChw) {
+    public void setHtsEduChw(String htsEduChw) {
         this.htsEduChw = htsEduChw;
     }
 
@@ -307,11 +307,11 @@ public class MemberObject implements Serializable {
         this.primaryCareGiverPhone = primaryCareGiverPhone;
     }
 
-    public String getSkeletonFollowUpDate() {
+    public String getHtsFollowUpDate() {
         return htsFollowUpDate;
     }
 
-    public void setSkeletonFollowUpDate(String htsFollowUpDate) {
+    public void setHtsFollowUpDate(String htsFollowUpDate) {
         this.htsFollowUpDate = htsFollowUpDate;
     }
 

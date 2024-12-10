@@ -138,7 +138,7 @@
             android:visibility="gone" />
 
         <RelativeLayout
-            android:id="@+id/rlSkeletonPositiveDate"
+            android:id="@+id/rlHtsPositiveDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_positive_date_row"
@@ -171,7 +171,7 @@
                 android:layout_toLeftOf="@+id/iv_positive_date_arrow"
                 android:layout_toRightOf="@+id/cancel_image"
                 android:gravity="left|center_horizontal"
-                android:text="Skeleton positive 12 Jan 2018"
+                android:text="Hts positive 12 Jan 2018"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@android:color/black" />
 
@@ -193,7 +193,7 @@
             android:id="@+id/view_most_due_overdue_row"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_below="@+id/rlSkeletonPositiveDate"
+            android:layout_below="@+id/rlHtsPositiveDate"
             android:background="@color/light_grey"
             android:visibility="visible" />
 

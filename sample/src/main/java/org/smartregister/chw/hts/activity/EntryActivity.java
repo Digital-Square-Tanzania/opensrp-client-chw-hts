@@ -7,7 +7,7 @@ import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
 
-import org.smartregister.chw.hts.contract.BaseSkeletonVisitContract;
+import org.smartregister.chw.hts.contract.BaseHtsVisitContract;
 import org.smartregister.chw.hts.domain.MemberObject;
 import org.smartregister.chw.hts.util.DBConstants;
 import org.smartregister.chw.hts.R;
@@ -19,7 +19,7 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-public class EntryActivity extends SecuredActivity implements View.OnClickListener, BaseSkeletonVisitContract.VisitView {
+public class EntryActivity extends SecuredActivity implements View.OnClickListener, BaseHtsVisitContract.VisitView {
     private static MemberObject htsMemberObject;
 
     public static MemberObject getSampleMember() {
@@ -81,13 +81,13 @@ public class EntryActivity extends SecuredActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.hts_activity:
-                startActivity(new Intent(this, SkeletonRegisterActivity.class));
+                startActivity(new Intent(this, HtsRegisterActivity.class));
                 break;
             case R.id.hts_home_visit:
-                SkeletonServiceActivity.startSkeletonVisitActivity(this, "12345", true);
+                HtsServiceActivity.startHtsVisitActivity(this, "12345", true);
                 break;
             case R.id.hts_profile:
-                SkeletonMemberProfileActivity.startMe(this, "12345");
+                HtsMemberProfileActivity.startMe(this, "12345");
                 break;
             default:
                 break;

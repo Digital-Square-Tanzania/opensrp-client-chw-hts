@@ -47,11 +47,11 @@
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="org.smartregister.chw.hts.activity.SkeletonMemberProfileActivity"
+            android:name="org.smartregister.chw.hts.activity.HtsMemberProfileActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="org.smartregister.chw.hts.activity.SkeletonServiceActivity"
+            android:name="org.smartregister.chw.hts.activity.HtsServiceActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

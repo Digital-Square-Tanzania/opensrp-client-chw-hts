@@ -35,7 +35,7 @@ public class VisitUtils {
     public static List<Visit> getVisits(String memberID, String... eventTypes) {
 
 
-        List<Visit> visits = (eventTypes != null && eventTypes.length > 0) ? getVisitsOnly(memberID, eventTypes[0]) : getVisitsOnly(memberID, Constants.EVENT_TYPE.SKELETON_ENROLLMENT);
+        List<Visit> visits = (eventTypes != null && eventTypes.length > 0) ? getVisitsOnly(memberID, eventTypes[0]) : getVisitsOnly(memberID, Constants.EVENT_TYPE.HTS_ENROLLMENT);
 
         return visits;
     }
@@ -96,7 +96,7 @@ public class VisitUtils {
                 if (StringUtils.isBlank(baseEvent.getFormSubmissionId()))
                     baseEvent.setFormSubmissionId(UUID.randomUUID().toString());
 
-                baseEvent.addDetails(Constants.SKELETON_VISIT_GROUP, visitGroupId);
+                baseEvent.addDetails(Constants.Hts_VISIT_GROUP, visitGroupId);
 
                 AllSharedPreferences allSharedPreferences = HtsLibrary.getInstance().context().allSharedPreferences();
                 NCUtils.addEvent(allSharedPreferences, baseEvent);

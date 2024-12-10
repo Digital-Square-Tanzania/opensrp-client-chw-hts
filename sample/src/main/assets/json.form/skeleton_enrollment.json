@@ -1,6 +1,6 @@
 {
   "count": "1",
-  "encounter_type": "Skeleton Enrollment",
+  "encounter_type": "HTS Enrollment",
   "entity_id": "",
   "metadata": {
     "start": {
@@ -42,7 +42,7 @@
     "encounter_location": ""
   },
   "step1": {
-    "title": "Skeleton",
+    "title": "HTS",
     "fields": [
       {
         "key": "service_delivery_approach",
@@ -82,7 +82,7 @@
         "mask": "111890-1 #### 2023",
         "mask_hint": "123456789123",
         "allowed_chars": "0123456789",
-        "hint": "SKELETON Client Id e.g 111890-1 001 2023",
+        "hint": "Hts Client Id e.g 111890-1 001 2023",
         "edit_type": "number",
         "v_max_length": {
           "value": "18",
@@ -91,7 +91,7 @@
         },
         "v_regex": {
           "value": "^\\d{6}-\\d{1} \\d{4} \\d{4}$",
-          "err": "Skeleton Client ID should be of the format (111890-1 0001 2023)"
+          "err": "HTS Client ID should be of the format (111890-1 0001 2023)"
         },
         "v_required": {
           "value": true,

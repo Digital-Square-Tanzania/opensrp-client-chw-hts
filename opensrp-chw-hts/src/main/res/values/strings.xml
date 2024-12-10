@@ -2,7 +2,7 @@
     <string name="app_name" translatable="false">hts</string>
     <string name="error_unable_to_start_form">An error occurred when starting the form</string>
     <string name="error_unable_to_save_form">An error occurred when saving the form</string>
-    <string name="hts">Skeleton</string>
+    <string name="hts">Hts</string>
     <string name="add_member">Add Member</string>
     <string name="sort">Sort</string>
     <string name="home">Home</string>
@@ -11,16 +11,16 @@
     <string name="job_aids">Job Aids</string>
     <string name="saving_dialog_title">Saving</string>
     <string name="interpunct" translatable="false">\u00b7</string>
-    <string name="record_hts">Provide SKELETON Services</string>
+    <string name="record_hts">Provide Hts Services</string>
     <string name="manual_process_visit">Process Visit</string>
     <string name="continue_visit">Continue</string>
     <string name="edit_visit">Edit</string>
     <string name="hts_visit_in_progress">Visit In Progress</string>
-    <string name="hts_service_visit_in_progress">Skeleton Service In Progress</string>
-    <string name="hts_procedure_visit_in_progress">Skeleton Procedure In Progress</string>
-    <string name="hts_visit_conducted">SKELETON Visit Conducted</string>
+    <string name="hts_service_visit_in_progress">Hts Service In Progress</string>
+    <string name="hts_procedure_visit_in_progress">Hts Procedure In Progress</string>
+    <string name="hts_visit_conducted">Hts Visit Conducted</string>
 
-    <string name="hts_profile">SKELETON Profile</string>
+    <string name="hts_profile">Hts Profile</string>
 
     <string name="hts_medical_history">Medical History</string>
     <string name="hts_followup_visit">Follow Up Visit</string>
@@ -29,7 +29,7 @@
 
     <string name="optional">Optional</string>
     <string name="error_unable_save_visit">Unable to save visit</string>
-    <string name="return_to_previous_page">Return all Skeleton Clients</string>
+    <string name="return_to_previous_page">Return all Hts Clients</string>
     <string name="last_visit_40_days_ago">Last visit %1$s ago</string>
     <string name="view_medical_history">View medical history</string>
     <string name="call_no_number_provided">(no number provided)</string>
@@ -43,9 +43,9 @@
     <string name="vaccine_service_upcoming"><![CDATA[%1$s <font color=#7f7f7f>upcoming (%2$s)</font></b>]]></string>
     <string name="vaccine_service_overdue"><![CDATA[%1$s <font color=#f04646>overdue (%2$s)</font></b>]]></string>
     <string name="vaccine_service_due"><![CDATA[%1$s <font color=#000000>due (%2$s)</font></b>]]></string>
-    <string name="call_hts_client">Skeleton Client</string>
+    <string name="call_hts_client">Hts Client</string>
     <string name="head_of_family">Head of family</string>
-    <string name="hts_client">Skeleton Client</string>
+    <string name="hts_client">Hts Client</string>
     <string name="hts_contraindication">Clear Contraindication first, to proceed with MC procedure</string>
     <string name="copy_to_clipboard">Copy to clipboard</string>
     <string name="copied_phone_number">PhoneNumber copied to clipboard</string>
@@ -62,14 +62,14 @@
     <string name="call_pnc_client">PNC Client</string>
     <string name="call_head_of_family">Call Head of Family</string>
     <string name="view_hts_test_result">View hts test results</string>
-    <string name="hts_positive">Skeleton positive</string>
+    <string name="hts_positive">Hts positive</string>
     <string name="anc_string">ANC</string>
     <string name="pnc_string">PNC</string>
     <string name="visit_done">Visit Done</string>
     <string name="edit">EDIT</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
-    <string name="return_to_hts_clients">Return to SKELETON Clients</string>
+    <string name="return_to_hts_clients">Return to Hts Clients</string>
     <string name="number_not_filled">client phone number, not filled</string>
 
 </resources>
