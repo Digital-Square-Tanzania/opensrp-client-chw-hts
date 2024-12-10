@@ -9,7 +9,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "org.smartregister.chw.skeleton_sample"
+        applicationId "org.smartregister.chw.hts_sample"
         minSdkVersion androidMinSdkVersion
         targetSdkVersion androidTargetSdkVersion
         versionCode 1
@@ -136,8 +136,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
-
-    implementation project(':opensrp-chw-skeleton')
+    implementation project(':opensrp-chw-hts')
 
 
     implementation 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'

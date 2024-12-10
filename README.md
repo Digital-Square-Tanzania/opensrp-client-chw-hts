@@ -1,4 +1,4 @@
 
-# opensrp-client-chw-skeleton
+# opensrp-client-chw-hts
 OpenSRP client SKELETON module library
 

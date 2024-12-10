@@ -181,14 +181,14 @@
         "calculation": {
           "rules-engine": {
             "ex-rules": {
-              "rules-file": "skeleton_physcial_exam_calculation.yml"
+              "rules-file": "hts_physcial_exam_calculation.yml"
             }
           }
         },
         "relevance": {
           "rules-engine": {
             "ex-rules": {
-              "rules-file": "skeleton_physcial_exam_relevance.yml"
+              "rules-file": "hts_physcial_exam_relevance.yml"
             }
           }
         }
@@ -331,7 +331,7 @@
         "relevance": {
           "rules-engine": {
             "ex-rules": {
-              "rules-file": "skeleton_physcial_exam_relevance.yml"
+              "rules-file": "hts_physcial_exam_relevance.yml"
             }
           }
         }
@@ -347,7 +347,7 @@
         "relevance": {
           "rules-engine": {
             "ex-rules": {
-              "rules-file": "skeleton_physcial_exam_relevance.yml"
+              "rules-file": "hts_physcial_exam_relevance.yml"
             }
           }
         }
@@ -649,7 +649,7 @@
         "relevance": {
           "rules-engine": {
             "ex-rules": {
-              "rules-file": "skeleton_physcial_exam_relevance.yml"
+              "rules-file": "hts_physcial_exam_relevance.yml"
             }
           }
         }
@@ -663,7 +663,7 @@
         "calculation": {
           "rules-engine": {
             "ex-rules": {
-              "rules-file": "skeleton_physcial_exam_calculation.yml"
+              "rules-file": "hts_physcial_exam_calculation.yml"
             }
           }
         }

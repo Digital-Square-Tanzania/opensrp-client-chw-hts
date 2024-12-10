@@ -346,7 +346,7 @@
         "relevance": {
           "rules-engine": {
             "ex-rules": {
-              "rules-file": "skeleton_medical_history.yml"
+              "rules-file": "hts_medical_history.yml"
             }
           }
         }
@@ -362,7 +362,7 @@
         "relevance": {
           "rules-engine": {
             "ex-rules": {
-              "rules-file": "skeleton_medical_history.yml"
+              "rules-file": "hts_medical_history.yml"
             }
           }
         }
@@ -378,7 +378,7 @@
         "relevance": {
           "rules-engine": {
             "ex-rules": {
-              "rules-file": "skeleton_medical_history.yml"
+              "rules-file": "hts_medical_history.yml"
             }
           }
         }

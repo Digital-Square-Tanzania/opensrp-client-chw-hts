@@ -74,10 +74,10 @@
         }
       },
       {
-        "key": "skeleton_client_id",
+        "key": "hts_client_id",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "skeleton_client_id",
+        "openmrs_entity_id": "hts_client_id",
         "type": "mask_edit_text",
         "mask": "111890-1 #### 2023",
         "mask_hint": "123456789123",
@@ -87,7 +87,7 @@
         "v_max_length": {
           "value": "18",
           "is_fixed_size": "true",
-          "err": "Please enter a valid skeleton client id"
+          "err": "Please enter a valid hts client id"
         },
         "v_regex": {
           "value": "^\\d{6}-\\d{1} \\d{4} \\d{4}$",
@@ -95,7 +95,7 @@
         },
         "v_required": {
           "value": true,
-          "err": "Please enter a valid skeleton client ID"
+          "err": "Please enter a valid hts client ID"
         }
       },
       {
@@ -197,7 +197,7 @@
         "calculation": {
           "rules-engine": {
             "ex-rules": {
-              "rules-file": "skeleton_enrollment_calculation.yml"
+              "rules-file": "hts_enrollment_calculation.yml"
             }
           }
         }
