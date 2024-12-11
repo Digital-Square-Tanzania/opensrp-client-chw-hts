@@ -68,7 +68,8 @@
 
     <string name="hts_medical_history">Historia ya kitibabu</string>
     <string name="hts_physical_examination">Uchunguzi wa kimwili</string>
-    <string name="hts_hts">Huduma za upimaji wa VVU</string>
+
+    <string name="hts_visit_type_action_title">Aina ya tembeleo</string>
     <string name="hts_contraindication">Tatua vizuizi kwanza , kuendelea na upasuaji wa tohara</string>
     <string name="no_phone_number">Hakuna nambari ya simu</string>
     <string name="return_to_hts_clients">Rudi kwenye wateja wote wa tohara</string>

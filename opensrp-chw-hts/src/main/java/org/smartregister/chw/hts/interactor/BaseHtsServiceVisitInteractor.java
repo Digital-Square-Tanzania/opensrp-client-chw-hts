@@ -8,7 +8,7 @@ import androidx.annotation.VisibleForTesting;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.hts.R;
 import org.smartregister.chw.hts.HtsLibrary;
-import org.smartregister.chw.hts.actionhelper.HtsActionHelper;
+import org.smartregister.chw.hts.actionhelper.VisitTypeActionHelper;
 import org.smartregister.chw.hts.actionhelper.HtsMedicalHistoryActionHelper;
 import org.smartregister.chw.hts.contract.BaseHtsVisitContract;
 import org.smartregister.chw.hts.domain.MemberObject;
@@ -64,7 +64,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             try {
                 evaluateHtsMedicalHistory(details);
                 evaluateHtsPhysicalExam(details);
-                evaluateHtsHTS(details);
+                evaluateVisitType(details);
 
             } catch (BaseHtsVisitAction.ValidationException e) {
                 Timber.e(e);
@@ -101,16 +101,15 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         actionList.put(context.getString(R.string.hts_physical_examination), action);
     }
 
-    private void evaluateHtsHTS(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
-
-        HtsActionHelper actionHelper = new HtsActionHelper(mContext, memberObject);
-        BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_hts))
+    private void evaluateVisitType(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
+        VisitTypeActionHelper actionHelper = new VisitTypeActionHelper(mContext, memberObject);
+        BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_visit_type_action_title))
                 .withOptional(true)
                 .withDetails(details)
                 .withHelper(actionHelper)
-                .withFormName(Constants.Hts_FOLLOWUP_FORMS.HTS)
+                .withFormName(Constants.FORMS.HTS_VISIT_TYPE)
                 .build();
-        actionList.put(context.getString(R.string.hts_hts), action);
+        actionList.put(context.getString(R.string.hts_visit_type_action_title), action);
     }
 
     @Override
@@ -135,7 +134,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             if (StringUtils.isNotBlank(medical_history)) {
                 try {
                     evaluateHtsPhysicalExam(details);
-                    evaluateHtsHTS(details);
+                    evaluateVisitType(details);
                 } catch (BaseHtsVisitAction.ValidationException e) {
                     e.printStackTrace();
                 }
@@ -156,7 +155,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         public String postProcess(String s) {
             if (StringUtils.isNotBlank(medical_history)) {
                 try {
-                    evaluateHtsHTS(details);
+                    evaluateVisitType(details);
                 } catch (BaseHtsVisitAction.ValidationException e) {
                     e.printStackTrace();
                 }

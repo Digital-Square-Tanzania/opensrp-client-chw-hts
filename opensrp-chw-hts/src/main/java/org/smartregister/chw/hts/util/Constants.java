@@ -25,8 +25,8 @@ public interface Constants {
     }
 
     interface FORMS {
-        String Hts_REGISTRATION = "hts_enrollment";
-        String Hts_FOLLOW_UP_VISIT = "hts_followup_visit";
+        String HTS_ENROLLMENT = "hts_enrollment";
+        String HTS_VISIT_TYPE = "hts_visit_type";
     }
 
     interface Hts_FOLLOWUP_FORMS {
