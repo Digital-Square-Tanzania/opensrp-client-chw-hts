@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.hts.R;
 import org.smartregister.chw.hts.HtsLibrary;
 import org.smartregister.chw.hts.actionhelper.HivTestingActionHelper;
+import org.smartregister.chw.hts.actionhelper.PostTestServicesActionHelper;
 import org.smartregister.chw.hts.actionhelper.PreTestServicesActionHelper;
 import org.smartregister.chw.hts.actionhelper.VisitTypeActionHelper;
 import org.smartregister.chw.hts.contract.BaseHtsVisitContract;
@@ -65,6 +66,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                 evaluateVisitType(details);
                 evaluatePreTestServices(details);
                 evaluateHivTestingServices(details);
+                evaluatePostTestServices(details);
             } catch (BaseHtsVisitAction.ValidationException e) {
                 Timber.e(e);
             }
@@ -106,6 +108,17 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                 .withFormName(Constants.FORMS.HTS_HIV_TESTING_SERVICES)
                 .build();
         actionList.put(context.getString(R.string.hts_hiv_testing_action_title), action);
+    }
+
+    private void evaluatePostTestServices(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
+        PostTestServicesActionHelper actionHelper = new PostTestServicesActionHelper(mContext, memberObject);
+        BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_post_test_services_action_title))
+                .withOptional(true)
+                .withDetails(details)
+                .withHelper(actionHelper)
+                .withFormName(Constants.FORMS.HTS_POST_TEST_SERVICES)
+                .build();
+        actionList.put(context.getString(R.string.hts_post_test_services_action_title), action);
     }
 
     @Override
