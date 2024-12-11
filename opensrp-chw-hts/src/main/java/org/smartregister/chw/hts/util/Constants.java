@@ -30,6 +30,7 @@ public interface Constants {
         String HTS_PRE_TEST_SERVICES = "hts_pre_test_services";
         String HTS_HIV_TESTING_SERVICES = "hts_hiv_testing";
         String HTS_POST_TEST_SERVICES = "hts_post_test_services";
+        String HTS_DNA_PCR_SAMPLE_COLLECTION = "hts_dna_pcr_sample_collection";
     }
 
     interface Hts_FOLLOWUP_FORMS {

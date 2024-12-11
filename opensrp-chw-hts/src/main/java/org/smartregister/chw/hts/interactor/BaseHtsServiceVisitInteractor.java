@@ -8,6 +8,7 @@ import androidx.annotation.VisibleForTesting;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.hts.R;
 import org.smartregister.chw.hts.HtsLibrary;
+import org.smartregister.chw.hts.actionhelper.DnaPcrSampleCollectionActionHelper;
 import org.smartregister.chw.hts.actionhelper.HivTestingActionHelper;
 import org.smartregister.chw.hts.actionhelper.PostTestServicesActionHelper;
 import org.smartregister.chw.hts.actionhelper.PreTestServicesActionHelper;
@@ -67,6 +68,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                 evaluatePreTestServices(details);
                 evaluateHivTestingServices(details);
                 evaluatePostTestServices(details);
+                evaluateDnaPcrSampleCollection(details);
             } catch (BaseHtsVisitAction.ValidationException e) {
                 Timber.e(e);
             }
@@ -119,6 +121,16 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                 .withFormName(Constants.FORMS.HTS_POST_TEST_SERVICES)
                 .build();
         actionList.put(context.getString(R.string.hts_post_test_services_action_title), action);
+    }
+    private void evaluateDnaPcrSampleCollection(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
+        DnaPcrSampleCollectionActionHelper actionHelper = new DnaPcrSampleCollectionActionHelper(mContext, memberObject);
+        BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_dna_pcr_sample_collection_action_title))
+                .withOptional(true)
+                .withDetails(details)
+                .withHelper(actionHelper)
+                .withFormName(Constants.FORMS.HTS_DNA_PCR_SAMPLE_COLLECTION)
+                .build();
+        actionList.put(context.getString(R.string.hts_dna_pcr_sample_collection_action_title), action);
     }
 
     @Override

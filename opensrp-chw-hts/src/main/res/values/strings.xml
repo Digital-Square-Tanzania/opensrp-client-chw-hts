@@ -29,6 +29,7 @@
     <string name="hts_pre_test_services_action_title">Pre-Test Services</string>
     <string name="hts_hiv_testing_action_title">HIV Testing</string>
     <string name="hts_post_test_services_action_title">Post-Test Services</string>
+    <string name="hts_dna_pcr_sample_collection_action_title">DNA-PCR Sample Collection</string>
 
     <string name="optional">Optional</string>
     <string name="error_unable_save_visit">Unable to save visit</string>
