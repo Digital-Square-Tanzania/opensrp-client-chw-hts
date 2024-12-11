@@ -8,10 +8,9 @@ import androidx.annotation.VisibleForTesting;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.hts.R;
 import org.smartregister.chw.hts.HtsLibrary;
+import org.smartregister.chw.hts.actionhelper.PreTestServicesActionHelper;
 import org.smartregister.chw.hts.actionhelper.VisitTypeActionHelper;
-import org.smartregister.chw.hts.actionhelper.HtsMedicalHistoryActionHelper;
 import org.smartregister.chw.hts.contract.BaseHtsVisitContract;
-import org.smartregister.chw.hts.domain.MemberObject;
 import org.smartregister.chw.hts.domain.VisitDetail;
 import org.smartregister.chw.hts.model.BaseHtsVisitAction;
 import org.smartregister.chw.hts.util.AppExecutors;
@@ -62,10 +61,8 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         this.callBack = callBack;
         final Runnable runnable = () -> {
             try {
-                evaluateHtsMedicalHistory(details);
-                evaluateHtsPhysicalExam(details);
                 evaluateVisitType(details);
-
+                evaluatePreTestServices(details);
             } catch (BaseHtsVisitAction.ValidationException e) {
                 Timber.e(e);
             }
@@ -74,31 +71,6 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         };
 
         appExecutors.diskIO().execute(runnable);
-    }
-
-    private void evaluateHtsMedicalHistory(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
-
-        HtsMedicalHistoryActionHelper actionHelper = new HtsMedicalHistory(mContext, memberObject);
-        BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_medical_history))
-                .withOptional(true)
-                .withDetails(details)
-                .withHelper(actionHelper)
-                .withFormName(Constants.Hts_FOLLOWUP_FORMS.MEDICAL_HISTORY)
-                .build();
-        actionList.put(context.getString(R.string.hts_medical_history), action);
-
-    }
-
-    private void evaluateHtsPhysicalExam(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
-
-        HtsPhysicalExamActionHelper actionHelper = new HtsPhysicalExamActionHelper(mContext, memberObject);
-        BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_physical_examination))
-                .withOptional(true)
-                .withDetails(details)
-                .withHelper(actionHelper)
-                .withFormName(Constants.Hts_FOLLOWUP_FORMS.PHYSICAL_EXAMINATION)
-                .build();
-        actionList.put(context.getString(R.string.hts_physical_examination), action);
     }
 
     private void evaluateVisitType(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
@@ -112,6 +84,17 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         actionList.put(context.getString(R.string.hts_visit_type_action_title), action);
     }
 
+    private void evaluatePreTestServices(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
+        PreTestServicesActionHelper actionHelper = new PreTestServicesActionHelper(mContext, memberObject);
+        BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_pre_test_services_action_title))
+                .withOptional(true)
+                .withDetails(details)
+                .withHelper(actionHelper)
+                .withFormName(Constants.FORMS.HTS_PRE_TEST_SERVICES)
+                .build();
+        actionList.put(context.getString(R.string.hts_pre_test_services_action_title), action);
+    }
+
     @Override
     protected String getEncounterType() {
         return Constants.EVENT_TYPE.HTS_SERVICES;
@@ -119,51 +102,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
 
     @Override
     protected String getTableName() {
-        return Constants.TABLES.Hts_SERVICE;
-    }
-
-    private class HtsMedicalHistory extends HtsMedicalHistoryActionHelper {
-
-
-        public HtsMedicalHistory(Context context, MemberObject memberObject) {
-            super(context, memberObject);
-        }
-
-        @Override
-        public String postProcess(String s) {
-            if (StringUtils.isNotBlank(medical_history)) {
-                try {
-                    evaluateHtsPhysicalExam(details);
-                    evaluateVisitType(details);
-                } catch (BaseHtsVisitAction.ValidationException e) {
-                    e.printStackTrace();
-                }
-            }
-            new AppExecutors().mainThread().execute(() -> callBack.preloadActions(actionList));
-            return super.postProcess(s);
-        }
-
-    }
-
-    private class HtsPhysicalExamActionHelper extends org.smartregister.chw.hts.actionhelper.HtsPhysicalExamActionHelper {
-
-        public HtsPhysicalExamActionHelper(Context context, MemberObject memberObject) {
-            super(context, memberObject);
-        }
-
-        @Override
-        public String postProcess(String s) {
-            if (StringUtils.isNotBlank(medical_history)) {
-                try {
-                    evaluateVisitType(details);
-                } catch (BaseHtsVisitAction.ValidationException e) {
-                    e.printStackTrace();
-                }
-            }
-            new AppExecutors().mainThread().execute(() -> callBack.preloadActions(actionList));
-            return super.postProcess(s);
-        }
-
+        return Constants.TABLES.HTS_SERVICES;
     }
 
 }

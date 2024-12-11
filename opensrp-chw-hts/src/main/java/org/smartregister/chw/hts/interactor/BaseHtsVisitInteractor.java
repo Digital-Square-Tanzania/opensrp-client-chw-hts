@@ -378,6 +378,6 @@ public class BaseHtsVisitInteractor implements BaseHtsVisitContract.Interactor {
     }
 
     protected String getTableName() {
-        return Constants.TABLES.Hts_ENROLLMENT;
+        return Constants.TABLES.HTS_ENROLLMENT;
     }
 }

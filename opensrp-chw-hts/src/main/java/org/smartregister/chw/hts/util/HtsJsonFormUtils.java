@@ -91,9 +91,9 @@ public class HtsJsonFormUtils extends org.smartregister.util.JsonFormUtils {
         String encounter_type = jsonForm.optString(Constants.JSON_FORM_EXTRA.ENCOUNTER_TYPE);
 
         if (Constants.EVENT_TYPE.HTS_ENROLLMENT.equals(encounter_type)) {
-            encounter_type = Constants.TABLES.Hts_ENROLLMENT;
+            encounter_type = Constants.TABLES.HTS_ENROLLMENT;
         } else if (Constants.EVENT_TYPE.HTS_SERVICES.equals(encounter_type)) {
-            encounter_type = Constants.TABLES.Hts_SERVICE;
+            encounter_type = Constants.TABLES.HTS_SERVICES;
         }
         return org.smartregister.util.JsonFormUtils.createEvent(fields, getJSONObject(jsonForm, METADATA), formTag(allSharedPreferences), entityId, getString(jsonForm, ENCOUNTER_TYPE), encounter_type);
     }

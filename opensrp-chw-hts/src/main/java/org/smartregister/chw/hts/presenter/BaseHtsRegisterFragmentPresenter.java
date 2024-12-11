@@ -97,7 +97,7 @@ public class BaseHtsRegisterFragmentPresenter implements HtsRegisterFragmentCont
 
     @Override
     public String getMainTable() {
-        return Constants.TABLES.Hts_ENROLLMENT;
+        return Constants.TABLES.HTS_ENROLLMENT;
     }
 
     @Override

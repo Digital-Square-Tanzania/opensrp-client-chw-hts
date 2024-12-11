@@ -27,6 +27,7 @@ public interface Constants {
     interface FORMS {
         String HTS_ENROLLMENT = "hts_enrollment";
         String HTS_VISIT_TYPE = "hts_visit_type";
+        String HTS_PRE_TEST_SERVICES = "hts_pre_test_services";
     }
 
     interface Hts_FOLLOWUP_FORMS {
@@ -36,8 +37,8 @@ public interface Constants {
     }
 
     interface TABLES {
-        String Hts_ENROLLMENT = "ec_hts_enrollment";
-        String Hts_SERVICE = "ec_hts_services";
+        String HTS_ENROLLMENT = "ec_hts_enrollment";
+        String HTS_SERVICES = "ec_hts_services";
     }
 
     interface ACTIVITY_PAYLOAD {
