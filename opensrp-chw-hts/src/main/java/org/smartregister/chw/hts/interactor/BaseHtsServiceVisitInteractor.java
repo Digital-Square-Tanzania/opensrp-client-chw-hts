@@ -8,6 +8,7 @@ import androidx.annotation.VisibleForTesting;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.hts.R;
 import org.smartregister.chw.hts.HtsLibrary;
+import org.smartregister.chw.hts.actionhelper.HivTestingActionHelper;
 import org.smartregister.chw.hts.actionhelper.PreTestServicesActionHelper;
 import org.smartregister.chw.hts.actionhelper.VisitTypeActionHelper;
 import org.smartregister.chw.hts.contract.BaseHtsVisitContract;
@@ -63,6 +64,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             try {
                 evaluateVisitType(details);
                 evaluatePreTestServices(details);
+                evaluateHivTestingServices(details);
             } catch (BaseHtsVisitAction.ValidationException e) {
                 Timber.e(e);
             }
@@ -93,6 +95,17 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                 .withFormName(Constants.FORMS.HTS_PRE_TEST_SERVICES)
                 .build();
         actionList.put(context.getString(R.string.hts_pre_test_services_action_title), action);
+    }
+
+    private void evaluateHivTestingServices(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
+        HivTestingActionHelper actionHelper = new HivTestingActionHelper(mContext, memberObject);
+        BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_hiv_testing_action_title))
+                .withOptional(true)
+                .withDetails(details)
+                .withHelper(actionHelper)
+                .withFormName(Constants.FORMS.HTS_HIV_TESTING_SERVICES)
+                .build();
+        actionList.put(context.getString(R.string.hts_hiv_testing_action_title), action);
     }
 
     @Override

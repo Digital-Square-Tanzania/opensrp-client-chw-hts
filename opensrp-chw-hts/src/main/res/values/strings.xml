@@ -27,6 +27,7 @@
     <string name="hts_physical_examination">Physical Examination</string>
     <string name="hts_visit_type_action_title">Visit Type</string>
     <string name="hts_pre_test_services_action_title">Pre-Test Services</string>
+    <string name="hts_hiv_testing_action_title">HIV Testing</string>
 
     <string name="optional">Optional</string>
     <string name="error_unable_save_visit">Unable to save visit</string>

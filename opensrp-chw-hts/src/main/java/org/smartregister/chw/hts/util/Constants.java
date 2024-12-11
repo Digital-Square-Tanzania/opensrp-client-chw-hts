@@ -28,6 +28,7 @@ public interface Constants {
         String HTS_ENROLLMENT = "hts_enrollment";
         String HTS_VISIT_TYPE = "hts_visit_type";
         String HTS_PRE_TEST_SERVICES = "hts_pre_test_services";
+        String HTS_HIV_TESTING_SERVICES = "hts_hiv_testing";
     }
 
     interface Hts_FOLLOWUP_FORMS {
