@@ -170,11 +170,20 @@ allprojects {
                 password = githubProperties['gpr.key'] ?: System.getenv("GITHUB_TOKEN")
             }
         }
+
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/Digital-Square-Tanzania/opensrp-client-core.git")
+            credentials {
+                username = githubProperties['gpr.usr'] ?: System.getenv("GITHUB_ACTOR")
+                password = githubProperties['gpr.key'] ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
     }
 }
 
 dependencies {
-    implementation('org.smartregister:opensrp-client-core:1.11.3-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-core:1.16.8-NACP-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.google.guava', module: 'guava'
