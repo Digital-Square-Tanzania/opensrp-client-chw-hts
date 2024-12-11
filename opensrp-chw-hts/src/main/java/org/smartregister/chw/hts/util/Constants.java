@@ -31,12 +31,7 @@ public interface Constants {
         String HTS_HIV_TESTING_SERVICES = "hts_hiv_testing";
         String HTS_POST_TEST_SERVICES = "hts_post_test_services";
         String HTS_DNA_PCR_SAMPLE_COLLECTION = "hts_dna_pcr_sample_collection";
-    }
-
-    interface Hts_FOLLOWUP_FORMS {
-        String MEDICAL_HISTORY = "hts_service_medical_history";
-        String PHYSICAL_EXAMINATION = "hts_service_physical_examination";
-        String HTS = "hts_service_hts";
+        String HTS_LINKAGE_TO_PREVENTION_SERVICES = "hts_linkage_to_prevention_services";
     }
 
     interface TABLES {

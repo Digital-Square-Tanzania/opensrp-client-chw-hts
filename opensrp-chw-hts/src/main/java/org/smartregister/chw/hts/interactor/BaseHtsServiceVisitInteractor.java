@@ -10,6 +10,7 @@ import org.smartregister.chw.hts.R;
 import org.smartregister.chw.hts.HtsLibrary;
 import org.smartregister.chw.hts.actionhelper.DnaPcrSampleCollectionActionHelper;
 import org.smartregister.chw.hts.actionhelper.HivTestingActionHelper;
+import org.smartregister.chw.hts.actionhelper.LinkageToPreventionServicesActionHelper;
 import org.smartregister.chw.hts.actionhelper.PostTestServicesActionHelper;
 import org.smartregister.chw.hts.actionhelper.PreTestServicesActionHelper;
 import org.smartregister.chw.hts.actionhelper.VisitTypeActionHelper;
@@ -69,6 +70,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                 evaluateHivTestingServices(details);
                 evaluatePostTestServices(details);
                 evaluateDnaPcrSampleCollection(details);
+                evaluateLinkageToPreventionServices(details);
             } catch (BaseHtsVisitAction.ValidationException e) {
                 Timber.e(e);
             }
@@ -131,6 +133,17 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                 .withFormName(Constants.FORMS.HTS_DNA_PCR_SAMPLE_COLLECTION)
                 .build();
         actionList.put(context.getString(R.string.hts_dna_pcr_sample_collection_action_title), action);
+    }
+
+    private void evaluateLinkageToPreventionServices(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
+        LinkageToPreventionServicesActionHelper actionHelper = new LinkageToPreventionServicesActionHelper(mContext, memberObject);
+        BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_linkage_to_prevention_services_action_title))
+                .withOptional(true)
+                .withDetails(details)
+                .withHelper(actionHelper)
+                .withFormName(Constants.FORMS.HTS_LINKAGE_TO_PREVENTION_SERVICES)
+                .build();
+        actionList.put(context.getString(R.string.hts_linkage_to_prevention_services_action_title), action);
     }
 
     @Override
