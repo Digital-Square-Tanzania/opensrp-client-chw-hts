@@ -1,0 +1,144 @@
+{
+  "count": "1",
+  "encounter_type": "dna_pcr_sample_collection",
+  "entity_id": "",
+  "relational_id": "",
+  "validate_on_submit": true,
+  "show_errors_on_submit": false,
+  "metadata": {
+    "start": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "start",
+      "openmrs_entity_id": "163137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "end": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "end",
+      "openmrs_entity_id": "163138AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "today": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "encounter",
+      "openmrs_entity_id": "encounter_date"
+    },
+    "deviceid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "deviceid",
+      "openmrs_entity_id": "163149AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "subscriberid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "subscriberid",
+      "openmrs_entity_id": "163150AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "simserial": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "simserial",
+      "openmrs_entity_id": "163151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "phonenumber": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "phonenumber",
+      "openmrs_entity_id": "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "encounter_location": "",
+    "look_up": {
+      "entity_id": "",
+      "value": ""
+    }
+  },
+  "global": {},
+  "step1": {
+    "title": "DNA-PCR Sample Collection",
+    "fields": [
+      {
+        "key": "hts_sample_collection_for_dna_pcr_test",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_sample_collection_for_dna_pcr_test",
+        "type": "native_radio",
+        "label": "Was sample collected for DNA-PCR test?",
+        "options": [
+          {
+            "key": "yes",
+            "text": "Yes",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "new_client"
+          },
+          {
+            "key": "no",
+            "text": "No",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "returning"
+          }
+        ],
+        "v_required": {
+          "value": "true",
+          "err": "Please select the client visit type"
+        }
+      },
+      {
+        "key": "hts_type_of_sample_collected",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_type_of_sample_collected",
+        "type": "native_radio",
+        "label": "Type of sample collected",
+        "options": [
+          {
+            "key": "dbs",
+            "text": "DBS",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "dbs"
+          },
+          {
+            "key": "whole_sample",
+            "text": "Whole Sample",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "whole_sample"
+          }
+        ],
+        "v_required": {
+          "value": "true",
+          "err": "Please select the client visit type"
+        }
+      },
+      {
+        "key": "hts_dbs_kit_batch_number",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_dbs_kit_batch_number",
+        "type": "edit_text",
+        "label": "DBS kit batch number",
+        "hint": "Specify DBS kit batch number",
+        "v_required": {
+          "value": "true",
+          "err": "Please select a value"
+        }
+      },
+      {
+        "key": "hts_dbs_expire_date",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_dbs_expire_date",
+        "type": "date_picker",
+        "min_date": "today",
+        "max_date": "today+5y",
+        "expanded": false,
+        "hint": "Select DBS expire date",
+        "v_required": {
+          "value": "true",
+          "err": "Required"
+        }
+      }
+    ]
+  }
+}
+
+
