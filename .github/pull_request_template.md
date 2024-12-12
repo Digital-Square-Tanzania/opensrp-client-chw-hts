@@ -3,6 +3,7 @@
 Fixes #[issue number] or Closes #[issue number]
 
 **Engineer Checklist**
+
 - [ ] I have written **Unit tests** for any new feature(s) and edge cases for bug fixes
 - [ ] I have added any strings visible on UI components to the `strings.xml` file
 - [ ] I have updated the  [CHANGELOG.md](./CHANGELOG.md) file for any notable changes to the codebase
@@ -11,6 +12,7 @@ Fixes #[issue number] or Closes #[issue number]
 
 
 **Code Reviewer Checklist**
+
 - [ ] I have verified **Unit tests** have been written for any new feature(s) and edge cases
 - [ ] I have verified any strings visible on UI components are in the `strings.xml` file
 - [ ] I have verifed the [CHANGELOG.md](./CHANGELOG.md) file has any notable changes to the codebase
