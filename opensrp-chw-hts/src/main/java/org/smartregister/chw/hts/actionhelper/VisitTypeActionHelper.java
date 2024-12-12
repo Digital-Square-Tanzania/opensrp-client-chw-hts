@@ -73,7 +73,7 @@ public class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVisitActionH
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
-            visitType = JsonFormUtils.getValue(jsonObject, "visit_type");
+            visitType = JsonFormUtils.getValue(jsonObject, "hts_visit_type");
         } catch (JSONException e) {
             Timber.e(e);
         }
