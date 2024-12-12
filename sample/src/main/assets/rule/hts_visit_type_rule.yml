@@ -1,0 +1,35 @@
+---
+name: step1_hts_previous_hivst_client_type
+description:
+priority: 1
+condition: "step1_hts_has_the_client_recently_tested_with_hivst.equals('yes')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_previous_hivst_test_type
+description:
+priority: 1
+condition: "step1_hts_has_the_client_recently_tested_with_hivst.equals('yes')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_pitc_testing_point
+description:
+priority: 1
+condition: "step1_hts_testing_approach.equals('pitc')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_other_testing_point
+description:
+priority: 1
+condition: "step1_hts_citc_testing_point.contains('other')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_testing_point
+description:
+priority: 1
+condition: "true"
+actions:
+  - "calculation = step1_hts_testing_approach.equals('cbhts') ? 'cbhts' : step1_hts_testing_approach.equals('citc') ? 'citc' : step1_hts_pitc_testing_point"

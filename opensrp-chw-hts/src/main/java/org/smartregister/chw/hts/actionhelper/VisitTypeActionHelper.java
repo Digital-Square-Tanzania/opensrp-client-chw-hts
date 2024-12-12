@@ -22,7 +22,7 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-public class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
+public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
 
     protected String visitType;
 
@@ -74,6 +74,7 @@ public class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVisitActionH
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
             visitType = JsonFormUtils.getValue(jsonObject, "hts_visit_type");
+            processVisitType(visitType);
         } catch (JSONException e) {
             Timber.e(e);
         }
@@ -111,5 +112,7 @@ public class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVisitActionH
     public void onPayloadReceived(BaseHtsVisitAction baseHtsVisitAction) {
         //overridden
     }
+
+    public abstract void processVisitType(String visitType);
 
 }

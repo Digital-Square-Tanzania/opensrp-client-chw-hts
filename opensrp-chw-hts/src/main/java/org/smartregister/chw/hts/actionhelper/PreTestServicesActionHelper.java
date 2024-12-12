@@ -22,7 +22,7 @@ import timber.log.Timber;
 
 public class PreTestServicesActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
 
-    protected String typeOfCounsellingProvided;
+    protected String hasPreTestCounsellingBeenProvided;
 
     protected String jsonPayload;
 
@@ -48,7 +48,7 @@ public class PreTestServicesActionHelper implements BaseHtsVisitAction.HtsVisitA
 
             //Example of injecting global values to the action forms
             JSONObject global = jsonObject.getJSONObject("global");
-            global.put("sex",memberObject.getGender());
+            global.put("sex", memberObject.getGender());
 
             JSONArray fields = jsonObject.getJSONObject(JsonFormConstants.STEP1).getJSONArray(JsonFormConstants.FIELDS);
 
@@ -71,7 +71,7 @@ public class PreTestServicesActionHelper implements BaseHtsVisitAction.HtsVisitA
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
-            typeOfCounsellingProvided = JsonFormUtils.getValue(jsonObject, "type_of_counselling_provided");
+            hasPreTestCounsellingBeenProvided = JsonFormUtils.getValue(jsonObject, "hts_has_pre_test_counselling_been_provided");
         } catch (JSONException e) {
             Timber.e(e);
         }
@@ -99,7 +99,7 @@ public class PreTestServicesActionHelper implements BaseHtsVisitAction.HtsVisitA
 
     @Override
     public BaseHtsVisitAction.Status evaluateStatusOnPayload() {
-        if (StringUtils.isNotBlank(typeOfCounsellingProvided)) {
+        if (StringUtils.isNotBlank(hasPreTestCounsellingBeenProvided)) {
             return BaseHtsVisitAction.Status.COMPLETED;
         }
         return BaseHtsVisitAction.Status.PENDING;

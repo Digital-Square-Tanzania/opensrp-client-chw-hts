@@ -6,8 +6,8 @@ import android.content.Context;
 import androidx.annotation.VisibleForTesting;
 
 import org.apache.commons.lang3.StringUtils;
-import org.smartregister.chw.hts.R;
 import org.smartregister.chw.hts.HtsLibrary;
+import org.smartregister.chw.hts.R;
 import org.smartregister.chw.hts.actionhelper.DnaPcrSampleCollectionActionHelper;
 import org.smartregister.chw.hts.actionhelper.HivTestingActionHelper;
 import org.smartregister.chw.hts.actionhelper.LinkageToPreventionServicesActionHelper;
@@ -29,11 +29,10 @@ import timber.log.Timber;
 
 public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
 
-    protected BaseHtsVisitContract.InteractorCallBack callBack;
-
-    String visitType;
     private final LinkedHashMap<String, BaseHtsVisitAction> actionList;
+    protected BaseHtsVisitContract.InteractorCallBack callBack;
     protected AppExecutors appExecutors;
+    String visitType;
     private Context mContext;
 
 
@@ -62,11 +61,6 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         final Runnable runnable = () -> {
             try {
                 evaluateVisitType(details);
-                evaluatePreTestServices(details);
-                evaluateHivTestingServices(details);
-                evaluatePostTestServices(details);
-                evaluateDnaPcrSampleCollection(details);
-                evaluateLinkageToPreventionServices(details);
             } catch (BaseHtsVisitAction.ValidationException e) {
                 Timber.e(e);
             }
@@ -78,9 +72,24 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
     }
 
     private void evaluateVisitType(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
-        VisitTypeActionHelper actionHelper = new VisitTypeActionHelper(mContext, memberObject);
+        VisitTypeActionHelper actionHelper = new VisitTypeActionHelper(mContext, memberObject) {
+            @Override
+            public void processVisitType(String visitType) {
+                try {
+                    evaluatePreTestServices(details);
+                    evaluateHivTestingServices(details);
+                    evaluatePostTestServices(details);
+                    evaluateDnaPcrSampleCollection(details);
+                    evaluateLinkageToPreventionServices(details);
+                } catch (Exception e) {
+                    Timber.e(e);
+                }
+                appExecutors.mainThread().execute(() -> callBack.preloadActions(actionList));
+            }
+        };
+
         BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_visit_type_action_title))
-                .withOptional(true)
+                .withOptional(false)
                 .withDetails(details)
                 .withHelper(actionHelper)
                 .withFormName(Constants.FORMS.HTS_VISIT_TYPE)
@@ -120,6 +129,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                 .build();
         actionList.put(context.getString(R.string.hts_post_test_services_action_title), action);
     }
+
     private void evaluateDnaPcrSampleCollection(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
         DnaPcrSampleCollectionActionHelper actionHelper = new DnaPcrSampleCollectionActionHelper(mContext, memberObject);
         BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_dna_pcr_sample_collection_action_title))
