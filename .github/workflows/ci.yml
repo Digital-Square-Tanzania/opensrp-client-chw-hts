@@ -18,11 +18,11 @@ jobs:
           java-version: 11
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Run unit tests with Gradle
-        run: ./gradlew :opensrp-chw-hts:clean :opensrp-chw-hts:jacocoTestReport  --stacktrace
+      - name: Build the module with Gradle
+        run: ./gradlew :opensrp-chw-hts:clean :opensrp-chw-hts:build  --stacktrace
         env:
           GITHUB_TOKEN: ${{ github.token }}
-      - name: Upload coverage to Coveralls with Gradle
-        run: ./gradlew coveralls --stacktrace
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+#      - name: Upload coverage to Coveralls with Gradle
+#        run: ./gradlew coveralls --stacktrace
+#        env:
+#          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
