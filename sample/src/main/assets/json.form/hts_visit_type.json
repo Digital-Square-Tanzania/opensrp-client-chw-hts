@@ -55,7 +55,7 @@
   },
   "global": {},
   "step1": {
-    "title": "HTS Screening",
+    "title": "Visit Type",
     "fields": [
       {
         "key": "hts_visit_type",
@@ -63,7 +63,7 @@
         "openmrs_entity": "concept",
         "openmrs_entity_id": "hts_visit_type",
         "type": "native_radio",
-        "label": "Pregnancy & Breast Feeding",
+        "label": "Client Visit Type",
         "options": [
           {
             "key": "new_client",
@@ -139,6 +139,13 @@
         "v_required": {
           "value": "true",
           "err": "Please select a value"
+        },
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_visit_type_rule.yml"
+            }
+          }
         }
       },
       {
@@ -161,6 +168,13 @@
         "v_required": {
           "value": "true",
           "err": "Please select a value"
+        },
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_visit_type_rule.yml"
+            }
+          }
         }
       },
       {
@@ -211,15 +225,21 @@
         "options": [
           {
             "key": "cbhts",
-            "text": "CBHTS"
+            "text": "CBHTS",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "cbhts"
           },
           {
             "key": "pitc",
-            "text": "PITC"
+            "text": "PITC",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "pitc"
           },
           {
             "key": "citc",
-            "text": "CITC"
+            "text": "CITC",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "citc"
           }
         ],
         "v_required": {
@@ -228,69 +248,102 @@
         }
       },
       {
-        "key": "hts_testing_point",
+        "key": "hts_pitc_testing_point",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_testing_point",
+        "openmrs_entity_id": "hts_pitc_testing_point",
         "type": "native_radio",
-        "label": "Testing Approach",
+        "label": "Testing Point",
         "options": [
           {
             "key": "sti_clinic",
-            "text": "STI Clinic"
+            "text": "STI Clinic",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "sti_clinic"
           },
           {
             "key": "tb_clinic",
-            "text": "TB Clinic"
+            "text": "TB Clinic",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "tb_clinic"
           },
           {
             "key": "ipd",
-            "text": "IPD"
+            "text": "IPD",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "ipd"
           },
           {
             "key": "opd",
-            "text": "OPD"
+            "text": "OPD",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "opd"
           },
           {
             "key": "blood_donation",
-            "text": "Blood Donation"
+            "text": "Blood Donation",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "blood_donation"
           },
           {
             "key": "family_planning",
-            "text": "Family Planning"
+            "text": "Family Planning",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "family_planning"
           },
           {
             "key": "ctc",
-            "text": "CTC"
+            "text": "CTC",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "ctc"
           },
           {
             "key": "vmmc",
-            "text": "VMMC"
+            "text": "VMMC",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "vmmc"
           },
           {
             "key": "outreach",
-            "text": "Outreach"
+            "text": "Outreach",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "outreach"
           },
           {
             "key": "rch",
-            "text": "RCH"
+            "text": "RCH",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "rch"
           },
           {
             "key": "laboratory",
-            "text": "Laboratory"
+            "text": "Laboratory",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "laboratory"
           },
           {
             "key": "cervical_cancer_screening",
-            "text": "Cervical Cancer Screening"
+            "text": "Cervical Cancer Screening",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "cervical_cancer_screening"
           },
           {
-            "key": "others_specify",
-            "text": "Others (Specify)"
+            "key": "other",
+            "text": "Others (Specify)",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "other"
           }
         ],
         "v_required": {
           "value": "true",
           "err": "Please select a value"
+        },
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_visit_type_rule.yml"
+            }
+          }
         }
       },
       {
@@ -306,8 +359,24 @@
           "err": "Please the testing point"
         },
         "relevance": {
-          "step1:hts_testing_point": {
-            "equals": "others_specify"
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_visit_type_rule.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "hts_testing_point",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_testing_point",
+        "type": "hidden",
+        "calculation": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_visit_type_rule.yml"
+            }
           }
         }
       }
