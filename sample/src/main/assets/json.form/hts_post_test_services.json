@@ -123,7 +123,8 @@
           },
           {
             "key": "not_ready_to_share",
-            "text": "Not ready to share"
+            "text": "Not ready to share",
+            "exclusive": true
           }
         ],
         "v_required": {
