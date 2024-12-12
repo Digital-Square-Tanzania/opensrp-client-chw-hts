@@ -202,6 +202,53 @@
         "v_required": {
           "value": "true",
           "err": "Please select condom distribution"
+        },
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_preventive_services_rules.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "hts_number_of_male_condoms_provided",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_number_of_male_condoms_provided",
+        "type": "edit_text",
+        "label": "Number of male condoms provided",
+        "hint": "Number of male condoms provided",
+        "v_required": {
+          "value": "true",
+          "err": "Please select a value"
+        },
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_preventive_services_rules.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "hts_number_of_female_condoms_provided",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_number_of_female_condoms_provided",
+        "type": "edit_text",
+        "label": "Number of female condoms provided",
+        "hint": "Number of female condoms provided",
+        "v_required": {
+          "value": "true",
+          "err": "Please select a value"
+        },
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_preventive_services_rules.yml"
+            }
+          }
         }
       }
     ]
