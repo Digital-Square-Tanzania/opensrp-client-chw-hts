@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.smartregister.chw.hts.R;
 import org.smartregister.chw.hts.contract.BaseHtsVisitContract;
 import org.smartregister.chw.hts.model.BaseHtsVisitAction;
-import org.smartregister.chw.hts.R;
 
 import java.text.MessageFormat;
 import java.util.LinkedHashMap;
@@ -23,9 +23,9 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BaseHtsVisitAdapter extends RecyclerView.Adapter<BaseHtsVisitAdapter.MyViewHolder> {
-    private Map<String, BaseHtsVisitAction> htsVisitActionList;
-    private Context context;
-    private BaseHtsVisitContract.View visitContractView;
+    private final Map<String, BaseHtsVisitAction> htsVisitActionList;
+    private final Context context;
+    private final BaseHtsVisitContract.View visitContractView;
 
     public BaseHtsVisitAdapter(Context context, BaseHtsVisitContract.View view, LinkedHashMap<String, BaseHtsVisitAction> myDataset) {
         htsVisitActionList = myDataset;
@@ -172,10 +172,12 @@ public class BaseHtsVisitAdapter extends RecyclerView.Adapter<BaseHtsVisitAdapte
         return count;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView titleText, invalidText, descriptionText;
-        private CircleImageView circleImageView;
-        private LinearLayout myView;
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        private final TextView titleText;
+        private final TextView invalidText;
+        private final TextView descriptionText;
+        private final CircleImageView circleImageView;
+        private final LinearLayout myView;
 
         private MyViewHolder(View view) {
             super(view);

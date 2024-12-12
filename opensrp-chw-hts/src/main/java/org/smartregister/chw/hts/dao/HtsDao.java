@@ -25,7 +25,7 @@ public class HtsDao extends AbstractDao {
         memberObject.setGender(getCursorValue(cursor, "gender"));
         memberObject.setMartialStatus(getCursorValue(cursor, "marital_status"));
         memberObject.setUniqueId(getCursorValue(cursor, "unique_id", ""));
-        memberObject.setAge(getCursorValue(cursor, "dob"));
+        memberObject.setDob(getCursorValue(cursor, "dob"));
         memberObject.setFamilyBaseEntityId(getCursorValue(cursor, "relational_id", ""));
         memberObject.setRelationalId(getCursorValue(cursor, "relational_id", ""));
         memberObject.setPrimaryCareGiver(getCursorValue(cursor, "primary_caregiver"));

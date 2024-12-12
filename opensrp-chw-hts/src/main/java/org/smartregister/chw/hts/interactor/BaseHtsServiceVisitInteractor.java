@@ -32,18 +32,14 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
     protected BaseHtsVisitContract.InteractorCallBack callBack;
 
     String visitType;
-    private final HtsLibrary htsLibrary;
     private final LinkedHashMap<String, BaseHtsVisitAction> actionList;
     protected AppExecutors appExecutors;
-    private ECSyncHelper syncHelper;
     private Context mContext;
 
 
     @VisibleForTesting
     public BaseHtsServiceVisitInteractor(AppExecutors appExecutors, HtsLibrary HtsLibrary, ECSyncHelper syncHelper) {
         this.appExecutors = appExecutors;
-        this.htsLibrary = HtsLibrary;
-        this.syncHelper = syncHelper;
         this.actionList = new LinkedHashMap<>();
     }
 
