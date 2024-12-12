@@ -4,7 +4,7 @@
   "entity_id": "",
   "relational_id": "",
   "validate_on_submit": true,
-  "show_errors_on_submit": true,
+  "show_errors_on_submit": false,
   "metadata": {
     "start": {
       "openmrs_entity_parent": "",
@@ -53,6 +53,7 @@
       "value": ""
     }
   },
+  "global": {},
   "step1": {
     "title": "HTS Screening",
     "fields": [
