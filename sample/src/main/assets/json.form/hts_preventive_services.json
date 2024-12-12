@@ -80,30 +80,6 @@
             "openmrs_entity_id": "sputum_testing_laboratory"
           },
           {
-            "key": "sputum_testing_laboratory",
-            "text": "Sputum Testing Laboratory",
-            "openmrs_entity": "concept",
-            "openmrs_entity_id": "sputum_testing_laboratory"
-          },
-          {
-            "key": "sputum_testing_laboratory",
-            "text": "Sputum Testing Laboratory",
-            "openmrs_entity": "concept",
-            "openmrs_entity_id": "sputum_testing_laboratory"
-          },
-          {
-            "key": "sputum_testing_laboratory",
-            "text": "Sputum Testing Laboratory",
-            "openmrs_entity": "concept",
-            "openmrs_entity_id": "sputum_testing_laboratory"
-          },
-          {
-            "key": "sputum_testing_laboratory",
-            "text": "Sputum Testing Laboratory",
-            "openmrs_entity": "concept",
-            "openmrs_entity_id": "sputum_testing_laboratory"
-          },
-          {
             "key": "prevention_of_mother_to_child_transmission",
             "text": "Prevention of Mother to Child Transmission",
             "openmrs_entity": "concept",
