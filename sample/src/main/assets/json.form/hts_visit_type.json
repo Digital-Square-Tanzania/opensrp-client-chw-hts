@@ -225,15 +225,21 @@
         "options": [
           {
             "key": "cbhts",
-            "text": "CBHTS"
+            "text": "CBHTS",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "cbhts"
           },
           {
             "key": "pitc",
-            "text": "PITC"
+            "text": "PITC",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "pitc"
           },
           {
             "key": "citc",
-            "text": "CITC"
+            "text": "CITC",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "citc"
           }
         ],
         "v_required": {
@@ -242,10 +248,10 @@
         }
       },
       {
-        "key": "hts_testing_point",
+        "key": "hts_pitc_testing_point",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_testing_point",
+        "openmrs_entity_id": "hts_pitc_testing_point",
         "type": "native_radio",
         "label": "Testing Point",
         "options": [
@@ -331,6 +337,13 @@
         "v_required": {
           "value": "true",
           "err": "Please select a value"
+        },
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_visit_type_rule.yml"
+            }
+          }
         }
       },
       {
@@ -346,6 +359,20 @@
           "err": "Please the testing point"
         },
         "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_visit_type_rule.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "hts_testing_point",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_testing_point",
+        "type": "hidden",
+        "calculation": {
           "rules-engine": {
             "ex-rules": {
               "rules-file": "hts_visit_type_rule.yml"
