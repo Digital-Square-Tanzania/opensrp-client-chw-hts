@@ -60,66 +60,80 @@
       {
         "key": "hts_visit_type",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "",
-        "openmrs_entity_id": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_visit_type",
         "type": "native_radio",
         "label": "Pregnancy & Breast Feeding",
         "options": [
           {
             "key": "new_client",
-            "text": "New Client"
+            "text": "New Client",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "new_client"
           },
           {
             "key": "returning",
-            "text": "Returning"
+            "text": "Returning",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "returning"
           }
         ],
         "v_required": {
           "value": "true",
-          "err": "Please select a value"
+          "err": "Please select the client visit type"
         }
       },
       {
-        "key": "hts_has_the_user_recently_tested_with_hivst",
+        "key": "hts_has_the_client_recently_tested_with_hivst",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "",
-        "openmrs_entity_id": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_has_the_client_recently_tested_with_hivst",
         "type": "native_radio",
         "label": "Has the user recently tested with HIVST?",
         "options": [
           {
             "key": "yes",
-            "text": "Yes"
+            "text": "Yes",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "yes"
           },
           {
             "key": "no",
-            "text": "No"
+            "text": "No",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "no"
           }
         ],
         "v_required": {
           "value": "true",
-          "err": "Please select a value"
+          "err": "Please select an answer for the above question"
         }
       },
       {
         "key": "hts_previous_hivst_client_type",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "",
-        "openmrs_entity_id": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_previous_hivst_client_type",
         "type": "native_radio",
         "label": "Previous HIVST client type",
         "options": [
           {
             "key": "self",
-            "text": "Self"
+            "text": "Self",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "no"
           },
           {
             "key": "peer_friend",
-            "text": "Peer Friend"
+            "text": "Peer Friend",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "peer_friend"
           },
           {
             "key": "sexual_partner",
-            "text": "Sexual Partner"
+            "text": "Sexual Partner",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "sexual_partner"
           }
         ],
         "v_required": {
@@ -130,8 +144,8 @@
       {
         "key": "hts_previous_hivst_test_type",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "",
-        "openmrs_entity_id": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_previous_hivst_test_type",
         "type": "native_radio",
         "label": "Previous HIVST test type",
         "options": [
@@ -152,26 +166,34 @@
       {
         "key": "hts_client_type",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "",
-        "openmrs_entity_id": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_client_type",
         "type": "native_radio",
         "label": "Client Type",
         "options": [
           {
             "key": "index_contact",
-            "text": "Index Contact"
+            "text": "Index Contact",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "index_contact"
           },
           {
             "key": "normal_client",
-            "text": "Normal Client"
+            "text": "Normal Client",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "normal_client"
           },
           {
             "key": "verification",
-            "text": "Verification"
+            "text": "Verification",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "verification"
           },
           {
             "key": "social_network_contact",
-            "text": "Social Network Contact"
+            "text": "Social Network Contact",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "social_network_contact"
           }
         ],
         "v_required": {
@@ -182,8 +204,8 @@
       {
         "key": "hts_testing_approach",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "",
-        "openmrs_entity_id": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_testing_approach",
         "type": "native_radio",
         "label": "Testing Approach",
         "options": [
@@ -208,8 +230,8 @@
       {
         "key": "hts_testing_point",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "",
-        "openmrs_entity_id": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_testing_point",
         "type": "native_radio",
         "label": "Testing Approach",
         "options": [
