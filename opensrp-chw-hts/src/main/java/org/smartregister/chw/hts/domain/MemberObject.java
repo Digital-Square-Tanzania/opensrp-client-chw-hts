@@ -43,9 +43,6 @@ public class MemberObject implements Serializable {
     private String htsFollowUpDate;
     private String enrollmentDate;
 
-    public MemberObject() {
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -101,6 +98,7 @@ public class MemberObject implements Serializable {
     public String getMartialStatus() {
         return martialStatus;
     }
+
     public void setMartialStatus(String martialStatus) {
         this.martialStatus = martialStatus;
     }

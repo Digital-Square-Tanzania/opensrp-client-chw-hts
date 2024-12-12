@@ -24,6 +24,7 @@ import org.joda.time.Period;
 import org.json.JSONObject;
 import org.smartregister.AllConstants;
 import org.smartregister.chw.hts.HtsLibrary;
+import org.smartregister.chw.hts.R;
 import org.smartregister.chw.hts.adapter.BaseHtsVisitAdapter;
 import org.smartregister.chw.hts.contract.BaseHtsVisitContract;
 import org.smartregister.chw.hts.dao.HtsDao;
@@ -33,7 +34,6 @@ import org.smartregister.chw.hts.model.BaseHtsVisitAction;
 import org.smartregister.chw.hts.presenter.BaseHtsVisitPresenter;
 import org.smartregister.chw.hts.util.Constants;
 import org.smartregister.view.activity.SecuredActivity;
-import org.smartregister.chw.hts.R;
 
 import java.text.MessageFormat;
 import java.util.LinkedHashMap;
@@ -42,8 +42,7 @@ import java.util.Map;
 import timber.log.Timber;
 
 public class BaseHtsVisitActivity extends SecuredActivity implements BaseHtsVisitContract.View, View.OnClickListener {
-
-    private static final String TAG = BaseHtsVisitActivity.class.getCanonicalName();
+    protected static String profileType;
     protected Map<String, BaseHtsVisitAction> actionList = new LinkedHashMap<>();
     protected BaseHtsVisitContract.Presenter presenter;
     protected MemberObject memberObject;
@@ -56,7 +55,6 @@ public class BaseHtsVisitActivity extends SecuredActivity implements BaseHtsVisi
     protected String current_action;
     protected String confirmCloseTitle;
     protected String confirmCloseMessage;
-    protected static String profileType;
 
     public static void startMe(Activity activity, String baseEntityID, Boolean isEditMode) {
         Intent intent = new Intent(activity, BaseHtsVisitActivity.class);
