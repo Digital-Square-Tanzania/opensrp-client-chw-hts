@@ -12,30 +12,23 @@ import id.zelory.compressor.Compressor;
 
 public class HtsLibrary {
     private static HtsLibrary instance;
-
+    private static boolean submitOnSave = false;
     private final Context context;
     private final Repository repository;
-
     private int applicationVersion;
     private int databaseVersion;
     private ECSyncHelper syncHelper;
-
     private ClientProcessorForJava clientProcessorForJava;
-    private Compressor compressor;
-
     private VisitRepository visitRepository;
     private VisitDetailsRepository visitDetailsRepository;
-
-    public String getSaveDateFormat() {
-        return saveDateFormat;
-    }
-
-    public void setSaveDateFormat(String saveDateFormat) {
-        this.saveDateFormat = saveDateFormat;
-    }
-
     private String sourceDateFormat = "dd-MM-yyyy";
     private String saveDateFormat = "yyyy-MM-dd";
+    private HtsLibrary(Context contextArg, Repository repositoryArg, int applicationVersion, int databaseVersion) {
+        this.context = contextArg;
+        this.repository = repositoryArg;
+        this.applicationVersion = applicationVersion;
+        this.databaseVersion = databaseVersion;
+    }
 
     public static boolean isSubmitOnSave() {
         return submitOnSave;
@@ -43,16 +36,6 @@ public class HtsLibrary {
 
     public void setSubmitOnSave(boolean submitOnSave) {
         HtsLibrary.submitOnSave = submitOnSave;
-    }
-
-    private static boolean submitOnSave = false;
-
-    public String getSourceDateFormat() {
-        return sourceDateFormat;
-    }
-
-    public void setSourceDateFormat(String sourceDateFormat) {
-        this.sourceDateFormat = sourceDateFormat;
     }
 
     public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion) {
@@ -71,11 +54,20 @@ public class HtsLibrary {
         return instance;
     }
 
-    private HtsLibrary(Context contextArg, Repository repositoryArg, int applicationVersion, int databaseVersion) {
-        this.context = contextArg;
-        this.repository = repositoryArg;
-        this.applicationVersion = applicationVersion;
-        this.databaseVersion = databaseVersion;
+    public String getSaveDateFormat() {
+        return saveDateFormat;
+    }
+
+    public void setSaveDateFormat(String saveDateFormat) {
+        this.saveDateFormat = saveDateFormat;
+    }
+
+    public String getSourceDateFormat() {
+        return sourceDateFormat;
+    }
+
+    public void setSourceDateFormat(String sourceDateFormat) {
+        this.sourceDateFormat = sourceDateFormat;
     }
 
     public Context context() {
