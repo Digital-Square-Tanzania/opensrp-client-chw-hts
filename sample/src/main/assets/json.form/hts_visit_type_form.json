@@ -1,0 +1,295 @@
+{
+  "count": "1",
+  "encounter_type": "Visit Type",
+  "entity_id": "",
+  "relational_id": "",
+  "validate_on_submit": true,
+  "show_errors_on_submit": true,
+  "metadata": {
+    "start": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "start",
+      "openmrs_entity_id": "163137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "end": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "end",
+      "openmrs_entity_id": "163138AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "today": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "encounter",
+      "openmrs_entity_id": "encounter_date"
+    },
+    "deviceid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "deviceid",
+      "openmrs_entity_id": "163149AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "subscriberid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "subscriberid",
+      "openmrs_entity_id": "163150AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "simserial": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "simserial",
+      "openmrs_entity_id": "163151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "phonenumber": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "phonenumber",
+      "openmrs_entity_id": "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "encounter_location": "",
+    "look_up": {
+      "entity_id": "",
+      "value": ""
+    }
+  },
+  "step1": {
+    "title": "HTS Screening",
+    "fields": [
+      {
+        "key": "hts_visit_type",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "Pregnancy & Breast Feeding",
+        "options": [
+          {
+            "key": "new_client",
+            "text": "New Client"
+          },
+          {
+            "key": "returning",
+            "text": "Returning"
+          }
+        ],
+        "v_required": {
+          "value": "true",
+          "err": "Please select a value"
+        }
+      },
+      {
+        "key": "hts_has_the_user_recently_tested_with_hivst",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "Has the user recently tested with HIVST?",
+        "options": [
+          {
+            "key": "yes",
+            "text": "Yes"
+          },
+          {
+            "key": "no",
+            "text": "No"
+          }
+        ],
+        "v_required": {
+          "value": "true",
+          "err": "Please select a value"
+        }
+      },
+      {
+        "key": "hts_previous_hivst_client_type",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "Previous HIVST client type",
+        "options": [
+          {
+            "key": "self",
+            "text": "Self"
+          },
+          {
+            "key": "peer_friend",
+            "text": "Peer Friend"
+          },
+          {
+            "key": "sexual_partner",
+            "text": "Sexual Partner"
+          }
+        ],
+        "v_required": {
+          "value": "true",
+          "err": "Please select a value"
+        }
+      },
+      {
+        "key": "hts_previous_hivst_test_type",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "Previous HIVST test type",
+        "options": [
+          {
+            "key": "oral_based_self_test",
+            "text": "Oral Based Self Test (STO)"
+          },
+          {
+            "key": "blood_based_self_test",
+            "text": "Blood Based Self Test (STB)"
+          }
+        ],
+        "v_required": {
+          "value": "true",
+          "err": "Please select a value"
+        }
+      },
+      {
+        "key": "hts_client_type",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "Client Type",
+        "options": [
+          {
+            "key": "index_contact",
+            "text": "Index Contact"
+          },
+          {
+            "key": "normal_client",
+            "text": "Normal Client"
+          },
+          {
+            "key": "verification",
+            "text": "Verification"
+          },
+          {
+            "key": "social_network_contact",
+            "text": "Social Network Contact"
+          }
+        ],
+        "v_required": {
+          "value": "true",
+          "err": "Please select a value"
+        }
+      },
+      {
+        "key": "hts_testing_approach",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "Testing Approach",
+        "options": [
+          {
+            "key": "cbhts",
+            "text": "CBHTS"
+          },
+          {
+            "key": "pitc",
+            "text": "PITC"
+          },
+          {
+            "key": "citc",
+            "text": "CITC"
+          }
+        ],
+        "v_required": {
+          "value": "true",
+          "err": "Please select a value"
+        }
+      },
+      {
+        "key": "hts_testing_point",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "Testing Approach",
+        "options": [
+          {
+            "key": "sti_clinic",
+            "text": "STI Clinic"
+          },
+          {
+            "key": "tb_clinic",
+            "text": "TB Clinic"
+          },
+          {
+            "key": "ipd",
+            "text": "IPD"
+          },
+          {
+            "key": "opd",
+            "text": "OPD"
+          },
+          {
+            "key": "blood_donation",
+            "text": "Blood Donation"
+          },
+          {
+            "key": "family_planning",
+            "text": "Family Planning"
+          },
+          {
+            "key": "ctc",
+            "text": "CTC"
+          },
+          {
+            "key": "vmmc",
+            "text": "VMMC"
+          },
+          {
+            "key": "outreach",
+            "text": "Outreach"
+          },
+          {
+            "key": "rch",
+            "text": "RCH"
+          },
+          {
+            "key": "laboratory",
+            "text": "Laboratory"
+          },
+          {
+            "key": "cervical_cancer_screening",
+            "text": "Cervical Cancer Screening"
+          },
+          {
+            "key": "others_specify",
+            "text": "Others (Specify)"
+          }
+        ],
+        "v_required": {
+          "value": "true",
+          "err": "Please select a value"
+        }
+      },
+      {
+        "key": "hts_other_testing_point",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_other_testing_point",
+        "type": "edit_text",
+        "hint": "Specify other testing point",
+        "edit_type": "name",
+        "v_required": {
+          "value": "true",
+          "err": "Please the testing point"
+        },
+        "relevance": {
+          "step1:hts_testing_point": {
+            "equals": "others_specify"
+          }
+        }
+      }
+    ]
+  }
+}
+
+
