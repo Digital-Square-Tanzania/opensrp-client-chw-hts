@@ -37,42 +37,12 @@ public class HtsMemberProfileActivity extends BaseHtsProfileActivity {
     @Override
     public void openFollowupVisit() {
         try {
-            startForm("hts_enrollment");
+            HtsServiceActivity.startHtsVisitActivity(this,memberObject.getBaseEntityId(), false);
+
         } catch (Exception e) {
             Timber.e(e);
         }
     }
-
-    private void startForm(String formName) throws Exception {
-        JSONObject jsonForm = FileSourceFactoryHelper.getFileSource("").getFormFromFile(getApplicationContext(), formName);
-
-        String currentLocationId = "Tanzania";
-        if (jsonForm != null) {
-            jsonForm.getJSONObject("metadata").put("encounter_location", currentLocationId);
-            Intent intent = new Intent(this, JsonWizardFormActivity.class);
-            intent.putExtra("json", jsonForm.toString());
-
-            Form form = new Form();
-            form.setWizard(true);
-            form.setNextLabel("Next");
-            form.setPreviousLabel("Previous");
-            form.setSaveLabel("Save");
-            form.setHideSaveLabel(true);
-
-            intent.putExtra("form", form);
-            startActivityForResult(intent, Constants.REQUEST_CODE_GET_JSON);
-
-        }
-
-    }
-
-
-
-
-//    public void startFormActivity(JSONObject jsonForm) {
-//        Intent intent = org.smartregister.chw.core.utils.Utils.formActivityIntent(this, jsonForm.toString());
-//        startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
-//    }
 
     @Override
     public void startServiceForm() {
