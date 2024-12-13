@@ -223,6 +223,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
 
                         //removing extra actions that are not required in this scenario
                         removeExtraRepeatActions(R.string.hts_repeate_of_second_hiv_test_action_title, repeatNumber);
+                        actionList.remove(mContext.getString(R.string.hts_repeate_of_first_hiv_test_title));
                     } else if (secondHivTestResults.equalsIgnoreCase("non_reactive")) {
                         evaluateRepeatOfFirstHivTest(details);
 
