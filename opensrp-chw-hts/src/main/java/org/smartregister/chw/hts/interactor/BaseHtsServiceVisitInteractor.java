@@ -31,26 +31,46 @@ import java.util.Map;
 
 import timber.log.Timber;
 
+/**
+ * Handles the logic for HIV Testing Services (HTS) service visits.
+ * This interactor manages the creation and population of HTS visit actions based on visit details.
+ */
 public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
 
-    private final LinkedHashMap<String, BaseHtsVisitAction> actionList;
-    protected BaseHtsVisitContract.InteractorCallBack callBack;
-    protected AppExecutors appExecutors;
-    String visitType;
-    private Context mContext;
+    private final LinkedHashMap<String, BaseHtsVisitAction> actionList; // Stores all HTS actions for the visit
+    protected BaseHtsVisitContract.InteractorCallBack callBack; // Callback interface to communicate with the presenter
+    protected AppExecutors appExecutors; // Executor for managing asynchronous tasks
+    String visitType; // Type of the current HTS visit
+    private Context mContext; // Context for accessing resources and helpers
 
-
+    /**
+     * Constructor for testing, allowing injection of dependencies.
+     *
+     * @param appExecutors Executor for handling background and main thread tasks
+     * @param HtsLibrary   Reference to the HTS Library
+     * @param syncHelper    Helper for syncing data
+     */
     @VisibleForTesting
     public BaseHtsServiceVisitInteractor(AppExecutors appExecutors, HtsLibrary HtsLibrary, ECSyncHelper syncHelper) {
         this.appExecutors = appExecutors;
         this.actionList = new LinkedHashMap<>();
     }
 
+    /**
+     * Main constructor that initializes the interactor with a visit type.
+     *
+     * @param visitType The type of HTS visit
+     */
     public BaseHtsServiceVisitInteractor(String visitType) {
         this(new AppExecutors(), HtsLibrary.getInstance(), HtsLibrary.getInstance().getEcSyncHelper());
         this.visitType = visitType;
     }
 
+    /**
+     * Gets the current visit type. If none is specified, it falls back to the parent implementation.
+     *
+     * @return The visit type as a string
+     */
     @Override
     protected String getCurrentVisitType() {
         if (StringUtils.isNotBlank(visitType)) {
@@ -59,6 +79,12 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         return super.getCurrentVisitType();
     }
 
+    /**
+     * Populates the action list for the HTS visit.
+     * This method determines the required actions for the visit based on visit details.
+     *
+     * @param callBack Callback to communicate with the presenter
+     */
     @Override
     protected void populateActionList(BaseHtsVisitContract.InteractorCallBack callBack) {
         this.callBack = callBack;
@@ -75,6 +101,12 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         appExecutors.diskIO().execute(runnable);
     }
 
+    /**
+     * Evaluates the type of visit and determines the corresponding actions.
+     *
+     * @param details Map of visit details
+     * @throws BaseHtsVisitAction.ValidationException If validation of actions fails
+     */
     private void evaluateVisitType(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
         VisitTypeActionHelper actionHelper = new VisitTypeActionHelper(mContext, memberObject) {
             @Override
@@ -98,6 +130,13 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         actionList.put(context.getString(R.string.hts_visit_type_action_title), action);
     }
 
+    /**
+     * Evaluates and initializes the pre-test services action for the HTS visit.
+     * This includes providing pre-test counseling and other preparatory steps for HIV testing.
+     *
+     * @param details A map of visit details, containing key-value pairs of information about the visit.
+     * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
+     */
     private void evaluatePreTestServices(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
         PreTestServicesActionHelper actionHelper = new PreTestServicesActionHelper(mContext, memberObject);
         BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_pre_test_services_action_title))
@@ -109,6 +148,14 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         actionList.put(context.getString(R.string.hts_pre_test_services_action_title), action);
     }
 
+    /**
+     * Evaluates and initializes the first HIV test action for the HTS visit.
+     * The method handles both the first test and repeat tests if necessary based on test results
+     * (in-case there was wastage or invalid results in the previous test).
+     * @param details       A map of visit details, containing key-value pairs of information about the visit.
+     * @param repeatNumber  The current repeat test number; defaults to 1 for the initial test.
+     * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
+     */
     private void evaluateFirstHivTest(Map<String, List<VisitDetail>> details, final int repeatNumber) throws BaseHtsVisitAction.ValidationException {
         HivFirstHivTestActionHelper actionHelper = new HivFirstHivTestActionHelper(mContext, memberObject) {
             @Override
@@ -151,6 +198,14 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         actionList.put(actionTitle, action);
     }
 
+    /**
+     * Evaluates and initializes the second HIV test action for the HTS visit.
+     * The second test is conducted if the first test yields reactive results.
+     *
+     * @param details       A map of visit details, containing key-value pairs of information about the visit.
+     * @param repeatNumber  The current repeat test number; defaults to 1 for the initial second test.
+     * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
+     */
     private void evaluateSecondHivTest(Map<String, List<VisitDetail>> details, int repeatNumber) throws BaseHtsVisitAction.ValidationException {
         HivSecondHivTestActionHelper actionHelper = new HivSecondHivTestActionHelper(mContext, memberObject) {
             @Override
@@ -184,6 +239,13 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         actionList.put(actionTitle, action);
     }
 
+    /**
+     * Evaluates and initializes the Unigold HIV test action for the HTS visit.
+     * This test is conducted as a confirmatory test if the second test is reactive.
+     *
+     * @param details A map of visit details, containing key-value pairs of information about the visit.
+     * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
+     */
     private void evaluateUnigoldHivTest(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
         HivUnigoldHivTestActionHelper actionHelper = new HivUnigoldHivTestActionHelper(mContext, memberObject) {
             @Override
@@ -209,6 +271,13 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
     }
 
 
+    /**
+     * Evaluates and initializes the repeat of the first HIV test action for the HTS visit.
+     * This test is conducted if the second test is non-reactive or inconclusive.
+     *
+     * @param details A map of visit details, containing key-value pairs of information about the visit.
+     * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
+     */
     private void evaluateRepeatOfFirstHivTest(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
         HivRepeatFirstHivTestActionHelper actionHelper = new HivRepeatFirstHivTestActionHelper(mContext, memberObject) {
             @Override
@@ -234,6 +303,13 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         actionList.put(context.getString(R.string.hts_first_hiv_test_action_title), action);
     }
 
+    /**
+     * Evaluates and initializes the post-test services action for the HTS visit.
+     * This includes counseling and guidance based on the HIV test results.
+     *
+     * @param details A map of visit details, containing key-value pairs of information about the visit.
+     * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
+     */
     private void evaluatePostTestServices(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
         PostTestServicesActionHelper actionHelper = new PostTestServicesActionHelper(mContext, memberObject);
         BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_post_test_services_action_title))
@@ -256,6 +332,14 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         actionList.put(context.getString(R.string.hts_dna_pcr_sample_collection_action_title), action);
     }
 
+    /**
+     * Evaluates and initializes the linkage to prevention services action
+     * for the HTS visit for clients who are found to be HIV Negative.
+     * This includes referring clients to prevention programs such as PrEP or risk reduction counseling.
+     *
+     * @param details A map of visit details, containing key-value pairs of information about the visit.
+     * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
+     */
     private void evaluateLinkageToPreventionServices(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
         LinkageToPreventionServicesActionHelper actionHelper = new LinkageToPreventionServicesActionHelper(mContext, memberObject);
         BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_linkage_to_prevention_services_action_title))
@@ -267,22 +351,41 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         actionList.put(context.getString(R.string.hts_linkage_to_prevention_services_action_title), action);
     }
 
+    /**
+     * Removes extra repeat test actions from the action list.
+     *
+     * @param resId               Resource ID for the test action string
+     * @param currentRepeatNumber The current repeat test number
+     */
     private void removeExtraRepeatActions(@StringRes int resId, int currentRepeatNumber) {
         for (int testNumber = currentRepeatNumber; testNumber <= actionList.size(); testNumber++) {
             actionList.remove(String.format(context.getString(resId), testNumber));
         }
     }
 
+    /**
+     * Removes common actions from the action list (e.g., post-test services, prevention services).
+     */
     private void removeCommonActions() {
         actionList.remove(context.getString(R.string.hts_post_test_services_action_title));
         actionList.remove(context.getString(R.string.hts_linkage_to_prevention_services_action_title));
     }
 
+    /**
+     * Gets the encounter type for the visit.
+     *
+     * @return The encounter type string
+     */
     @Override
     protected String getEncounterType() {
         return Constants.EVENT_TYPE.HTS_SERVICES;
     }
 
+    /**
+     * Gets the table name associated with the visit.
+     *
+     * @return The table name string
+     */
     @Override
     protected String getTableName() {
         return Constants.TABLES.HTS_SERVICES;
