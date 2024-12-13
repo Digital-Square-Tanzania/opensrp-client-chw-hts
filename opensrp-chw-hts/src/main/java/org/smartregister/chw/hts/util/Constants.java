@@ -28,7 +28,9 @@ public interface Constants {
         String HTS_ENROLLMENT = "hts_enrollment";
         String HTS_VISIT_TYPE = "hts_visit_type";
         String HTS_PRE_TEST_SERVICES = "hts_pre_test_services";
-        String HTS_HIV_TESTING_SERVICES = "hts_hiv_testing";
+        String HTS_FIRST_HIV_TEST = "hts_first_hiv_test";
+        String HTS_SECOND_HIV_TEST = "hts_second_hiv_test";
+        String HTS_UNIGOLD_HIV_TEST = "hts_unigold_hiv_test";
         String HTS_POST_TEST_SERVICES = "hts_post_test_services";
         String HTS_DNA_PCR_SAMPLE_COLLECTION = "hts_dna_pcr_sample_collection";
         String HTS_LINKAGE_TO_PREVENTION_SERVICES = "hts_linkage_to_prevention_services";

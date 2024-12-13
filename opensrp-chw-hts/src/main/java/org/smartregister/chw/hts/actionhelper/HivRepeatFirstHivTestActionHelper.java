@@ -20,9 +20,9 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-public class PreTestServicesActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
+public abstract class HivRepeatFirstHivTestActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
 
-    protected String hasPreTestCounsellingBeenProvided;
+    protected String firstHivTestResults;
 
     protected String jsonPayload;
 
@@ -31,7 +31,7 @@ public class PreTestServicesActionHelper implements BaseHtsVisitAction.HtsVisitA
     protected MemberObject memberObject;
 
 
-    public PreTestServicesActionHelper(Context context, MemberObject memberObject) {
+    public HivRepeatFirstHivTestActionHelper(Context context, MemberObject memberObject) {
         this.context = context;
         this.memberObject = memberObject;
     }
@@ -50,11 +50,14 @@ public class PreTestServicesActionHelper implements BaseHtsVisitAction.HtsVisitA
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
-            hasPreTestCounsellingBeenProvided = JsonFormUtils.getValue(jsonObject, "hts_has_pre_test_counselling_been_provided");
+            firstHivTestResults = JsonFormUtils.getValue(jsonObject, "hts_first_hiv_test_result");
+            processFirstHivTestResults(firstHivTestResults);
         } catch (JSONException e) {
             Timber.e(e);
         }
     }
+
+    public abstract void processFirstHivTestResults(String firstHivTestResults);
 
     @Override
     public BaseHtsVisitAction.ScheduleStatus getPreProcessedStatus() {
@@ -78,7 +81,7 @@ public class PreTestServicesActionHelper implements BaseHtsVisitAction.HtsVisitA
 
     @Override
     public BaseHtsVisitAction.Status evaluateStatusOnPayload() {
-        if (StringUtils.isNotBlank(hasPreTestCounsellingBeenProvided)) {
+        if (StringUtils.isNotBlank(firstHivTestResults)) {
             return BaseHtsVisitAction.Status.COMPLETED;
         }
         return BaseHtsVisitAction.Status.PENDING;

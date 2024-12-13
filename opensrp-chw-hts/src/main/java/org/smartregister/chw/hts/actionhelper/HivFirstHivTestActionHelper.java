@@ -20,9 +20,9 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-public class HivTestingActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
+public abstract class HivFirstHivTestActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
 
-    protected String typeOfFirstTestUsed;
+    protected String firstHivTestResults;
 
     protected String jsonPayload;
 
@@ -31,7 +31,7 @@ public class HivTestingActionHelper implements BaseHtsVisitAction.HtsVisitAction
     protected MemberObject memberObject;
 
 
-    public HivTestingActionHelper(Context context, MemberObject memberObject) {
+    public HivFirstHivTestActionHelper(Context context, MemberObject memberObject) {
         this.context = context;
         this.memberObject = memberObject;
     }
@@ -43,27 +43,6 @@ public class HivTestingActionHelper implements BaseHtsVisitAction.HtsVisitAction
 
     @Override
     public String getPreProcessed() {
-        try {
-            JSONObject jsonObject = new JSONObject(jsonPayload);
-
-            //Example of injecting global values to the action forms
-            JSONObject global = jsonObject.getJSONObject("global");
-            global.put("sex", memberObject.getGender());
-
-            JSONArray fields = jsonObject.getJSONObject(JsonFormConstants.STEP1).getJSONArray(JsonFormConstants.FIELDS);
-
-            //Sample Example of updating form fields before loading the form
-            int age = new Period(new DateTime(memberObject.getAge()),
-                    new DateTime()).getYears();
-            JSONObject actualAge = org.smartregister.util.JsonFormUtils.getFieldJSONObject(fields, "actual_age");
-            actualAge.put(JsonFormUtils.VALUE, age);
-
-
-            return jsonObject.toString();
-        } catch (JSONException e) {
-            Timber.e(e);
-        }
-
         return null;
     }
 
@@ -71,11 +50,14 @@ public class HivTestingActionHelper implements BaseHtsVisitAction.HtsVisitAction
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
-            typeOfFirstTestUsed = JsonFormUtils.getValue(jsonObject, "type_of_first_test_used");
+            firstHivTestResults = JsonFormUtils.getValue(jsonObject, "hts_first_hiv_test_result");
+            processFirstHivTestResults(firstHivTestResults);
         } catch (JSONException e) {
             Timber.e(e);
         }
     }
+
+    public abstract void processFirstHivTestResults(String firstHivTestResults);
 
     @Override
     public BaseHtsVisitAction.ScheduleStatus getPreProcessedStatus() {
@@ -99,7 +81,7 @@ public class HivTestingActionHelper implements BaseHtsVisitAction.HtsVisitAction
 
     @Override
     public BaseHtsVisitAction.Status evaluateStatusOnPayload() {
-        if (StringUtils.isNotBlank(typeOfFirstTestUsed)) {
+        if (StringUtils.isNotBlank(firstHivTestResults)) {
             return BaseHtsVisitAction.Status.COMPLETED;
         }
         return BaseHtsVisitAction.Status.PENDING;

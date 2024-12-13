@@ -45,28 +45,7 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
 
     @Override
     public String getPreProcessed() {
-        try {
-            JSONObject jsonObject = new JSONObject(jsonPayload);
-
-            //Example of injecting global values to the action forms
-            JSONObject global = jsonObject.getJSONObject("global");
-            global.put("sex",memberObject.getGender());
-
-            JSONArray fields = jsonObject.getJSONObject(JsonFormConstants.STEP1).getJSONArray(JsonFormConstants.FIELDS);
-
-            //Sample Example of updating form fields before loading the form
-            int age = new Period(new DateTime(memberObject.getAge()),
-                    new DateTime()).getYears();
-            JSONObject actualAge = org.smartregister.util.JsonFormUtils.getFieldJSONObject(fields, "actual_age");
-            actualAge.put(JsonFormUtils.VALUE, age);
-
-
-            return jsonObject.toString();
-        } catch (JSONException e) {
-            Timber.e(e);
-        }
-
-        return null;
+        return jsonPayload;
     }
 
     @Override
@@ -82,7 +61,7 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
 
     @Override
     public BaseHtsVisitAction.ScheduleStatus getPreProcessedStatus() {
-        return null;
+        return BaseHtsVisitAction.ScheduleStatus.DUE;
     }
 
     @Override
