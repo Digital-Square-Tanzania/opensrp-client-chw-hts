@@ -57,32 +57,10 @@
     "title": "Repeat First HIV Test",
     "fields": [
       {
-        "key": "hts_type_of_test_used",
+        "key": "hts_repeat_first_test_kit_batch_number",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_type_of_test_used",
-        "type": "native_radio",
-        "label": "Type of test used",
-        "options": [
-          {
-            "key": "bioline",
-            "text": "Bioline"
-          },
-          {
-            "key": "hiv_syphilis_dual",
-            "text": "HIV/Syphilis Dual"
-          }
-        ],
-        "v_required": {
-          "value": "true",
-          "err": "Please select a value"
-        }
-      },
-      {
-        "key": "hts_kit_batch_number",
-        "openmrs_entity_parent": "",
-        "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_kit_batch_number",
+        "openmrs_entity_id": "hts_repeat_first_test_kit_batch_number",
         "type": "edit_text",
         "label": "Kit batch number",
         "hint": "Specify kit batch number",
@@ -92,10 +70,10 @@
         }
       },
       {
-        "key": "hts_kit_expire_date",
+        "key": "hts_repeat_first_test_kit_expire_date",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_kit_expire_date",
+        "openmrs_entity_id": "hts_repeat_first_test_kit_expire_date",
         "type": "date_picker",
         "min_date": "today",
         "max_date": "today+5y",
@@ -107,10 +85,10 @@
         }
       },
       {
-        "key": "hts_first_hiv_test_result",
+        "key": "hts_repeat_first_hiv_test_result",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_first_hiv_test_result",
+        "openmrs_entity_id": "hts_repeat_first_hiv_test_result",
         "type": "native_radio",
         "label": "First HIV Test result",
         "options": [
@@ -134,6 +112,38 @@
         "v_required": {
           "value": "true",
           "err": "Please select a value"
+        }
+      },
+      {
+        "key": "prompt_for_hiv_negative",
+        "type": "toaster_notes",
+        "text": "The client is HIV Negative",
+        "openmrs_entity_id": "prompt_for_hiv_negative",
+        "openmrs_entity": "concept",
+        "openmrs_entity_parent": "",
+        "toaster_type": "positive",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_repeat_first_hiv_test_rules.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "prompt_for_repeat_test_after_14_days",
+        "type": "toaster_notes",
+        "text": "HIV Test results are <b>INCONCLUSIVE</b><br>Repeat the test after 14 days",
+        "openmrs_entity_id": "prompt_for_repeat_test_after_14_days",
+        "openmrs_entity": "concept",
+        "openmrs_entity_parent": "",
+        "toaster_type": "warning",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_repeat_first_hiv_test_rules.yml"
+            }
+          }
         }
       }
     ]
