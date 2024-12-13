@@ -129,10 +129,6 @@
           {
             "key": "wastage",
             "text": "Wastage"
-          },
-          {
-            "key": "not_applicable",
-            "text": "Not-applicable"
           }
         ],
         "v_required": {

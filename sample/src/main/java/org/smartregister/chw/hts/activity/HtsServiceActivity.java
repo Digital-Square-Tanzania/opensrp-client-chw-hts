@@ -16,6 +16,7 @@ import org.smartregister.chw.hts.util.Constants;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 
 public class HtsServiceActivity extends BaseHtsVisitActivity {
@@ -75,10 +76,11 @@ public class HtsServiceActivity extends BaseHtsVisitActivity {
             actionList.put(getString(R.string.hts_first_hiv_test_action_title), map.get(getString(R.string.hts_first_hiv_test_action_title)));
         }
 
-        int i = 0;
+        String repeatedFirstTestsRegex = getString(R.string.hts_repeate_of_first_hiv_test_action_title).replace("%d", "\\d+");
+        Pattern repeatedFirstTestpattern = Pattern.compile(repeatedFirstTestsRegex);
         for (Map.Entry<String, BaseHtsVisitAction> entry : map.entrySet()) {
-            i++;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && entry.getKey().contains(String.format(getString(R.string.hts_repeate_of_first_hiv_test_action_title), i))) {
+            String key = entry.getKey();
+            if (repeatedFirstTestpattern.matcher(key).matches() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 actionList.putIfAbsent(entry.getKey(), entry.getValue());
             }
         }
@@ -87,12 +89,17 @@ public class HtsServiceActivity extends BaseHtsVisitActivity {
             actionList.put(getString(R.string.hts_second_hiv_test_action_title), map.get(getString(R.string.hts_second_hiv_test_action_title)));
         }
 
-        int j = 0;
+        String repeatedSecondTestsRegex = getString(R.string.hts_repeate_of_second_hiv_test_action_title).replace("%d", "\\d+");
+        Pattern repeatedSecondTestsPattern = Pattern.compile(repeatedSecondTestsRegex);
         for (Map.Entry<String, BaseHtsVisitAction> entry : map.entrySet()) {
-            j++;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && entry.getKey().contains(String.format(getString(R.string.hts_repeate_of_second_hiv_test_action_title), j))) {
+            String key = entry.getKey();
+            if (repeatedSecondTestsPattern.matcher(key).matches() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 actionList.putIfAbsent(entry.getKey(), entry.getValue());
             }
+        }
+
+        if (map.containsKey(getString(R.string.hts_repeate_of_first_hiv_test_title))) {
+            actionList.put(getString(R.string.hts_repeate_of_first_hiv_test_title), map.get(getString(R.string.hts_repeate_of_first_hiv_test_title)));
         }
 
         if (map.containsKey(getString(R.string.hts_unigold_hiv_test_action_title))) {
@@ -111,7 +118,6 @@ public class HtsServiceActivity extends BaseHtsVisitActivity {
             actionList.put(getString(R.string.hts_linkage_to_prevention_services_action_title), map.get(getString(R.string.hts_linkage_to_prevention_services_action_title)));
         }
         //====================End of Necessary evil ====================================
-
 
 
         if (mAdapter != null) {

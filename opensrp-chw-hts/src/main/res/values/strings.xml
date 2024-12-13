@@ -35,6 +35,7 @@
     <string name="hts_post_test_services_action_title">Post-Test Services</string>
     <string name="hts_dna_pcr_sample_collection_action_title">DNA-PCR Sample Collection</string>
     <string name="hts_linkage_to_prevention_services_action_title">Linkage to Prevention Services</string>
+    <string name="hts_repeate_of_first_hiv_test_title">Repeat of First HIV Test</string>
 
     <string name="optional">Optional</string>
     <string name="error_unable_save_visit">Unable to save visit</string>

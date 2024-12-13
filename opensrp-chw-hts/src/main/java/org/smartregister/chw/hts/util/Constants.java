@@ -33,7 +33,7 @@ public interface Constants {
         String HTS_UNIGOLD_HIV_TEST = "hts_unigold_hiv_test";
         String HTS_POST_TEST_SERVICES = "hts_post_test_services";
         String HTS_DNA_PCR_SAMPLE_COLLECTION = "hts_dna_pcr_sample_collection";
-        String HTS_LINKAGE_TO_PREVENTION_SERVICES = "hts_linkage_to_prevention_services";
+        String HTS_LINKAGE_TO_PREVENTION_SERVICES = "hts_preventive_services";
     }
 
     interface TABLES {
