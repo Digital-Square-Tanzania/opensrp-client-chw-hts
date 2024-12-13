@@ -66,11 +66,15 @@
         "options": [
           {
             "key": "bioline",
-            "text": "Bioline"
+            "text": "Bioline",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "bioline"
           },
           {
             "key": "hiv_syphilis_dual",
-            "text": "HIV/Syphilis Dual"
+            "text": "HIV/Syphilis Dual",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "hiv_syphilis_dual"
           }
         ],
         "v_required": {
@@ -116,24 +120,113 @@
         "options": [
           {
             "key": "non_reactive",
-            "text": "Non-Reactive"
+            "text": "Non-Reactive",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "non_reactive"
           },
           {
             "key": "reactive",
-            "text": "Reactive"
+            "text": "Reactive",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "reactive"
           },
           {
             "key": "invalid",
-            "text": "Invalid"
+            "text": "Invalid",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "invalid"
           },
           {
             "key": "wastage",
-            "text": "Wastage"
+            "text": "Wastage",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "wastage"
           }
         ],
         "v_required": {
           "value": "true",
           "err": "Please select a value"
+        }
+      },
+      {
+        "key": "prompt_for_hiv_negative",
+        "type": "toaster_notes",
+        "text": "The client is HIV Negative",
+        "openmrs_entity_id": "prompt_for_hiv_negative",
+        "openmrs_entity": "concept",
+        "openmrs_entity_parent": "",
+        "toaster_type": "positive",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_first_hiv_test_rules.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "prompt_repeat_the_test_using_another_test_kit",
+        "type": "toaster_notes",
+        "text": "Repeat the HIV Test",
+        "openmrs_entity_id": "prompt_repeat_the_test_using_another_test_kit",
+        "openmrs_entity": "concept",
+        "openmrs_entity_parent": "",
+        "toaster_type": "info",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_first_hiv_test_rules.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "hts_syphilis_test_results",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_syphilis_test_results",
+        "type": "native_radio",
+        "label": "Syphilis Test result ",
+        "options": [
+          {
+            "key": "negative",
+            "text": "Negative",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "negative"
+          },
+          {
+            "key": "positive",
+            "text": "Positive",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "positive"
+          }
+        ],
+        "v_required": {
+          "value": "true",
+          "err": "Please select a value"
+        },
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_first_hiv_test_rules.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "prompt_for_positive_syphilis",
+        "type": "toaster_notes",
+        "text": "Refer or Treat for Syphilis",
+        "openmrs_entity_id": "prompt_for_positive_syphilis",
+        "openmrs_entity": "concept",
+        "openmrs_entity_parent": "",
+        "toaster_type": "problem",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_first_hiv_test_rules.yml"
+            }
+          }
         }
       }
     ]

@@ -1,0 +1,28 @@
+---
+name: step1_prompt_for_hiv_negative
+description:
+priority: 1
+condition: "step1_hts_first_hiv_test_result == 'non_reactive'"
+actions:
+  - "isRelevant = true"
+---
+name: step1_prompt_repeat_the_test_using_another_test_kit
+description:
+priority: 1
+condition: "step1_hts_first_hiv_test_result == 'invalid' || step1_hts_first_hiv_test_result == 'wastage'"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_syphilis_test_results
+description:
+priority: 1
+condition: "step1_hts_type_of_test_used.contains('hiv_syphilis_dual') && !step1_hts_first_hiv_test_result.isEmpty() && step1_hts_first_hiv_test_result != 'invalid' && step1_hts_first_hiv_test_result != 'wastage'"
+actions:
+  - "isRelevant = true"
+---
+name: step1_prompt_for_positive_syphilis
+description:
+priority: 1
+condition: "step1_hts_syphilis_test_results == 'positive'"
+actions:
+  - "isRelevant = true"
