@@ -48,12 +48,13 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
      *
      * @param appExecutors Executor for handling background and main thread tasks
      * @param HtsLibrary   Reference to the HTS Library
-     * @param syncHelper    Helper for syncing data
+     * @param syncHelper   Helper for syncing data
      */
     @VisibleForTesting
     public BaseHtsServiceVisitInteractor(AppExecutors appExecutors, HtsLibrary HtsLibrary, ECSyncHelper syncHelper) {
         this.appExecutors = appExecutors;
         this.actionList = new LinkedHashMap<>();
+        this.mContext = HtsLibrary.getInstance().context().applicationContext();
     }
 
     /**
@@ -152,8 +153,9 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
      * Evaluates and initializes the first HIV test action for the HTS visit.
      * The method handles both the first test and repeat tests if necessary based on test results
      * (in-case there was wastage or invalid results in the previous test).
-     * @param details       A map of visit details, containing key-value pairs of information about the visit.
-     * @param repeatNumber  The current repeat test number; defaults to 1 for the initial test.
+     *
+     * @param details      A map of visit details, containing key-value pairs of information about the visit.
+     * @param repeatNumber The current repeat test number; defaults to 1 for the initial test.
      * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
      */
     private void evaluateFirstHivTest(Map<String, List<VisitDetail>> details, final int repeatNumber) throws BaseHtsVisitAction.ValidationException {
@@ -164,19 +166,24 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                     if (firstHivTestResults.equalsIgnoreCase("reactive")) {
                         evaluateSecondHivTest(details, 1);
 
+                        //removing extra actions that are not required in this scenario
                         removeCommonActions();
                         removeExtraRepeatActions(R.string.hts_repeate_of_first_hiv_test_action_title, repeatNumber);
                     } else if (firstHivTestResults.equalsIgnoreCase("non_reactive")) {
                         evaluatePostTestServices(details);
                         evaluateLinkageToPreventionServices(details);
 
-                        actionList.remove(context.getString(R.string.hts_second_hiv_test_action_title));
+                        //removing extra actions that are not required in this scenario
+                        actionList.remove(mContext.getString(R.string.hts_second_hiv_test_action_title));
+                        actionList.remove(mContext.getString(R.string.hts_unigold_hiv_test_action_title));
                         removeExtraRepeatActions(R.string.hts_repeate_of_first_hiv_test_action_title, repeatNumber);
                     } else {
                         evaluateFirstHivTest(details, repeatNumber + 1);
 
+                        //removing extra actions that are not required in this scenario
                         removeCommonActions();
-                        actionList.remove(context.getString(R.string.hts_second_hiv_test_action_title));
+                        actionList.remove(mContext.getString(R.string.hts_second_hiv_test_action_title));
+                        actionList.remove(mContext.getString(R.string.hts_unigold_hiv_test_action_title));
                     }
                 } catch (Exception e) {
                     Timber.e(e);
@@ -202,8 +209,8 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
      * Evaluates and initializes the second HIV test action for the HTS visit.
      * The second test is conducted if the first test yields reactive results.
      *
-     * @param details       A map of visit details, containing key-value pairs of information about the visit.
-     * @param repeatNumber  The current repeat test number; defaults to 1 for the initial second test.
+     * @param details      A map of visit details, containing key-value pairs of information about the visit.
+     * @param repeatNumber The current repeat test number; defaults to 1 for the initial second test.
      * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
      */
     private void evaluateSecondHivTest(Map<String, List<VisitDetail>> details, int repeatNumber) throws BaseHtsVisitAction.ValidationException {
@@ -213,8 +220,16 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                 try {
                     if (secondHivTestResults.equalsIgnoreCase("reactive")) {
                         evaluateUnigoldHivTest(details);
+
+                        //removing extra actions that are not required in this scenario
+                        removeExtraRepeatActions(R.string.hts_repeate_of_second_hiv_test_action_title, repeatNumber);
+                        actionList.remove(mContext.getString(R.string.hts_repeate_of_first_hiv_test_title));
                     } else if (secondHivTestResults.equalsIgnoreCase("non_reactive")) {
                         evaluateRepeatOfFirstHivTest(details);
+
+                        //removing extra actions that are not required in this scenario
+                        actionList.remove(mContext.getString(R.string.hts_unigold_hiv_test_action_title));
+                        removeExtraRepeatActions(R.string.hts_repeate_of_second_hiv_test_action_title, repeatNumber);
                     } else {
                         evaluateSecondHivTest(details, repeatNumber + 1);
                     }
@@ -294,13 +309,13 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             }
         };
 
-        BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_first_hiv_test_action_title))
+        BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_repeate_of_first_hiv_test_title))
                 .withOptional(true)
                 .withDetails(details)
                 .withHelper(actionHelper)
-                .withFormName(Constants.FORMS.HTS_FIRST_HIV_TEST)
+                .withFormName(Constants.FORMS.HTS_REPEAT_FIRST_HIV_TEST)
                 .build();
-        actionList.put(context.getString(R.string.hts_first_hiv_test_action_title), action);
+        actionList.put(context.getString(R.string.hts_repeate_of_first_hiv_test_title), action);
     }
 
     /**
@@ -358,7 +373,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
      * @param currentRepeatNumber The current repeat test number
      */
     private void removeExtraRepeatActions(@StringRes int resId, int currentRepeatNumber) {
-        for (int testNumber = currentRepeatNumber; testNumber <= actionList.size(); testNumber++) {
+        for (int testNumber = currentRepeatNumber + 1; testNumber <= actionList.size(); testNumber++) {
             actionList.remove(String.format(context.getString(resId), testNumber));
         }
     }
