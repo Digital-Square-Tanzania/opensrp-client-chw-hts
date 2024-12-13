@@ -1,6 +1,6 @@
 {
   "count": "1",
-  "encounter_type": "second_hiv_testing",
+  "encounter_type": "hiv_testing",
   "entity_id": "",
   "relational_id": "",
   "validate_on_submit": true,
@@ -54,43 +54,65 @@
     }
   },
   "step1": {
-    "title": "Second HIV Testing",
+    "title": "HIV Testing",
     "fields": [
       {
-        "key": "hts_second_kit_batch_number",
+        "key": "hts_type_of_test_used",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_second_kit_batch_number",
-        "type": "edit_text",
-        "label": "Second kit batch number",
-        "hint": "Specify second kit batch number",
+        "openmrs_entity_id": "hts_type_of_test_used",
+        "type": "native_radio",
+        "label": "Type of test used",
+        "options": [
+          {
+            "key": "bioline",
+            "text": "Bioline"
+          },
+          {
+            "key": "hiv_syphilis_dual",
+            "text": "HIV/Syphilis Dual"
+          }
+        ],
         "v_required": {
           "value": "true",
           "err": "Please select a value"
         }
       },
       {
-        "key": "hts_second_kit_expire_date",
+        "key": "hts_kit_batch_number",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_second_kit_expire_date",
+        "openmrs_entity_id": "hts_kit_batch_number",
+        "type": "edit_text",
+        "label": "Kit batch number",
+        "hint": "Specify kit batch number",
+        "v_required": {
+          "value": "true",
+          "err": "Please select a value"
+        }
+      },
+      {
+        "key": "hts_kit_expire_date",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "hts_kit_expire_date",
         "type": "date_picker",
         "min_date": "today",
         "max_date": "today+5y",
         "expanded": false,
-        "hint": "Select second kit expire date",
+        "hint": "Select kit expire date",
         "v_required": {
           "value": "true",
           "err": "Required"
         }
       },
       {
-        "key": "hts_second_hiv_test_result",
+        "key": "hts_first_hiv_test_result",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_second_hiv_test_result",
+        "openmrs_entity_id": "hts_first_hiv_test_result",
         "type": "native_radio",
-        "label": "Second HIV Test result",
+        "label": "First HIV Test result",
         "options": [
           {
             "key": "non_reactive",

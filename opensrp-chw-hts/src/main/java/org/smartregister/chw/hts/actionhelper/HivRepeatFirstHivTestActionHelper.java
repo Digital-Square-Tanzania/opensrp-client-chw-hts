@@ -20,9 +20,9 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-public class DnaPcrSampleCollectionActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
+public abstract class HivRepeatFirstHivTestActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
 
-    protected String wasSampleCollectedForDnaPcr;
+    protected String firstHivTestResults;
 
     protected String jsonPayload;
 
@@ -31,7 +31,7 @@ public class DnaPcrSampleCollectionActionHelper implements BaseHtsVisitAction.Ht
     protected MemberObject memberObject;
 
 
-    public DnaPcrSampleCollectionActionHelper(Context context, MemberObject memberObject) {
+    public HivRepeatFirstHivTestActionHelper(Context context, MemberObject memberObject) {
         this.context = context;
         this.memberObject = memberObject;
     }
@@ -50,11 +50,14 @@ public class DnaPcrSampleCollectionActionHelper implements BaseHtsVisitAction.Ht
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
-            wasSampleCollectedForDnaPcr = JsonFormUtils.getValue(jsonObject, "was_sample_collected_for_dna_pcr");
+            firstHivTestResults = JsonFormUtils.getValue(jsonObject, "hts_first_hiv_test_result");
+            processFirstHivTestResults(firstHivTestResults);
         } catch (JSONException e) {
             Timber.e(e);
         }
     }
+
+    public abstract void processFirstHivTestResults(String firstHivTestResults);
 
     @Override
     public BaseHtsVisitAction.ScheduleStatus getPreProcessedStatus() {
@@ -78,7 +81,7 @@ public class DnaPcrSampleCollectionActionHelper implements BaseHtsVisitAction.Ht
 
     @Override
     public BaseHtsVisitAction.Status evaluateStatusOnPayload() {
-        if (StringUtils.isNotBlank(wasSampleCollectedForDnaPcr)) {
+        if (StringUtils.isNotBlank(firstHivTestResults)) {
             return BaseHtsVisitAction.Status.COMPLETED;
         }
         return BaseHtsVisitAction.Status.PENDING;
