@@ -68,7 +68,7 @@ public class PostTestServicesActionHelper implements BaseHtsVisitAction.HtsVisit
 
     @Override
     public String postProcess(String jsonPayload) {
-        return "";
+        return null;
     }
 
     @Override

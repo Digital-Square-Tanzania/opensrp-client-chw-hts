@@ -71,7 +71,7 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
 
     @Override
     public String postProcess(String jsonPayload) {
-        return "";
+        return null;
     }
 
     @Override

@@ -68,7 +68,7 @@ public class DnaPcrSampleCollectionActionHelper implements BaseHtsVisitAction.Ht
 
     @Override
     public String postProcess(String jsonPayload) {
-        return "";
+        return null;
     }
 
     @Override

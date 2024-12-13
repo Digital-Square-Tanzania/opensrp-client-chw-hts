@@ -71,7 +71,7 @@ public abstract class HivRepeatFirstHivTestActionHelper implements BaseHtsVisitA
 
     @Override
     public String postProcess(String jsonPayload) {
-        return "";
+        return null;
     }
 
     @Override

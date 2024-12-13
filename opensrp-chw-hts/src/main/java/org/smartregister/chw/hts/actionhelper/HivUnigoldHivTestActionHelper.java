@@ -70,7 +70,7 @@ public abstract class HivUnigoldHivTestActionHelper implements BaseHtsVisitActio
 
     @Override
     public String postProcess(String jsonPayload) {
-        return "";
+        return null;
     }
 
     @Override
