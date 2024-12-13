@@ -312,7 +312,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                 .withOptional(true)
                 .withDetails(details)
                 .withHelper(actionHelper)
-                .withFormName(Constants.FORMS.HTS_FIRST_HIV_TEST)
+                .withFormName(Constants.FORMS.HTS_REPEAT_FIRST_HIV_TEST)
                 .build();
         actionList.put(context.getString(R.string.hts_repeate_of_first_hiv_test_title), action);
     }
