@@ -1,13 +1,10 @@
 package org.smartregister.chw.hts.actionhelper;
 
+import static org.smartregister.client.utils.constants.JsonFormConstants.JSON_FORM_KEY.GLOBAL;
+
 import android.content.Context;
 
-import com.vijay.jsonwizard.constants.JsonFormConstants;
-
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.hts.domain.MemberObject;
@@ -30,10 +27,13 @@ public abstract class HivRepeatFirstHivTestActionHelper implements BaseHtsVisitA
 
     protected MemberObject memberObject;
 
+    private final String visitType;
 
-    public HivRepeatFirstHivTestActionHelper(Context context, MemberObject memberObject) {
+
+    public HivRepeatFirstHivTestActionHelper(Context context, MemberObject memberObject, String visitType) {
         this.context = context;
         this.memberObject = memberObject;
+        this.visitType = visitType;
     }
 
     @Override
@@ -43,6 +43,14 @@ public abstract class HivRepeatFirstHivTestActionHelper implements BaseHtsVisitA
 
     @Override
     public String getPreProcessed() {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonPayload);
+            JSONObject global = jsonObject.getJSONObject(GLOBAL);
+            global.put("visit_type", visitType);
+            return jsonObject.toString();
+        } catch (Exception e) {
+            Timber.e(e);
+        }
         return null;
     }
 

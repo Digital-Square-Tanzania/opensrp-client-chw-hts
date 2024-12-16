@@ -106,8 +106,8 @@ public class HtsServiceActivity extends BaseHtsVisitActivity {
             actionList.put(getString(R.string.hts_unigold_hiv_test_action_title), map.get(getString(R.string.hts_unigold_hiv_test_action_title)));
         }
 
-        if (map.containsKey(getString(R.string.hts_first_hiv_test_action_title))) {
-            actionList.put(getString(R.string.hts_first_hiv_test_action_title), map.get(getString(R.string.hts_first_hiv_test_action_title)));
+        if (map.containsKey(getString(R.string.hts_dna_pcr_sample_collection_action_title))) {
+            actionList.put(getString(R.string.hts_dna_pcr_sample_collection_action_title), map.get(getString(R.string.hts_dna_pcr_sample_collection_action_title)));
         }
 
         if (map.containsKey(getString(R.string.hts_post_test_services_action_title))) {

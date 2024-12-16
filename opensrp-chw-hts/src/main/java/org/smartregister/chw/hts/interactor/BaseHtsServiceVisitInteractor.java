@@ -40,8 +40,9 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
     private final LinkedHashMap<String, BaseHtsVisitAction> actionList; // Stores all HTS actions for the visit
     protected BaseHtsVisitContract.InteractorCallBack callBack; // Callback interface to communicate with the presenter
     protected AppExecutors appExecutors; // Executor for managing asynchronous tasks
-    String visitType; // Type of the current HTS visit
+    private String mVisitType; // Type of the current HTS visit
     private Context mContext; // Context for accessing resources and helpers
+    private String mClientType;
 
     /**
      * Constructor for testing, allowing injection of dependencies.
@@ -111,8 +112,10 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
     private void evaluateVisitType(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
         VisitTypeActionHelper actionHelper = new VisitTypeActionHelper(mContext, memberObject) {
             @Override
-            public void processVisitType(String visitType) {
+            public void processVisitAndClientTypes(String visitType, String clientType) {
                 try {
+                    mVisitType = visitType;
+                    mClientType = clientType;
                     evaluatePreTestServices(details);
                     evaluateFirstHivTest(details, 1);
                 } catch (Exception e) {
@@ -159,7 +162,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
      * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
      */
     private void evaluateFirstHivTest(Map<String, List<VisitDetail>> details, final int repeatNumber) throws BaseHtsVisitAction.ValidationException {
-        HivFirstHivTestActionHelper actionHelper = new HivFirstHivTestActionHelper(mContext, memberObject) {
+        HivFirstHivTestActionHelper actionHelper = new HivFirstHivTestActionHelper(mContext, memberObject, mClientType) {
             @Override
             public void processFirstHivTestResults(String firstHivTestResults) {
                 try {
@@ -169,14 +172,20 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                         //removing extra actions that are not required in this scenario
                         removeCommonActions();
                         removeExtraRepeatActions(R.string.hts_repeate_of_first_hiv_test_action_title, repeatNumber);
+                        actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
                     } else if (firstHivTestResults.equalsIgnoreCase("non_reactive")) {
-                        evaluatePostTestServices(details);
-                        evaluateLinkageToPreventionServices(details);
+                        if (StringUtils.isNotBlank(mClientType) && mClientType.equalsIgnoreCase("verification")) {
+                            evaluateDnaPcrSampleCollection(details);
+                        } else {
+                            evaluatePostTestServices(details);
+                            evaluateLinkageToPreventionServices(details);
+                        }
 
                         //removing extra actions that are not required in this scenario
                         actionList.remove(mContext.getString(R.string.hts_second_hiv_test_action_title));
                         actionList.remove(mContext.getString(R.string.hts_unigold_hiv_test_action_title));
                         removeExtraRepeatActions(R.string.hts_repeate_of_first_hiv_test_action_title, repeatNumber);
+
                     } else {
                         evaluateFirstHivTest(details, repeatNumber + 1);
 
@@ -184,6 +193,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                         removeCommonActions();
                         actionList.remove(mContext.getString(R.string.hts_second_hiv_test_action_title));
                         actionList.remove(mContext.getString(R.string.hts_unigold_hiv_test_action_title));
+                        actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
                     }
                 } catch (Exception e) {
                     Timber.e(e);
@@ -214,7 +224,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
      * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
      */
     private void evaluateSecondHivTest(Map<String, List<VisitDetail>> details, int repeatNumber) throws BaseHtsVisitAction.ValidationException {
-        HivSecondHivTestActionHelper actionHelper = new HivSecondHivTestActionHelper(mContext, memberObject) {
+        HivSecondHivTestActionHelper actionHelper = new HivSecondHivTestActionHelper(mContext, memberObject, mClientType) {
             @Override
             public void processSecondHivTestResults(String secondHivTestResults) {
                 try {
@@ -224,14 +234,23 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                         //removing extra actions that are not required in this scenario
                         removeExtraRepeatActions(R.string.hts_repeate_of_second_hiv_test_action_title, repeatNumber);
                         actionList.remove(mContext.getString(R.string.hts_repeate_of_first_hiv_test_title));
+                        actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
                     } else if (secondHivTestResults.equalsIgnoreCase("non_reactive")) {
-                        evaluateRepeatOfFirstHivTest(details);
+                        if (StringUtils.isNotBlank(mClientType) && mClientType.equalsIgnoreCase("verification")) {
+                            evaluateDnaPcrSampleCollection(details);
+                        } else {
+                            evaluateRepeatOfFirstHivTest(details);
+                        }
 
                         //removing extra actions that are not required in this scenario
                         actionList.remove(mContext.getString(R.string.hts_unigold_hiv_test_action_title));
                         removeExtraRepeatActions(R.string.hts_repeate_of_second_hiv_test_action_title, repeatNumber);
                     } else {
                         evaluateSecondHivTest(details, repeatNumber + 1);
+
+                        //removing extra actions that are not required in this scenario
+                        actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
+                        actionList.remove(mContext.getString(R.string.hts_unigold_hiv_test_action_title));
                     }
                 } catch (Exception e) {
                     Timber.e(e);
@@ -262,12 +281,21 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
      * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
      */
     private void evaluateUnigoldHivTest(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
-        HivUnigoldHivTestActionHelper actionHelper = new HivUnigoldHivTestActionHelper(mContext, memberObject) {
+        HivUnigoldHivTestActionHelper actionHelper = new HivUnigoldHivTestActionHelper(mContext, memberObject, mClientType, mVisitType) {
             @Override
             public void processUnigoldHivTestResults(String unigoldHivTestResults) {
                 try {
                     if (unigoldHivTestResults.equalsIgnoreCase("reactive")) {
                         evaluatePostTestServices(details);
+                    } else {
+                        if (StringUtils.isNotBlank(mClientType) && mClientType.equalsIgnoreCase("verification")) {
+                            evaluateDnaPcrSampleCollection(details);
+                            removeCommonActions();
+                        } else {
+                            evaluatePostTestServices(details);
+                            evaluateLinkageToPreventionServices(details);
+                            actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
+                        }
                     }
                 } catch (Exception e) {
                     Timber.e(e);
@@ -294,13 +322,18 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
      * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
      */
     private void evaluateRepeatOfFirstHivTest(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
-        HivRepeatFirstHivTestActionHelper actionHelper = new HivRepeatFirstHivTestActionHelper(mContext, memberObject) {
+        HivRepeatFirstHivTestActionHelper actionHelper = new HivRepeatFirstHivTestActionHelper(mContext, memberObject, mVisitType) {
             @Override
             public void processFirstHivTestResults(String firstHivTestResults) {
                 try {
                     if (firstHivTestResults.equalsIgnoreCase("non_reactive")) {
                         evaluatePostTestServices(details);
                         evaluateLinkageToPreventionServices(details);
+
+                        actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
+                    } else if (StringUtils.isNotBlank(mVisitType) && mClientType.equalsIgnoreCase("repeat") && firstHivTestResults.equalsIgnoreCase("reactive")) {
+                        evaluateDnaPcrSampleCollection(details);
+                        removeCommonActions();
                     }
                 } catch (Exception e) {
                     Timber.e(e);

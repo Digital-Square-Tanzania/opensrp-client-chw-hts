@@ -2,7 +2,7 @@
 name: step1_prompt_for_hiv_negative
 description:
 priority: 1
-condition: "step1_hts_first_hiv_test_result == 'non_reactive'"
+condition: "global_client_type != 'verification'  && step1_hts_first_hiv_test_result == 'non_reactive'"
 actions:
   - "isRelevant = true"
 ---
@@ -10,6 +10,13 @@ name: step1_prompt_repeat_the_test_using_another_test_kit
 description:
 priority: 1
 condition: "step1_hts_first_hiv_test_result == 'invalid' || step1_hts_first_hiv_test_result == 'wastage'"
+actions:
+  - "isRelevant = true"
+---
+name: step1_prompt_for_conducting_dna_pcr
+description:
+priority: 1
+condition: "global_client_type == 'verification' && step1_hts_first_hiv_test_result == 'non_reactive'"
 actions:
   - "isRelevant = true"
 ---
