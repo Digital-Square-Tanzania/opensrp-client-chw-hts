@@ -291,7 +291,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                         if (StringUtils.isNotBlank(mClientType) && mClientType.equalsIgnoreCase("verification")) {
                             evaluateDnaPcrSampleCollection(details);
                             removeCommonActions();
-                        } else{
+                        } else {
                             evaluatePostTestServices(details);
                             evaluateLinkageToPreventionServices(details);
                             actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
@@ -322,13 +322,18 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
      * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
      */
     private void evaluateRepeatOfFirstHivTest(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
-        HivRepeatFirstHivTestActionHelper actionHelper = new HivRepeatFirstHivTestActionHelper(mContext, memberObject) {
+        HivRepeatFirstHivTestActionHelper actionHelper = new HivRepeatFirstHivTestActionHelper(mContext, memberObject, mVisitType) {
             @Override
             public void processFirstHivTestResults(String firstHivTestResults) {
                 try {
                     if (firstHivTestResults.equalsIgnoreCase("non_reactive")) {
                         evaluatePostTestServices(details);
                         evaluateLinkageToPreventionServices(details);
+
+                        actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
+                    } else if (StringUtils.isNotBlank(mVisitType) && mClientType.equalsIgnoreCase("repeat") && firstHivTestResults.equalsIgnoreCase("reactive")) {
+                        evaluateDnaPcrSampleCollection(details);
+                        removeCommonActions();
                     }
                 } catch (Exception e) {
                     Timber.e(e);
