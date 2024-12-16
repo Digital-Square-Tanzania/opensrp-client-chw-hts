@@ -27,7 +27,7 @@ public abstract class HivFirstHivTestActionHelper implements BaseHtsVisitAction.
 
     protected MemberObject memberObject;
 
-    private String clientType;
+    private final String clientType;
 
     public HivFirstHivTestActionHelper(Context context, MemberObject memberObject, String clientType) {
         this.context = context;

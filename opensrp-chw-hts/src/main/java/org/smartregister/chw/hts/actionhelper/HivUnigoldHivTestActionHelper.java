@@ -27,9 +27,9 @@ public abstract class HivUnigoldHivTestActionHelper implements BaseHtsVisitActio
 
     protected MemberObject memberObject;
 
-    private String clientType;
+    private final String clientType;
 
-    private String visitType;
+    private final String visitType;
 
 
     public HivUnigoldHivTestActionHelper(Context context, MemberObject memberObject, String clientType, String visitType) {

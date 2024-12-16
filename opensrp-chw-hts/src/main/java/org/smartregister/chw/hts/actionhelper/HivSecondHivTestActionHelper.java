@@ -32,7 +32,7 @@ public abstract class HivSecondHivTestActionHelper implements BaseHtsVisitAction
 
     protected MemberObject memberObject;
 
-    private String clientType;
+    private final String clientType;
 
 
     public HivSecondHivTestActionHelper(Context context, MemberObject memberObject, String clientType) {
