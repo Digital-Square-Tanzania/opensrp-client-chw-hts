@@ -111,7 +111,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
     private void evaluateVisitType(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
         VisitTypeActionHelper actionHelper = new VisitTypeActionHelper(mContext, memberObject) {
             @Override
-            public void processVisitType(String visitType) {
+            public void processClientType(String visitType) {
                 try {
                     evaluatePreTestServices(details);
                     evaluateFirstHivTest(details, 1);

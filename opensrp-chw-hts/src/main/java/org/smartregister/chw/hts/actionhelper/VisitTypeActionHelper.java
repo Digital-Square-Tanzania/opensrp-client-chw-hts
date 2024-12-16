@@ -2,21 +2,14 @@ package org.smartregister.chw.hts.actionhelper;
 
 import android.content.Context;
 
-import com.vijay.jsonwizard.constants.JsonFormConstants;
-
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.hts.domain.MemberObject;
 import org.smartregister.chw.hts.domain.VisitDetail;
 import org.smartregister.chw.hts.model.BaseHtsVisitAction;
 import org.smartregister.chw.hts.util.JsonFormUtils;
-import org.smartregister.chw.hts.util.VisitUtils;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +28,7 @@ import timber.log.Timber;
  */
 public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
 
-    protected String visitType;
+    protected String clientType;
 
     protected String jsonPayload;
 
@@ -87,8 +80,8 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
-            visitType = JsonFormUtils.getValue(jsonObject, "hts_visit_type");
-            processVisitType(visitType);
+            clientType = JsonFormUtils.getValue(jsonObject, "hts_client_type");
+            processClientType(clientType);
         } catch (JSONException e) {
             Timber.e(e);
         }
@@ -128,7 +121,7 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
      */
     @Override
     public BaseHtsVisitAction.Status evaluateStatusOnPayload() {
-        if (StringUtils.isNotBlank(visitType)) {
+        if (StringUtils.isNotBlank(clientType)) {
             return BaseHtsVisitAction.Status.COMPLETED;
         }
         return BaseHtsVisitAction.Status.PENDING;
@@ -145,6 +138,6 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
      *
      * @param visitType The type of the visit to process.
      */
-    public abstract void processVisitType(String visitType);
+    public abstract void processClientType(String visitType);
 
 }
