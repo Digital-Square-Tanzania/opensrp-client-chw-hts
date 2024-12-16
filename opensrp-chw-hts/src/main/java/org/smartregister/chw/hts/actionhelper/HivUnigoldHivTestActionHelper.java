@@ -29,11 +29,14 @@ public abstract class HivUnigoldHivTestActionHelper implements BaseHtsVisitActio
 
     private String clientType;
 
+    private String visitType;
 
-    public HivUnigoldHivTestActionHelper(Context context, MemberObject memberObject, String clientType) {
+
+    public HivUnigoldHivTestActionHelper(Context context, MemberObject memberObject, String clientType, String visitType) {
         this.context = context;
         this.memberObject = memberObject;
         this.clientType = clientType;
+        this.visitType = visitType;
     }
 
     @Override
@@ -47,6 +50,7 @@ public abstract class HivUnigoldHivTestActionHelper implements BaseHtsVisitActio
             JSONObject jsonObject = new JSONObject(jsonPayload);
             JSONObject global = jsonObject.getJSONObject(GLOBAL);
             global.put("client_type", clientType);
+            global.put("visit_type", visitType);
             return jsonObject.toString();
         } catch (Exception e) {
             Timber.e(e);

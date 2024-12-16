@@ -281,7 +281,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
      * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
      */
     private void evaluateUnigoldHivTest(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
-        HivUnigoldHivTestActionHelper actionHelper = new HivUnigoldHivTestActionHelper(mContext, memberObject, mClientType) {
+        HivUnigoldHivTestActionHelper actionHelper = new HivUnigoldHivTestActionHelper(mContext, memberObject, mClientType, mVisitType) {
             @Override
             public void processUnigoldHivTestResults(String unigoldHivTestResults) {
                 try {

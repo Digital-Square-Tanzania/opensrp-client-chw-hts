@@ -2,6 +2,13 @@
 name: step1_prompt_for_conducting_dna_pcr
 description:
 priority: 1
-condition: "global_client_type == 'verification' && step1_hts_final_hiv_status == 'non_reactive'"
+condition: "(global_client_type == 'verification' || global_visit_type == 'repeat') && step1_hts_final_hiv_status == 'non_reactive'"
+actions:
+  - "isRelevant = true"
+---
+name: step1_prompt_for_repeat_test_after_14_days
+description:
+priority: 1
+condition: "global_client_type != 'verification' && global_visit_type != 'repeat' && step1_hts_final_hiv_status == 'non_reactive'"
 actions:
   - "isRelevant = true"

@@ -156,7 +156,23 @@
         "relevance": {
           "rules-engine": {
             "ex-rules": {
-              "rules-file": "hts_first_hiv_test_rules.yml"
+              "rules-file": "hts_unigold_test_rules.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "prompt_for_repeat_test_after_14_days",
+        "type": "toaster_notes",
+        "text": "HIV Test results are <b>INCONCLUSIVE</b><br>Repeat the test after 14 days",
+        "openmrs_entity_id": "prompt_for_repeat_test_after_14_days",
+        "openmrs_entity": "concept",
+        "openmrs_entity_parent": "",
+        "toaster_type": "warning",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_unigold_test_rules.yml"
             }
           }
         }
