@@ -30,6 +30,8 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
 
     protected String clientType;
 
+    protected String visitType;
+
     protected String jsonPayload;
 
     protected Context context;
@@ -81,7 +83,8 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
             clientType = JsonFormUtils.getValue(jsonObject, "hts_client_type");
-            processClientType(clientType);
+            visitType = JsonFormUtils.getValue(jsonObject, "hts_visit_type");
+            processVisitAndClientTypes(visitType, clientType);
         } catch (JSONException e) {
             Timber.e(e);
         }
@@ -137,7 +140,8 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
      * This method is abstract and must be implemented by subclasses to handle visit type-specific logic.
      *
      * @param visitType The type of the visit to process.
+     * @param clientType The type of client.
      */
-    public abstract void processClientType(String visitType);
+    public abstract void processVisitAndClientTypes(String visitType, String clientType);
 
 }

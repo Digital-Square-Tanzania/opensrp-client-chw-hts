@@ -1,0 +1,7 @@
+---
+name: step1_prompt_for_conducting_dna_pcr
+description:
+priority: 1
+condition: "global_client_type == 'verification' && step1_hts_second_hiv_test_result == 'non_reactive'"
+actions:
+  - "isRelevant = true"

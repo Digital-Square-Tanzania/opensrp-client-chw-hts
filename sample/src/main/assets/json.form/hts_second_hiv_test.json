@@ -53,6 +53,7 @@
       "value": ""
     }
   },
+  "global": {},
   "step1": {
     "title": "Second HIV Testing",
     "fields": [
@@ -112,6 +113,22 @@
         "v_required": {
           "value": "true",
           "err": "Please select a value"
+        }
+      },
+      {
+        "key": "prompt_for_conducting_dna_pcr",
+        "type": "toaster_notes",
+        "text": "Collect sample for DNA-PCR",
+        "openmrs_entity_id": "prompt_for_conducting_dna_pcr",
+        "openmrs_entity": "concept",
+        "openmrs_entity_parent": "",
+        "toaster_type": "positive",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_second_hiv_test_rules.yml"
+            }
+          }
         }
       }
     ]

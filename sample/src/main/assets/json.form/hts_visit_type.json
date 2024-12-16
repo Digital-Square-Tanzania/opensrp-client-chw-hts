@@ -72,6 +72,12 @@
             "openmrs_entity_id": "new_client"
           },
           {
+            "key": "repeat",
+            "text": "Repeat",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "repeat"
+          },
+          {
             "key": "returning",
             "text": "Returning",
             "openmrs_entity": "concept",
