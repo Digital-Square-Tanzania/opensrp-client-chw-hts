@@ -1,5 +1,7 @@
 package org.smartregister.chw.hts.actionhelper;
 
+import static org.smartregister.client.utils.constants.JsonFormConstants.JSON_FORM_KEY.GLOBAL;
+
 import android.content.Context;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
@@ -30,10 +32,13 @@ public abstract class HivSecondHivTestActionHelper implements BaseHtsVisitAction
 
     protected MemberObject memberObject;
 
+    private final String clientType;
 
-    public HivSecondHivTestActionHelper(Context context, MemberObject memberObject) {
+
+    public HivSecondHivTestActionHelper(Context context, MemberObject memberObject, String clientType) {
         this.context = context;
         this.memberObject = memberObject;
+        this.clientType = clientType;
     }
 
     @Override
@@ -43,6 +48,15 @@ public abstract class HivSecondHivTestActionHelper implements BaseHtsVisitAction
 
     @Override
     public String getPreProcessed() {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonPayload);
+            JSONObject global = jsonObject.getJSONObject(GLOBAL);
+            global.put("client_type", clientType);
+            return jsonObject.toString();
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
         return null;
     }
 

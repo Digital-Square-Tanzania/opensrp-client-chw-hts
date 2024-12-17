@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import timber.log.Timber;
+
 /**
  * This action list allows users to either load a form or link it to a separate fragment.
  */
@@ -69,7 +71,7 @@ public class BaseHtsVisitAction {
                 try {
                     jsonObject = new JSONObject(getTranslatedString(FormUtils.getInstance(context).getFormJson(formName).toString(), context));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Timber.e(e);
                 }
 
                 // update the form details
@@ -110,7 +112,7 @@ public class BaseHtsVisitAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
     }
 

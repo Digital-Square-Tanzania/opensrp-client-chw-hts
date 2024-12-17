@@ -2,21 +2,14 @@ package org.smartregister.chw.hts.actionhelper;
 
 import android.content.Context;
 
-import com.vijay.jsonwizard.constants.JsonFormConstants;
-
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.hts.domain.MemberObject;
 import org.smartregister.chw.hts.domain.VisitDetail;
 import org.smartregister.chw.hts.model.BaseHtsVisitAction;
 import org.smartregister.chw.hts.util.JsonFormUtils;
-import org.smartregister.chw.hts.util.VisitUtils;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +27,8 @@ import timber.log.Timber;
  * Subclasses must implement the abstract `processVisitType` method to handle specific visit types.
  */
 public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
+
+    protected String clientType;
 
     protected String visitType;
 
@@ -87,8 +82,9 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
+            clientType = JsonFormUtils.getValue(jsonObject, "hts_client_type");
             visitType = JsonFormUtils.getValue(jsonObject, "hts_visit_type");
-            processVisitType(visitType);
+            processVisitAndClientTypes(visitType, clientType);
         } catch (JSONException e) {
             Timber.e(e);
         }
@@ -128,7 +124,7 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
      */
     @Override
     public BaseHtsVisitAction.Status evaluateStatusOnPayload() {
-        if (StringUtils.isNotBlank(visitType)) {
+        if (StringUtils.isNotBlank(clientType)) {
             return BaseHtsVisitAction.Status.COMPLETED;
         }
         return BaseHtsVisitAction.Status.PENDING;
@@ -144,7 +140,8 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
      * This method is abstract and must be implemented by subclasses to handle visit type-specific logic.
      *
      * @param visitType The type of the visit to process.
+     * @param clientType The type of client.
      */
-    public abstract void processVisitType(String visitType);
+    public abstract void processVisitAndClientTypes(String visitType, String clientType);
 
 }
