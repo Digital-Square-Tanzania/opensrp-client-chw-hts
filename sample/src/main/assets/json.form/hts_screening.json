@@ -291,10 +291,10 @@
         }
       },
       {
-        "key": "hts_does_the_client_still_want_to_test",
+        "key": "does_the_client_still_want_to_test",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "",
-        "openmrs_entity_id": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "does_the_client_still_want_to_test",
         "type": "native_radio",
         "label": "Does the client still want to test?",
         "label_text_style": "bold",
@@ -302,13 +302,11 @@
         "options": [
           {
             "key": "yes",
-            "text": "Yes",
-            "value": true
+            "text": "Yes"
           },
           {
             "key": "no",
-            "text": "No",
-            "value": true
+            "text": "No"
           }
         ],
         "v_required": {
