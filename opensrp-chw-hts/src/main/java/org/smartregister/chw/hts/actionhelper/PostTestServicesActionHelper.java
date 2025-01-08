@@ -2,12 +2,7 @@ package org.smartregister.chw.hts.actionhelper;
 
 import android.content.Context;
 
-import com.vijay.jsonwizard.constants.JsonFormConstants;
-
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.hts.domain.MemberObject;
@@ -22,7 +17,7 @@ import timber.log.Timber;
 
 public class PostTestServicesActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
 
-    protected String wasTheClientProvidedWithPostTestCounselling;
+    protected String htsPostTestServices;
 
     protected String jsonPayload;
 
@@ -50,7 +45,7 @@ public class PostTestServicesActionHelper implements BaseHtsVisitAction.HtsVisit
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
-            wasTheClientProvidedWithPostTestCounselling = JsonFormUtils.getValue(jsonObject, "was_the_client_provided_with_post_testing_counselling");
+            htsPostTestServices = JsonFormUtils.getValue(jsonObject, "hts_post_test_services");
         } catch (JSONException e) {
             Timber.e(e);
         }
@@ -78,7 +73,7 @@ public class PostTestServicesActionHelper implements BaseHtsVisitAction.HtsVisit
 
     @Override
     public BaseHtsVisitAction.Status evaluateStatusOnPayload() {
-        if (StringUtils.isNotBlank(wasTheClientProvidedWithPostTestCounselling)) {
+        if (StringUtils.isNotBlank(htsPostTestServices)) {
             return BaseHtsVisitAction.Status.COMPLETED;
         }
         return BaseHtsVisitAction.Status.PENDING;

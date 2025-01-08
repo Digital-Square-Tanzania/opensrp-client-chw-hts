@@ -50,7 +50,7 @@ public class LinkageToPreventionServicesActionHelper implements BaseHtsVisitActi
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
-            referralToPreventionServicesProvided = JsonFormUtils.getValue(jsonObject, "referral_to_prevention_services_provided");
+            referralToPreventionServicesProvided = JsonFormUtils.getValue(jsonObject, "hts_preventive_services");
         } catch (JSONException e) {
             Timber.e(e);
         }
