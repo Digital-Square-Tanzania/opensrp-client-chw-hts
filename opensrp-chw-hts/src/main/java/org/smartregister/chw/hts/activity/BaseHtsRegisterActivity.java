@@ -51,7 +51,7 @@ public class BaseHtsRegisterActivity extends BaseRegisterActivity implements Hts
         super.onCreate(savedInstanceState);
         BASE_ENTITY_ID = getIntent().getStringExtra(Constants.ACTIVITY_PAYLOAD.BASE_ENTITY_ID);
         FAMILY_BASE_ENTITY_ID = getIntent().getStringExtra(Constants.ACTIVITY_PAYLOAD.FAMILY_BASE_ENTITY_ID);
-        FORM_NAME = getIntent().getStringExtra(Constants.ACTIVITY_PAYLOAD.Hts_FORM_NAME);
+        FORM_NAME = getIntent().getStringExtra(Constants.ACTIVITY_PAYLOAD.HTS_FORM_NAME);
         onStartActivityWithAction();
     }
 

@@ -3,6 +3,7 @@ package org.smartregister.chw.hts.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -38,6 +39,7 @@ import org.smartregister.view.activity.SecuredActivity;
 import java.text.MessageFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import timber.log.Timber;
 
@@ -123,7 +125,65 @@ public class BaseHtsVisitActivity extends SecuredActivity implements BaseHtsVisi
 
     @Override
     public void initializeActions(LinkedHashMap<String, BaseHtsVisitAction> map) {
-        actionList.putAll(map);
+        actionList.clear();
+
+        //Necessary evil to rearrange the actions according to a specific arrangement
+        if (map.containsKey(getString(R.string.hts_visit_type_action_title))) {
+            actionList.put(getString(R.string.hts_visit_type_action_title), map.get(getString(R.string.hts_visit_type_action_title)));
+        }
+
+        if (map.containsKey(getString(R.string.hts_pre_test_services_action_title))) {
+            actionList.put(getString(R.string.hts_pre_test_services_action_title), map.get(getString(R.string.hts_pre_test_services_action_title)));
+        }
+
+        if (map.containsKey(getString(R.string.hts_first_hiv_test_action_title))) {
+            actionList.put(getString(R.string.hts_first_hiv_test_action_title), map.get(getString(R.string.hts_first_hiv_test_action_title)));
+        }
+
+        String repeatedFirstTestsRegex = getString(R.string.hts_repeate_of_first_hiv_test_action_title).replace("%d", "\\d+");
+        Pattern repeatedFirstTestpattern = Pattern.compile(repeatedFirstTestsRegex);
+        for (Map.Entry<String, BaseHtsVisitAction> entry : map.entrySet()) {
+            String key = entry.getKey();
+            if (repeatedFirstTestpattern.matcher(key).matches() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                actionList.putIfAbsent(entry.getKey(), entry.getValue());
+            }
+        }
+
+        if (map.containsKey(getString(R.string.hts_second_hiv_test_action_title))) {
+            actionList.put(getString(R.string.hts_second_hiv_test_action_title), map.get(getString(R.string.hts_second_hiv_test_action_title)));
+        }
+
+        String repeatedSecondTestsRegex = getString(R.string.hts_repeate_of_second_hiv_test_action_title).replace("%d", "\\d+");
+        Pattern repeatedSecondTestsPattern = Pattern.compile(repeatedSecondTestsRegex);
+        for (Map.Entry<String, BaseHtsVisitAction> entry : map.entrySet()) {
+            String key = entry.getKey();
+            if (repeatedSecondTestsPattern.matcher(key).matches() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                actionList.putIfAbsent(entry.getKey(), entry.getValue());
+            }
+        }
+
+        if (map.containsKey(getString(R.string.hts_repeate_of_first_hiv_test_title))) {
+            actionList.put(getString(R.string.hts_repeate_of_first_hiv_test_title), map.get(getString(R.string.hts_repeate_of_first_hiv_test_title)));
+        }
+
+        if (map.containsKey(getString(R.string.hts_unigold_hiv_test_action_title))) {
+            actionList.put(getString(R.string.hts_unigold_hiv_test_action_title), map.get(getString(R.string.hts_unigold_hiv_test_action_title)));
+        }
+
+        if (map.containsKey(getString(R.string.hts_dna_pcr_sample_collection_action_title))) {
+            actionList.put(getString(R.string.hts_dna_pcr_sample_collection_action_title), map.get(getString(R.string.hts_dna_pcr_sample_collection_action_title)));
+        }
+
+        if (map.containsKey(getString(R.string.hts_post_test_services_action_title))) {
+            actionList.put(getString(R.string.hts_post_test_services_action_title), map.get(getString(R.string.hts_post_test_services_action_title)));
+        }
+
+        if (map.containsKey(getString(R.string.hts_linkage_to_prevention_services_action_title))) {
+            actionList.put(getString(R.string.hts_linkage_to_prevention_services_action_title), map.get(getString(R.string.hts_linkage_to_prevention_services_action_title)));
+        }
+        //====================End of Necessary evil ====================================
+
+
         if (mAdapter != null) {
             mAdapter.notifyDataSetChanged();
         }

@@ -34,7 +34,7 @@ public class BaseHtsRegisterFragmentPresenter implements HtsRegisterFragmentCont
 
     @Override
     public String getMainCondition() {
-        return " "+getMainTable()+".is_closed = 0 ";
+        return " "+getMainTable()+".is_closed = 0 AND does_the_client_still_want_to_test = 'yes' ";
     }
 
     @Override
@@ -97,7 +97,7 @@ public class BaseHtsRegisterFragmentPresenter implements HtsRegisterFragmentCont
 
     @Override
     public String getMainTable() {
-        return Constants.TABLES.HTS_ENROLLMENT;
+        return Constants.TABLES.HTS_REGISTER;
     }
 
     @Override

@@ -39,12 +39,12 @@ public class HtsVisitsUtil extends VisitUtils {
             Date updatedAtDate = new Date(v.getUpdatedAt().getTime());
             int daysDiff = TimeUtils.getElapsedDays(updatedAtDate);
             if (daysDiff > 1) {
-                if (v.getVisitType().equalsIgnoreCase(Constants.EVENT_TYPE.HTS_FOLLOW_UP_VISIT) && getHtsVisitStatus(v).equals(Complete)) {
+                if (v.getVisitType().equalsIgnoreCase(Constants.EVENT_TYPE.HTS_SERVICES) && getHtsVisitStatus(v).equals(Complete)) {
                     prepFollowupVisit.add(v);
                 }
             }
         }
-        if (prepFollowupVisit.size() > 0) {
+        if (!prepFollowupVisit.isEmpty()) {
             processVisits(prepFollowupVisit, visitRepository, visitDetailsRepository);
             for (Visit v : prepFollowupVisit) {
                 if (shouldCreateCloseVisitEvent(v)) {
@@ -63,6 +63,7 @@ public class HtsVisitsUtil extends VisitUtils {
         NCUtils.startClientProcessing();
     }
 
+    //TODO refactor implementation for computing VISIT Status
     public static String getHtsVisitStatus(Visit lastVisit) {
         HashMap<String, Boolean> completionObject = new HashMap<>();
         try {
@@ -77,24 +78,8 @@ public class HtsVisitsUtil extends VisitUtils {
         } catch (Exception e) {
             Timber.e(e);
         }
-        return getActionStatus(completionObject);
-    }
-
-    public static String getHtsServiceVisitStatus(Visit lastVisit) {
-        HashMap<String, Boolean> completionObject = new HashMap<>();
-        try {
-            JSONObject jsonObject = new JSONObject(lastVisit.getJson());
-            JSONArray obs = jsonObject.getJSONArray("obs");
-
-            completionObject.put("isMedicalHistoryDone", computeCompletionStatusForAction(obs, "medical_history_completion_status"));
-            completionObject.put("isPhysicalExamDone", computeCompletionStatusForAction(obs, "physical_exam_completion_status"));
-            completionObject.put("isHtsDone", computeCompletionStatusForAction(obs, "hts_completion_status"));
-
-
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-        return getActionStatus(completionObject);
+//        return getActionStatus(completionObject);
+        return Complete;
     }
 
     public static String getHtsProcedureVisitStatus(Visit lastVisit) {

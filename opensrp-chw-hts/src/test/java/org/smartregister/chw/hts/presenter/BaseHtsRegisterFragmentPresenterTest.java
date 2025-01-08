@@ -47,20 +47,20 @@ public class BaseHtsRegisterFragmentPresenterTest {
 
     @Test
     public void getDefaultSortQuery() {
-        Assert.assertEquals(Constants.TABLES.HTS_ENROLLMENT + "." + DBConstants.KEY.LAST_INTERACTED_WITH + " DESC ", baseHtsRegisterFragmentPresenter.getDefaultSortQuery());
+        Assert.assertEquals(Constants.TABLES.HTS_REGISTER + "." + DBConstants.KEY.LAST_INTERACTED_WITH + " DESC ", baseHtsRegisterFragmentPresenter.getDefaultSortQuery());
     }
 
     @Test
     public void getMainTable() {
-        Assert.assertEquals(Constants.TABLES.HTS_ENROLLMENT, baseHtsRegisterFragmentPresenter.getMainTable());
+        Assert.assertEquals(Constants.TABLES.HTS_REGISTER, baseHtsRegisterFragmentPresenter.getMainTable());
     }
 
     @Test
     public void initializeQueries() {
         Set<View> visibleColumns = new TreeSet<>();
         baseHtsRegisterFragmentPresenter.initializeQueries(null);
-        Mockito.doNothing().when(view).initializeQueryParams(Constants.TABLES.HTS_ENROLLMENT, null, null);
-        Mockito.verify(view).initializeQueryParams(Constants.TABLES.HTS_ENROLLMENT, null, null);
+        Mockito.doNothing().when(view).initializeQueryParams(Constants.TABLES.HTS_REGISTER, null, null);
+        Mockito.verify(view).initializeQueryParams(Constants.TABLES.HTS_REGISTER, null, null);
         Mockito.verify(view).initializeAdapter(visibleColumns);
         Mockito.verify(view).countExecute();
         Mockito.verify(view).filterandSortInInitializeQueries();

@@ -5,7 +5,6 @@ public interface Constants {
     int REQUEST_CODE_GET_JSON = 2244;
     String ENCOUNTER_TYPE = "encounter_type";
     String STEP_ONE = "step1";
-    String STEP_TWO = "step2";
     String Hts_VISIT_GROUP = "hts_visit_group";
 
 
@@ -16,16 +15,15 @@ public interface Constants {
     }
 
     interface EVENT_TYPE {
-        String HTS_ENROLLMENT = "Hts Enrollment";
+        String HTS_SCREENING = "HTS Screening";
         String HTS_SERVICES = "Hts Services";
-        String HTS_FOLLOW_UP_VISIT = "Hts Follow-up Visit";
         String VOID_EVENT = "Void Event";
         String CLOSE_HTS_SERVICE = "Close Hts Service";
 
     }
 
     interface FORMS {
-        String HTS_ENROLLMENT = "hts_enrollment";
+        String HTS_SCREENING = "hts_screening";
         String HTS_VISIT_TYPE = "hts_visit_type";
         String HTS_PRE_TEST_SERVICES = "hts_pre_test_services";
         String HTS_FIRST_HIV_TEST = "hts_first_hiv_test";
@@ -38,14 +36,14 @@ public interface Constants {
     }
 
     interface TABLES {
-        String HTS_ENROLLMENT = "ec_hts_enrollment";
+        String HTS_REGISTER = "ec_hts_register";
         String HTS_SERVICES = "ec_hts_services";
     }
 
     interface ACTIVITY_PAYLOAD {
         String BASE_ENTITY_ID = "BASE_ENTITY_ID";
         String FAMILY_BASE_ENTITY_ID = "FAMILY_BASE_ENTITY_ID";
-        String Hts_FORM_NAME = "Hts_FORM_NAME";
+        String HTS_FORM_NAME = "HTS_FORM_NAME";
         String MEMBER_PROFILE_OBJECT = "MemberObject";
         String EDIT_MODE = "editMode";
         String PROFILE_TYPE = "profile_type";

@@ -138,7 +138,7 @@ public class HtsUtil {
         Event closeHtsEvent = new Gson().
                 fromJson(jsonString, Event.class);
 
-        closeHtsEvent.setEntityType(Constants.TABLES.HTS_ENROLLMENT);
+        closeHtsEvent.setEntityType(Constants.TABLES.HTS_REGISTER);
         closeHtsEvent.setEventType(Constants.EVENT_TYPE.CLOSE_HTS_SERVICE);
         closeHtsEvent.setBaseEntityId(baseEntityId);
         closeHtsEvent.setFormSubmissionId(JsonFormUtils.

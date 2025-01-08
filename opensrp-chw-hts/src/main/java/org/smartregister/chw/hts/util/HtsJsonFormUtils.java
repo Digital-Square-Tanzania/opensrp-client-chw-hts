@@ -1,9 +1,9 @@
 package org.smartregister.chw.hts.util;
 
 import static org.smartregister.chw.hts.util.Constants.ENCOUNTER_TYPE;
-import static org.smartregister.chw.hts.util.Constants.STEP_ONE;
-import static org.smartregister.chw.hts.util.Constants.STEP_TWO;
 import static org.smartregister.chw.hts.util.Constants.Hts_VISIT_GROUP;
+import static org.smartregister.chw.hts.util.Constants.STEP_ONE;
+import static org.smartregister.client.utils.constants.JsonFormConstants.COUNT;
 
 import android.util.Log;
 
@@ -45,17 +45,17 @@ public class HtsJsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
     public static JSONArray htsFormFields(JSONObject jsonForm) {
         try {
+            int stepsCount = jsonForm.getInt(COUNT);
             JSONArray fieldsOne = fields(jsonForm, STEP_ONE);
-            JSONArray fieldsTwo = fields(jsonForm, STEP_TWO);
-            if (fieldsTwo != null) {
-                for (int i = 0; i < fieldsTwo.length(); i++) {
-                    fieldsOne.put(fieldsTwo.get(i));
+            for (int i = 2; i <= stepsCount; i++) {
+                JSONArray fields = fields(jsonForm, MessageFormat.format("step{0}", i));
+                for (int j = 0; j < fields.length(); j++) {
+                    fieldsOne.put(fields.get(j));
                 }
             }
             return fieldsOne;
-
         } catch (JSONException e) {
-            Log.e(TAG, "", e);
+            Timber.e(e);
         }
         return null;
     }
@@ -90,8 +90,8 @@ public class HtsJsonFormUtils extends org.smartregister.util.JsonFormUtils {
         String entityId = getString(jsonForm, ENTITY_ID);
         String encounter_type = jsonForm.optString(Constants.JSON_FORM_EXTRA.ENCOUNTER_TYPE);
 
-        if (Constants.EVENT_TYPE.HTS_ENROLLMENT.equals(encounter_type)) {
-            encounter_type = Constants.TABLES.HTS_ENROLLMENT;
+        if (Constants.EVENT_TYPE.HTS_SCREENING.equals(encounter_type)) {
+            encounter_type = Constants.TABLES.HTS_REGISTER;
         } else if (Constants.EVENT_TYPE.HTS_SERVICES.equals(encounter_type)) {
             encounter_type = Constants.TABLES.HTS_SERVICES;
         }
@@ -325,6 +325,13 @@ public class HtsJsonFormUtils extends org.smartregister.util.JsonFormUtils {
         return "";
     }
 
+    public static String cleanString(String dirtyString) {
+        if (StringUtils.isBlank(dirtyString))
+            return "";
+
+        return dirtyString.substring(1, dirtyString.length() - 1);
+    }
+
     private static class NameID {
         private String name;
         private int position;
@@ -333,13 +340,6 @@ public class HtsJsonFormUtils extends org.smartregister.util.JsonFormUtils {
             this.name = name;
             this.position = position;
         }
-    }
-
-    public static String cleanString(String dirtyString) {
-        if (StringUtils.isBlank(dirtyString))
-            return "";
-
-        return dirtyString.substring(1, dirtyString.length() - 1);
     }
 
 }

@@ -22,8 +22,8 @@ import androidx.viewpager.widget.ViewPager;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
-import org.smartregister.chw.hts.R;
 import org.smartregister.chw.hts.HtsLibrary;
+import org.smartregister.chw.hts.R;
 import org.smartregister.chw.hts.contract.HtsProfileContract;
 import org.smartregister.chw.hts.custom_views.BaseHtsFloatingMenu;
 import org.smartregister.chw.hts.dao.HtsDao;
@@ -57,7 +57,6 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
     protected TextView textViewUniqueID;
     protected TextView textViewRecordHts;
     protected TextView textViewRecordAnc;
-    protected TextView textViewContinueHts;
     protected TextView textViewContinueHtsService;
     protected TextView manualProcessVisit;
     protected TextView textview_positive_date;
@@ -69,7 +68,6 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
     protected RelativeLayout rlUpcomingServices;
     protected RelativeLayout rlFamilyServicesDue;
     protected RelativeLayout visitStatus;
-    protected RelativeLayout visitInProgress;
     protected RelativeLayout htsServiceInProgress;
     protected ImageView imageViewCross;
     protected TextView textViewUndo;
@@ -133,14 +131,12 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
         textViewVisitDone = findViewById(R.id.textview_visit_done);
         visitStatus = findViewById(R.id.record_visit_not_done_bar);
         visitDone = findViewById(R.id.visit_done_bar);
-        visitInProgress = findViewById(R.id.record_visit_in_progress);
         htsServiceInProgress = findViewById(R.id.record_hts_service_visit_in_progress);
         recordVisits = findViewById(R.id.record_visits);
         progressBar = findViewById(R.id.progress_bar);
         textViewRecordAncNotDone = findViewById(R.id.textview_record_anc_not_done);
         textViewVisitDoneEdit = findViewById(R.id.textview_edit);
         textViewRecordHts = findViewById(R.id.textview_record_hts);
-        textViewContinueHts = findViewById(R.id.textview_continue);
         textViewContinueHtsService = findViewById(R.id.continue_hts_service);
         manualProcessVisit = findViewById(R.id.textview_manual_process);
         textViewRecordAnc = findViewById(R.id.textview_record_anc);
@@ -154,7 +150,6 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
         rlFamilyServicesDue.setOnClickListener(this);
         rlHtsPositiveDate.setOnClickListener(this);
         textViewRecordHts.setOnClickListener(this);
-        textViewContinueHts.setOnClickListener(this);
         textViewContinueHtsService.setOnClickListener(this);
         manualProcessVisit.setOnClickListener(this);
         textViewRecordAnc.setOnClickListener(this);
@@ -190,7 +185,7 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
         try {
 
             if (getServiceVisit() != null) {
-                if (!getServiceVisit().getProcessed() && HtsVisitsUtil.getHtsServiceVisitStatus(getServiceVisit()).equalsIgnoreCase(HtsVisitsUtil.Complete)) {
+                if (!getServiceVisit().getProcessed() && HtsVisitsUtil.getHtsVisitStatus(getServiceVisit()).equalsIgnoreCase(HtsVisitsUtil.Complete)) {
                     manualProcessVisit.setVisibility(View.VISIBLE);
                     textViewContinueHtsService.setText(R.string.edit_visit);
                     manualProcessVisit.setOnClickListener(view -> {
@@ -256,8 +251,6 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
             this.openFollowupVisit();
         } else if (id == R.id.continue_hts_service) {
             this.continueService();
-        } else if (id == R.id.textview_continue) {
-            this.continueDischarge();
         }
     }
 
