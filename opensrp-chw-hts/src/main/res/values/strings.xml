@@ -56,7 +56,6 @@
     <string name="call_hts_client">Hts Client</string>
     <string name="head_of_family">Head of family</string>
     <string name="hts_client">Hts Client</string>
-    <string name="hts_contraindication">Clear Contraindication first, to proceed with MC procedure</string>
     <string name="copy_to_clipboard">Copy to clipboard</string>
     <string name="copied_phone_number">PhoneNumber copied to clipboard</string>
     <string name="call">Call</string>

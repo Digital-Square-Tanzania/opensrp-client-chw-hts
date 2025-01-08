@@ -147,18 +147,6 @@
                     </LinearLayout>
 
                     <org.smartregister.view.customcontrols.CustomFontTextView
-                        android:id="@+id/family_hts_head"
-                        style="@style/CustomFontTextViewStyle.ClientList.Light"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="0dp"
-                        android:paddingTop="@dimen/register_list_top_bottom_min_padding"
-                        android:text="@string/hts_contraindication"
-                        android:textColor="@color/alert_urgent_red"
-                        android:textSize="@dimen/hts_register_list_due_size"
-                        android:visibility="gone" />
-
-                    <org.smartregister.view.customcontrols.CustomFontTextView
                         android:id="@+id/primary_hts_caregiver"
                         style="@style/CustomFontTextViewStyle.ClientList.Light"
                         android:layout_width="wrap_content"

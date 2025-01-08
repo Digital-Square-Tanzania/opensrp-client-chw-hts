@@ -210,9 +210,6 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
 
                 processHtsService();
 
-                if (isVisitOnProgress(getServiceVisit())) {
-                    findViewById(R.id.family_hts_head).setVisibility(View.GONE);
-                }
 
             }
 
@@ -228,7 +225,6 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
 
     protected void processHtsService() {
         rlLastVisit.setVisibility(View.VISIBLE);
-        findViewById(R.id.family_hts_head).setVisibility(View.VISIBLE);
     }
 
 
