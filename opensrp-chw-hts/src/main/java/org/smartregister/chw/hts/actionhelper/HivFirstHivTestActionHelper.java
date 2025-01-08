@@ -1,8 +1,11 @@
 package org.smartregister.chw.hts.actionhelper;
 
 import static org.smartregister.client.utils.constants.JsonFormConstants.JSON_FORM_KEY.GLOBAL;
+import static org.smartregister.client.utils.constants.JsonFormConstants.VALUE;
 
 import android.content.Context;
+
+import com.vijay.jsonwizard.constants.JsonFormConstants;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
@@ -20,6 +23,8 @@ import timber.log.Timber;
 public abstract class HivFirstHivTestActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
 
     protected String firstHivTestResults;
+
+    protected String typeOfTestUsed;
 
     protected String jsonPayload;
 
@@ -59,6 +64,7 @@ public abstract class HivFirstHivTestActionHelper implements BaseHtsVisitAction.
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
             firstHivTestResults = JsonFormUtils.getValue(jsonObject, "hts_first_hiv_test_result");
+            typeOfTestUsed = JsonFormUtils.getValue(jsonObject, "hts_type_of_test_used");
             processFirstHivTestResults(firstHivTestResults);
         } catch (JSONException e) {
             Timber.e(e);
@@ -79,6 +85,16 @@ public abstract class HivFirstHivTestActionHelper implements BaseHtsVisitAction.
 
     @Override
     public String postProcess(String jsonPayload) {
+        if (StringUtils.isNotBlank(firstHivTestResults)) {
+            try {
+                JSONObject form = new JSONObject(jsonPayload);
+                JSONObject preTestServicesCompletionStatus = JsonFormUtils.getFieldJSONObject(form.getJSONObject(JsonFormConstants.STEP1).getJSONArray(org.smartregister.util.JsonFormUtils.FIELDS), "hts_first_hiv_test_completion_status");
+                preTestServicesCompletionStatus.put(VALUE, true);
+                return form.toString();
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+        }
         return null;
     }
 
@@ -91,6 +107,8 @@ public abstract class HivFirstHivTestActionHelper implements BaseHtsVisitAction.
     public BaseHtsVisitAction.Status evaluateStatusOnPayload() {
         if (StringUtils.isNotBlank(firstHivTestResults)) {
             return BaseHtsVisitAction.Status.COMPLETED;
+        } else if(StringUtils.isNotBlank(typeOfTestUsed)){
+            return BaseHtsVisitAction.Status.PARTIALLY_COMPLETED;
         }
         return BaseHtsVisitAction.Status.PENDING;
     }

@@ -71,6 +71,7 @@ public class HtsVisitsUtil extends VisitUtils {
             JSONArray obs = jsonObject.getJSONArray("obs");
 
             completionObject.put("isPreTestServicesDone", computeCompletionStatusForAction(obs, "pre_test_services_completion_status"));
+            completionObject.put("isFirstHivTestDone", computeCompletionStatusForAction(obs, "hts_first_hiv_test_completion_status"));
 
         } catch (Exception e) {
             Timber.e(e);

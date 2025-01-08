@@ -218,10 +218,6 @@
             "openmrs_entity_id": "positive"
           }
         ],
-        "v_required": {
-          "value": "true",
-          "err": "Please select a value"
-        },
         "relevance": {
           "rules-engine": {
             "ex-rules": {
@@ -245,9 +241,14 @@
             }
           }
         }
+      },
+      {
+        "key": "hts_first_hiv_test_completion_status",
+        "type": "hidden",
+        "openmrs_entity_id": "hts_first_hiv_test_completion_status",
+        "openmrs_entity": "concept",
+        "openmrs_entity_parent": ""
       }
     ]
   }
 }
-
-
