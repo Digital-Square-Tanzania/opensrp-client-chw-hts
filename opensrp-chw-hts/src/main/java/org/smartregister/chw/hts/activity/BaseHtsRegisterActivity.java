@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.AllConstants;
 import org.smartregister.Context;
+import org.smartregister.chw.hts.R;
 import org.smartregister.chw.hts.contract.HtsRegisterContract;
 import org.smartregister.chw.hts.fragment.BaseHtsRegisterFragment;
 import org.smartregister.chw.hts.interactor.BaseHtsRegisterInteractor;
@@ -32,7 +33,6 @@ import org.smartregister.repository.BaseRepository;
 import org.smartregister.util.Utils;
 import org.smartregister.view.activity.BaseRegisterActivity;
 import org.smartregister.view.fragment.BaseRegisterFragment;
-import org.smartregister.chw.hts.R;
 
 import java.util.Arrays;
 import java.util.Date;
