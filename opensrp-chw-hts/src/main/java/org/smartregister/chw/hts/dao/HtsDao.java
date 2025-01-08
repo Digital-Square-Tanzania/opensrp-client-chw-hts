@@ -1,6 +1,7 @@
 package org.smartregister.chw.hts.dao;
 
 import org.smartregister.chw.hts.domain.MemberObject;
+import org.smartregister.chw.hts.util.Constants;
 import org.smartregister.dao.AbstractDao;
 
 import java.text.SimpleDateFormat;
@@ -161,7 +162,7 @@ public class HtsDao extends AbstractDao {
                 "mr.* " +
                 "from ec_family_member m " +
                 "inner join ec_family f on m.relational_id = f.base_entity_id " +
-                "inner join ec_hts_enrollment mr on mr.base_entity_id = m.base_entity_id " +
+                "inner join " + Constants.TABLES.HTS_REGISTER + " mr on mr.base_entity_id = m.base_entity_id " +
                 "left join ec_family_member fh on fh.base_entity_id = f.family_head " +
                 "left join ec_family_member pcg on pcg.base_entity_id = f.primary_caregiver " +
                 "where mr.is_closed = 0 AND m.base_entity_id ='" + baseEntityID + "' ";
@@ -200,7 +201,7 @@ public class HtsDao extends AbstractDao {
                 "mr.* " +
                 "from ec_family_member m " +
                 "inner join ec_family f on m.relational_id = f.base_entity_id " +
-                "inner join ec_hts_enrollment mr on mr.base_entity_id = m.base_entity_id " +
+                "inner join " + Constants.TABLES.HTS_REGISTER + " mr on mr.base_entity_id = m.base_entity_id " +
                 "left join ec_family_member fh on fh.base_entity_id = f.family_head " +
                 "left join ec_family_member pcg on pcg.base_entity_id = f.primary_caregiver " +
                 "where mr.is_closed = 0 ";
