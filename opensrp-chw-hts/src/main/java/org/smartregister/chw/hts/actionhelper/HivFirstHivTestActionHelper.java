@@ -22,17 +22,13 @@ import timber.log.Timber;
 
 public abstract class HivFirstHivTestActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
 
-    protected String firstHivTestResults;
-
-    protected String typeOfTestUsed;
-
-    protected String jsonPayload;
-
-    protected Context context;
-
-    protected MemberObject memberObject;
-
     private final String clientType;
+    protected String firstHivTestResults;
+    protected String syphilisTestResults;
+    protected String typeOfTestUsed;
+    protected String jsonPayload;
+    protected Context context;
+    protected MemberObject memberObject;
 
     public HivFirstHivTestActionHelper(Context context, MemberObject memberObject, String clientType) {
         this.context = context;
@@ -64,6 +60,7 @@ public abstract class HivFirstHivTestActionHelper implements BaseHtsVisitAction.
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
             firstHivTestResults = JsonFormUtils.getValue(jsonObject, "hts_first_hiv_test_result");
+            syphilisTestResults = JsonFormUtils.getValue(jsonObject, "hts_syphilis_test_results");
             typeOfTestUsed = JsonFormUtils.getValue(jsonObject, "hts_type_of_test_used");
             processFirstHivTestResults(firstHivTestResults);
         } catch (JSONException e) {
@@ -85,7 +82,7 @@ public abstract class HivFirstHivTestActionHelper implements BaseHtsVisitAction.
 
     @Override
     public String postProcess(String jsonPayload) {
-        if (StringUtils.isNotBlank(firstHivTestResults)) {
+        if (StringUtils.isNotBlank(firstHivTestResults) && (StringUtils.isNotBlank(syphilisTestResults) || (StringUtils.isNotBlank(syphilisTestResults) && typeOfTestUsed.equalsIgnoreCase("bioline")))) {
             try {
                 JSONObject form = new JSONObject(jsonPayload);
                 JSONObject preTestServicesCompletionStatus = JsonFormUtils.getFieldJSONObject(form.getJSONObject(JsonFormConstants.STEP1).getJSONArray(org.smartregister.util.JsonFormUtils.FIELDS), "hts_first_hiv_test_completion_status");
@@ -107,7 +104,7 @@ public abstract class HivFirstHivTestActionHelper implements BaseHtsVisitAction.
     public BaseHtsVisitAction.Status evaluateStatusOnPayload() {
         if (StringUtils.isNotBlank(firstHivTestResults)) {
             return BaseHtsVisitAction.Status.COMPLETED;
-        } else if(StringUtils.isNotBlank(typeOfTestUsed)){
+        } else if (StringUtils.isNotBlank(typeOfTestUsed)) {
             return BaseHtsVisitAction.Status.PARTIALLY_COMPLETED;
         }
         return BaseHtsVisitAction.Status.PENDING;

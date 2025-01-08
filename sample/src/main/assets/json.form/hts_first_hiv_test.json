@@ -143,11 +143,7 @@
             "openmrs_entity": "concept",
             "openmrs_entity_id": "wastage"
           }
-        ],
-        "v_required": {
-          "value": "true",
-          "err": "Please select a value"
-        }
+        ]
       },
       {
         "key": "prompt_for_hiv_negative",
