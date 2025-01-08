@@ -72,6 +72,7 @@ public class PreTestServicesActionHelper implements BaseHtsVisitAction.HtsVisitA
                 JSONObject form = new JSONObject(jsonPayload);
                 JSONObject preTestServicesCompletionStatus = JsonFormUtils.getFieldJSONObject(form.getJSONObject(JsonFormConstants.STEP1).getJSONArray(org.smartregister.util.JsonFormUtils.FIELDS), "pre_test_services_completion_status");
                 preTestServicesCompletionStatus.put(VALUE, true);
+                return form.toString();
             } catch (Exception e) {
                 Timber.e(e);
             }
