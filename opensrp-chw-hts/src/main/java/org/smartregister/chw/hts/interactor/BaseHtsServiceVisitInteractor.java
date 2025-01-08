@@ -187,7 +187,8 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                         removeExtraRepeatActions(R.string.hts_repeate_of_first_hiv_test_action_title, repeatNumber);
 
                     } else {
-                        evaluateFirstHivTest(details, repeatNumber + 1);
+                        if (StringUtils.isNotBlank(firstHivTestResults))
+                            evaluateFirstHivTest(details, repeatNumber + 1);
 
                         //removing extra actions that are not required in this scenario
                         removeCommonActions();
@@ -246,7 +247,8 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                         actionList.remove(mContext.getString(R.string.hts_unigold_hiv_test_action_title));
                         removeExtraRepeatActions(R.string.hts_repeate_of_second_hiv_test_action_title, repeatNumber);
                     } else {
-                        evaluateSecondHivTest(details, repeatNumber + 1);
+                        if (StringUtils.isNotBlank(secondHivTestResults))
+                            evaluateSecondHivTest(details, repeatNumber + 1);
 
                         //removing extra actions that are not required in this scenario
                         actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));

@@ -198,6 +198,13 @@
             "ex": "equalTo(., \"yes\")"
           }
         }
+      },
+      {
+        "key": "pre_test_services_completion_status",
+        "type": "hidden",
+        "openmrs_entity_id": "pre_test_services_completion_status",
+        "openmrs_entity": "concept",
+        "openmrs_entity_parent": ""
       }
     ]
   }

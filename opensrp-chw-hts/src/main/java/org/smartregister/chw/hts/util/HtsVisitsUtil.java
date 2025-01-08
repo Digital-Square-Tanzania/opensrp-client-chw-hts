@@ -70,16 +70,12 @@ public class HtsVisitsUtil extends VisitUtils {
             JSONObject jsonObject = new JSONObject(lastVisit.getJson());
             JSONArray obs = jsonObject.getJSONArray("obs");
 
-            completionObject.put("isFirstVitalDone", computeCompletionStatusForAction(obs, "first_vital_completion_status"));
-            completionObject.put("isSecondVitalDone", computeCompletionStatusForAction(obs, "second_vital_completion_status"));
-            completionObject.put("isDischargeConditionDone", computeCompletionStatus(obs, "discharge_condition"));
-
+            completionObject.put("isPreTestServicesDone", computeCompletionStatusForAction(obs, "pre_test_services_completion_status"));
 
         } catch (Exception e) {
             Timber.e(e);
         }
-//        return getActionStatus(completionObject);
-        return Complete;
+        return getActionStatus(completionObject);
     }
 
     public static String getHtsProcedureVisitStatus(Visit lastVisit) {
