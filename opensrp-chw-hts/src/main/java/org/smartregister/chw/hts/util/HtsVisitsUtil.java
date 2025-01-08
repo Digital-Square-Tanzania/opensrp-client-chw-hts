@@ -73,22 +73,8 @@ public class HtsVisitsUtil extends VisitUtils {
             completionObject.put("isPreTestServicesDone", computeCompletionStatusForAction(obs, "pre_test_services_completion_status"));
             completionObject.put("isFirstHivTestDone", computeCompletionStatusForAction(obs, "hts_first_hiv_test_completion_status"));
 
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-        return getActionStatus(completionObject);
-    }
-
-    public static String getHtsProcedureVisitStatus(Visit lastVisit) {
-        HashMap<String, Boolean> completionObject = new HashMap<>();
-        try {
-            JSONObject jsonObject = new JSONObject(lastVisit.getJson());
-            JSONArray obs = jsonObject.getJSONArray("obs");
-            JSONObject checkObj = obs.getJSONObject(0);
-            JSONArray value = checkObj.getJSONArray("values");
-
-            completionObject.put("isClientConsentForMcProcedureDone", computeCompletionStatus(obs, "client_consent_for_mc_procedure"));
-            completionObject.put("isMcProcedureDone", computeCompletionStatusForAction(obs, "mc_procedure_completion_status"));
+            if (checkIfSecondTestShouldBePerformed(obs))
+                completionObject.put("isSecondHivTestDone", computeCompletionStatusForAction(obs, "hts_second_hiv_test_completion_status"));
 
         } catch (Exception e) {
             Timber.e(e);
@@ -143,18 +129,18 @@ public class HtsVisitsUtil extends VisitUtils {
         }
     }
 
-    public static boolean checkIfShouldInitiateToPrEP(JSONArray obs) throws JSONException {
-        String shouldInitiate = "";
+    public static boolean checkIfSecondTestShouldBePerformed(JSONArray obs) throws JSONException {
+        String firstTestResults = "";
         int size = obs.length();
         for (int i = 0; i < size; i++) {
             JSONObject checkObj = obs.getJSONObject(i);
-            if (checkObj.getString("fieldCode").equalsIgnoreCase("should_initiate")) {
+            if (checkObj.getString("fieldCode").equalsIgnoreCase("hts_first_hiv_test_result")) {
                 JSONArray values = checkObj.getJSONArray("values");
-                shouldInitiate = values.getString(0);
+                firstTestResults = values.getString(0);
                 break;
             }
         }
-        return shouldInitiate.equalsIgnoreCase("yes");
+        return firstTestResults.equalsIgnoreCase("reactive");
     }
 
     public static boolean checkIfShouldRemainToPrEP(JSONArray obs) throws JSONException {

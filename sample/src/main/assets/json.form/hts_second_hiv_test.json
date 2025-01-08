@@ -109,11 +109,7 @@
             "key": "wastage",
             "text": "Wastage"
           }
-        ],
-        "v_required": {
-          "value": "true",
-          "err": "Please select a value"
-        }
+        ]
       },
       {
         "key": "prompt_for_conducting_dna_pcr",
@@ -130,9 +126,14 @@
             }
           }
         }
+      },
+      {
+        "key": "hts_second_hiv_test_completion_status",
+        "type": "hidden",
+        "openmrs_entity_id": "hts_second_hiv_test_completion_status",
+        "openmrs_entity": "concept",
+        "openmrs_entity_parent": ""
       }
     ]
   }
 }
-
-

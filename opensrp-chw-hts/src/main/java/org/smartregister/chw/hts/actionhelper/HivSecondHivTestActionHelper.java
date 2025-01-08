@@ -1,15 +1,13 @@
 package org.smartregister.chw.hts.actionhelper;
 
 import static org.smartregister.client.utils.constants.JsonFormConstants.JSON_FORM_KEY.GLOBAL;
+import static org.smartregister.client.utils.constants.JsonFormConstants.VALUE;
 
 import android.content.Context;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.hts.domain.MemberObject;
@@ -24,15 +22,12 @@ import timber.log.Timber;
 
 public abstract class HivSecondHivTestActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
 
-    protected String secondHivTestResults;
-
-    protected String jsonPayload;
-
-    protected Context context;
-
-    protected MemberObject memberObject;
-
     private final String clientType;
+    protected String secondHivTestResults;
+    protected String secondTestKitBatchNumber;
+    protected String jsonPayload;
+    protected Context context;
+    protected MemberObject memberObject;
 
 
     public HivSecondHivTestActionHelper(Context context, MemberObject memberObject, String clientType) {
@@ -65,6 +60,7 @@ public abstract class HivSecondHivTestActionHelper implements BaseHtsVisitAction
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
             secondHivTestResults = JsonFormUtils.getValue(jsonObject, "hts_second_hiv_test_result");
+            secondTestKitBatchNumber = JsonFormUtils.getValue(jsonObject, "hts_second_kit_batch_number");
             processSecondHivTestResults(secondHivTestResults);
         } catch (JSONException e) {
             Timber.e(e);
@@ -85,6 +81,16 @@ public abstract class HivSecondHivTestActionHelper implements BaseHtsVisitAction
 
     @Override
     public String postProcess(String jsonPayload) {
+        if (StringUtils.isNotBlank(secondHivTestResults)) {
+            try {
+                JSONObject form = new JSONObject(jsonPayload);
+                JSONObject preTestServicesCompletionStatus = JsonFormUtils.getFieldJSONObject(form.getJSONObject(JsonFormConstants.STEP1).getJSONArray(org.smartregister.util.JsonFormUtils.FIELDS), "hts_second_hiv_test_completion_status");
+                preTestServicesCompletionStatus.put(VALUE, true);
+                return form.toString();
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+        }
         return null;
     }
 
@@ -97,6 +103,8 @@ public abstract class HivSecondHivTestActionHelper implements BaseHtsVisitAction
     public BaseHtsVisitAction.Status evaluateStatusOnPayload() {
         if (StringUtils.isNotBlank(secondHivTestResults)) {
             return BaseHtsVisitAction.Status.COMPLETED;
+        } else if (StringUtils.isNotBlank(secondTestKitBatchNumber)) {
+            return BaseHtsVisitAction.Status.PARTIALLY_COMPLETED;
         }
         return BaseHtsVisitAction.Status.PENDING;
     }
