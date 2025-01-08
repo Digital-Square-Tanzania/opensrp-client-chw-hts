@@ -10,6 +10,8 @@ import org.smartregister.domain.AlertStatus;
 
 import java.util.Date;
 
+import timber.log.Timber;
+
 public class BaseHtsProfileInteractor implements HtsProfileContract.Interactor {
     protected AppExecutors appExecutors;
 
@@ -39,7 +41,7 @@ public class BaseHtsProfileInteractor implements HtsProfileContract.Interactor {
             try {
                 HtsUtil.saveFormEvent(jsonString);
             } catch (Exception e) {
-                e.printStackTrace();
+                Timber.e(e);
             }
 
         };

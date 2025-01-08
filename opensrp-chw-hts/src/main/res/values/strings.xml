@@ -80,5 +80,6 @@
     <string name="female">Female</string>
     <string name="return_to_hts_clients">Return to Hts Clients</string>
     <string name="number_not_filled">client phone number, not filled</string>
+    <string name="hts_visit">Hts Visits</string>
 
 </resources>

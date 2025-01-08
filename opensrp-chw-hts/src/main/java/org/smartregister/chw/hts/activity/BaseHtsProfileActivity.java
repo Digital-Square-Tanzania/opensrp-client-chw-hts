@@ -209,8 +209,6 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
                 }
 
                 processHtsService();
-
-
             }
 
         } catch (Exception e) {
