@@ -55,7 +55,7 @@
   },
   "global": {},
   "step1": {
-    "title": "HIV Testing",
+    "title": "Uni-Gold HIV Test",
     "fields": [
       {
         "key": "hts_unigold_kit_batch_number",
@@ -94,50 +94,20 @@
         "label": "Unigold HIV Test result",
         "options": [
           {
-            "key": "negative",
-            "text": "Negative"
-          },
-          {
-            "key": "positive",
-            "text": "Positive"
-          },
-          {
             "key": "non_reactive",
-            "text": "Inconclusive"
+            "text": "Non-Reactive"
+          },
+          {
+            "key": "reactive",
+            "text": "Reactive"
+          },
+          {
+            "key": "invalid",
+            "text": "Invalid"
           },
           {
             "key": "wastage",
             "text": "Wastage"
-          }
-        ],
-        "v_required": {
-          "value": "true",
-          "err": "Please select a value"
-        }
-      },
-      {
-        "key": "hts_final_hiv_status",
-        "openmrs_entity_parent": "",
-        "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_final_hiv_status",
-        "type": "native_radio",
-        "label": "Final HIV Test result",
-        "options": [
-          {
-            "key": "negative",
-            "text": "Negative"
-          },
-          {
-            "key": "positive",
-            "text": "Positive"
-          },
-          {
-            "key": "known_positive",
-            "text": "Known Positive"
-          },
-          {
-            "key": "inconclusive",
-            "text": "Inconclusive"
           }
         ],
         "v_required": {
