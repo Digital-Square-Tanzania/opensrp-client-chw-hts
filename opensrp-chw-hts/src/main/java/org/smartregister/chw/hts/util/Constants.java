@@ -8,6 +8,14 @@ public interface Constants {
     String Hts_VISIT_GROUP = "hts_visit_group";
 
 
+    interface HIV_TEST_RESULTS {
+        String REACTIVE = "reactive";
+        String NON_REACTIVE = "non_reactive";
+        String POSITIVE = "positive";
+        String NEGATIVE = "negative";
+        String INCONCLUSIVE = "inconclusive";
+    }
+
     interface JSON_FORM_EXTRA {
         String JSON = "json";
         String ENCOUNTER_TYPE = "encounter_type";

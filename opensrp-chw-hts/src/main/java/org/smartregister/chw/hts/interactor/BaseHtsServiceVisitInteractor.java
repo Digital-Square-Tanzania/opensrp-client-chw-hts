@@ -166,14 +166,14 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             @Override
             public void processFirstHivTestResults(String firstHivTestResults) {
                 try {
-                    if (firstHivTestResults.equalsIgnoreCase("reactive")) {
+                    if (firstHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.REACTIVE)) {
                         evaluateSecondHivTest(details, 1);
 
                         //removing extra actions that are not required in this scenario
                         removeCommonActions();
                         removeExtraRepeatActions(R.string.hts_repeate_of_first_hiv_test_action_title, repeatNumber);
                         actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
-                    } else if (firstHivTestResults.equalsIgnoreCase("non_reactive")) {
+                    } else if (firstHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.NON_REACTIVE)) {
                         if (StringUtils.isNotBlank(mClientType) && mClientType.equalsIgnoreCase("verification")) {
                             evaluateDnaPcrSampleCollection(details);
                         } else {
@@ -229,14 +229,14 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             @Override
             public void processSecondHivTestResults(String secondHivTestResults) {
                 try {
-                    if (secondHivTestResults.equalsIgnoreCase("reactive")) {
+                    if (secondHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.REACTIVE)) {
                         evaluateUnigoldHivTest(details);
 
                         //removing extra actions that are not required in this scenario
                         removeExtraRepeatActions(R.string.hts_repeate_of_second_hiv_test_action_title, repeatNumber);
                         actionList.remove(mContext.getString(R.string.hts_repeate_of_first_hiv_test_title));
                         actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
-                    } else if (secondHivTestResults.equalsIgnoreCase("non_reactive")) {
+                    } else if (secondHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.NON_REACTIVE)) {
                         if (StringUtils.isNotBlank(mClientType) && mClientType.equalsIgnoreCase("verification")) {
                             evaluateDnaPcrSampleCollection(details);
                         } else {
@@ -287,7 +287,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             @Override
             public void processUnigoldHivTestResults(String unigoldHivTestResults) {
                 try {
-                    if (unigoldHivTestResults.equalsIgnoreCase("reactive")) {
+                    if (unigoldHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.REACTIVE)) {
                         evaluatePostTestServices(details);
                     } else {
                         if (StringUtils.isNotBlank(mClientType) && mClientType.equalsIgnoreCase("verification")) {
@@ -328,12 +328,12 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             @Override
             public void processFirstHivTestResults(String firstHivTestResults) {
                 try {
-                    if (firstHivTestResults.equalsIgnoreCase("non_reactive")) {
+                    if (firstHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.NON_REACTIVE)) {
                         evaluatePostTestServices(details);
                         evaluateLinkageToPreventionServices(details);
 
                         actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
-                    } else if (StringUtils.isNotBlank(mVisitType) && mClientType.equalsIgnoreCase("repeat") && firstHivTestResults.equalsIgnoreCase("reactive")) {
+                    } else if (StringUtils.isNotBlank(mVisitType) && mClientType.equalsIgnoreCase("repeat") && firstHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.REACTIVE)) {
                         evaluateDnaPcrSampleCollection(details);
                         removeCommonActions();
                     }
