@@ -8,11 +8,13 @@ import android.content.Context;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.hts.domain.MemberObject;
 import org.smartregister.chw.hts.domain.VisitDetail;
 import org.smartregister.chw.hts.model.BaseHtsVisitAction;
+import org.smartregister.chw.hts.util.Constants;
 import org.smartregister.chw.hts.util.JsonFormUtils;
 
 import java.util.List;
@@ -85,8 +87,13 @@ public abstract class HivFirstHivTestActionHelper implements BaseHtsVisitAction.
         if (StringUtils.isNotBlank(firstHivTestResults) && (StringUtils.isNotBlank(syphilisTestResults) || (StringUtils.isNotBlank(syphilisTestResults) && typeOfTestUsed.equalsIgnoreCase("bioline")))) {
             try {
                 JSONObject form = new JSONObject(jsonPayload);
-                JSONObject preTestServicesCompletionStatus = JsonFormUtils.getFieldJSONObject(form.getJSONObject(JsonFormConstants.STEP1).getJSONArray(org.smartregister.util.JsonFormUtils.FIELDS), "hts_first_hiv_test_completion_status");
+                JSONArray fields = form.getJSONObject(JsonFormConstants.STEP1).getJSONArray(org.smartregister.util.JsonFormUtils.FIELDS);
+                JSONObject preTestServicesCompletionStatus = JsonFormUtils.getFieldJSONObject(fields, "hts_first_hiv_test_completion_status");
                 preTestServicesCompletionStatus.put(VALUE, true);
+
+                if (firstHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.NON_REACTIVE)) {
+                    fields.put(JsonFormUtils.generateFinalHivTestResults(Constants.HIV_TEST_RESULTS.NEGATIVE));
+                }
                 return form.toString();
             } catch (Exception e) {
                 Timber.e(e);

@@ -1,15 +1,20 @@
 package org.smartregister.chw.hts.actionhelper;
 
 import static org.smartregister.client.utils.constants.JsonFormConstants.JSON_FORM_KEY.GLOBAL;
+import static org.smartregister.client.utils.constants.JsonFormConstants.VALUE;
 
 import android.content.Context;
 
+import com.vijay.jsonwizard.constants.JsonFormConstants;
+
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.hts.domain.MemberObject;
 import org.smartregister.chw.hts.domain.VisitDetail;
 import org.smartregister.chw.hts.model.BaseHtsVisitAction;
+import org.smartregister.chw.hts.util.Constants;
 import org.smartregister.chw.hts.util.JsonFormUtils;
 
 import java.util.List;
@@ -84,6 +89,18 @@ public abstract class HivUnigoldHivTestActionHelper implements BaseHtsVisitActio
 
     @Override
     public String postProcess(String jsonPayload) {
+        if (StringUtils.isNotBlank(unigoldHivTestResults)) {
+            try {
+                JSONObject form = new JSONObject(jsonPayload);
+                JSONArray fields = form.getJSONObject(JsonFormConstants.STEP1).getJSONArray(org.smartregister.util.JsonFormUtils.FIELDS);
+                if (unigoldHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.REACTIVE)) {
+                    fields.put(JsonFormUtils.generateFinalHivTestResults(Constants.HIV_TEST_RESULTS.POSITIVE));
+                }
+                return form.toString();
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+        }
         return null;
     }
 

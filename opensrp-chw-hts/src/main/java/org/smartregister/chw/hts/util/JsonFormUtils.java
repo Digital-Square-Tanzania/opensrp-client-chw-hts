@@ -1,6 +1,8 @@
 package org.smartregister.chw.hts.util;
 
 import static org.smartregister.chw.hts.util.Constants.ENCOUNTER_TYPE;
+import static org.smartregister.client.utils.constants.JsonFormConstants.HIDDEN;
+import static org.smartregister.client.utils.constants.JsonFormConstants.TYPE;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 
@@ -361,6 +363,23 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                 }
             }
         }
+    }
+
+    public static JSONObject generateFinalHivTestResults(String value) {
+        JSONObject finalHivTestResultObject = new JSONObject();
+        try {
+            finalHivTestResultObject.put(OPENMRS_ENTITY, CONCEPT);
+            finalHivTestResultObject.put(OPENMRS_ENTITY_ID, "hts_final_hiv_status");
+            finalHivTestResultObject.put(OPENMRS_ENTITY_PARENT, "");
+            finalHivTestResultObject.put(KEY, "hts_final_hiv_status");
+            finalHivTestResultObject.put(TYPE, HIDDEN);
+            finalHivTestResultObject.put(VALUE, value);
+        } catch (JSONException e) {
+            Timber.e(e);
+        }
+
+
+        return finalHivTestResultObject;
     }
 
     private static class NameID {
