@@ -41,6 +41,9 @@ public interface Constants {
         String HTS_DNA_PCR_SAMPLE_COLLECTION = "hts_dna_pcr_sample_collection";
         String HTS_LINKAGE_TO_PREVENTION_SERVICES = "hts_preventive_services";
         String HTS_REPEAT_FIRST_HIV_TEST = "hts_repeat_first_hiv_test";
+        String HTS_SCREENING_15_AND_ABOVE = "hts_screening_15_and_above_form";
+        String HTS_SCREENING_2_TO_9 = "hts_screening_children_aged_2_to_9_form";
+        String HTS_SCREENING_10_TO_14 = "hts_screening_children_aged_10_to_14_form";
     }
 
     interface TABLES {
