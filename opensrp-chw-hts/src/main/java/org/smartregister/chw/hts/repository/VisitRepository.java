@@ -56,9 +56,8 @@ public class VisitRepository extends BaseRepository {
             + VISIT_TYPE + " COLLATE NOCASE , "
             + VISIT_DATE + " COLLATE NOCASE"
             + ");";
-    private String[] VISIT_COLUMNS = {VISIT_ID, VISIT_TYPE, VISIT_GROUP, PARENT_VISIT_ID, BASE_ENTITY_ID, VISIT_DATE, VISIT_JSON, PRE_PROCESSED, FORM_SUBMISSION_ID, PROCESSED, UPDATED_AT, CREATED_AT};
-
     public static String ADD_VISIT_GROUP_COLUMN = "ALTER TABLE " + VISIT_TABLE + " ADD COLUMN " + VISIT_GROUP + " VARCHAR;";
+    private String[] VISIT_COLUMNS = {VISIT_ID, VISIT_TYPE, VISIT_GROUP, PARENT_VISIT_ID, BASE_ENTITY_ID, VISIT_DATE, VISIT_JSON, PRE_PROCESSED, FORM_SUBMISSION_ID, PROCESSED, UPDATED_AT, CREATED_AT};
 
     public static void createTable(SQLiteDatabase database) {
         database.execSQL(CREATE_VISIT_TABLE);
@@ -103,9 +102,9 @@ public class VisitRepository extends BaseRepository {
         String visitID = null;
         Cursor cursor = null;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        String sql = "select " + VISIT_ID + " from visits where base_entity_id = ? COLLATE NOCASE and visit_type = ? COLLATE NOCASE and strftime('%Y-%m-%d',visit_date / 1000, 'unixepoch') = ? ";
+        String sql = "select " + VISIT_ID + " from visits where base_entity_id = ? COLLATE NOCASE and visit_type = ? COLLATE NOCASE ORDER by visit_date desc LIMIT 1 ";
         try {
-            cursor = getReadableDatabase().rawQuery(sql, new String[]{baseEntityID, parentEventType, sdf.format(eventDate)});
+            cursor = getReadableDatabase().rawQuery(sql, new String[]{baseEntityID, parentEventType});
             if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
                     visitID = cursor.getString(cursor.getColumnIndex(VISIT_ID));
@@ -225,7 +224,6 @@ public class VisitRepository extends BaseRepository {
         }
         return visits;
     }
-
 
 
     public List<Visit> getAllUnSynced(Long last_edit_time, String baseEntityID) {
