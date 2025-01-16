@@ -58,6 +58,7 @@ public interface Constants {
         String MEMBER_PROFILE_OBJECT = "MemberObject";
         String EDIT_MODE = "editMode";
         String PROFILE_TYPE = "profile_type";
+        String SEX = "sex";
 
     }
 
