@@ -1,0 +1,35 @@
+---
+name: step1_hts_has_testing_been_done_more_than_12_months_ago
+description: relevance rule to control the visibility of (tests done more than 12 years ago)
+priority: 1
+condition: "step1_hts_has_the_client_ever_tested_for_hiv.equals('yes')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_last_hiv_test_results_are_known_or_were_indeterminate_inconclusive
+description: relevance rule to control the visibility of (tests done more than 12 years ago)
+priority: 1
+condition: "!step1_hts_has_testing_been_done_more_than_12_months_ago.equals('no') && !step1_hts_has_the_client_ever_tested_for_hiv.equals('no')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_does_client_report_to_test_hiv_positive_but_no_evidence_ctc1_card_or_referral_form
+description: relevance rule to control the visibility of (tests done more than 12 years ago)
+priority: 1
+condition: "!step1_hts_has_testing_been_done_more_than_12_months_ago.equals('no')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_is_client_pregnant
+description: Show question for females only
+priority: 1
+condition: "global_sex == 'Female'"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_is_client_breastfeeding
+description: Show question for females only
+priority: 1
+condition: "global_sex == 'Female'"
+actions:
+  - "isRelevant = true"

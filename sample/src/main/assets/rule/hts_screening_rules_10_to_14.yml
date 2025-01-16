@@ -1,0 +1,7 @@
+---
+name: step3_hts_is_the_biological_mother_of_the_child_hiv_positive
+description: relevance rule to control the visibility of (Is the biological mother of the child, HIV positive?)
+priority: 1
+condition: "step3_hts_are_one_or_both_biological_parents_of_the_child_diseased.equals('no')"
+actions:
+  - "isRelevant = true"
