@@ -39,6 +39,7 @@ import org.smartregister.view.activity.SecuredActivity;
 import java.text.MessageFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import timber.log.Timber;
@@ -124,71 +125,81 @@ public class BaseHtsVisitActivity extends SecuredActivity implements BaseHtsVisi
 
 
     @Override
-    public void initializeActions(LinkedHashMap<String, BaseHtsVisitAction> map) {
+    public void initializeActions(LinkedHashMap<String, BaseHtsVisitAction> actionsMap) {
+        final LinkedHashMap<String, BaseHtsVisitAction> map = actionsMap;
         actionList.clear();
 
-        //Necessary evil to rearrange the actions according to a specific arrangement
-        if (map.containsKey(getString(R.string.hts_visit_type_action_title))) {
-            actionList.put(getString(R.string.hts_visit_type_action_title), map.get(getString(R.string.hts_visit_type_action_title)));
-        }
+        // Add actions in a specific order
+        addActionToMap(map, R.string.hts_visit_type_action_title);
+        addActionToMap(map, R.string.hts_pre_test_services_action_title);
+        addActionToMap(map, R.string.hts_first_hiv_test_action_title);
 
-        if (map.containsKey(getString(R.string.hts_pre_test_services_action_title))) {
-            actionList.put(getString(R.string.hts_pre_test_services_action_title), map.get(getString(R.string.hts_pre_test_services_action_title)));
-        }
+        // Process repeated tests
+        addSortedRepeatedActions(map,
+                R.string.hts_repeate_of_first_hiv_test_action_title,
+                actionList);
 
-        if (map.containsKey(getString(R.string.hts_first_hiv_test_action_title))) {
-            actionList.put(getString(R.string.hts_first_hiv_test_action_title), map.get(getString(R.string.hts_first_hiv_test_action_title)));
-        }
+        addActionToMap(map, R.string.hts_second_hiv_test_action_title);
 
-        String repeatedFirstTestsRegex = getString(R.string.hts_repeate_of_first_hiv_test_action_title).replace("%d", "\\d+");
-        Pattern repeatedFirstTestpattern = Pattern.compile(repeatedFirstTestsRegex);
-        for (Map.Entry<String, BaseHtsVisitAction> entry : map.entrySet()) {
-            String key = entry.getKey();
-            if (repeatedFirstTestpattern.matcher(key).matches() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                actionList.putIfAbsent(entry.getKey(), entry.getValue());
-            }
-        }
+        addSortedRepeatedActions(map,
+                R.string.hts_repeate_of_second_hiv_test_action_title,
+                actionList);
 
-        if (map.containsKey(getString(R.string.hts_second_hiv_test_action_title))) {
-            actionList.put(getString(R.string.hts_second_hiv_test_action_title), map.get(getString(R.string.hts_second_hiv_test_action_title)));
-        }
+        // Add remaining actions
+        addActionToMap(map, R.string.hts_repeate_of_first_hiv_test_title);
+        addActionToMap(map, R.string.hts_unigold_hiv_test_action_title);
+        addActionToMap(map, R.string.hts_dna_pcr_sample_collection_action_title);
+        addActionToMap(map, R.string.hts_post_test_services_action_title);
+        addActionToMap(map, R.string.hts_linkage_to_prevention_services_action_title);
 
-        String repeatedSecondTestsRegex = getString(R.string.hts_repeate_of_second_hiv_test_action_title).replace("%d", "\\d+");
-        Pattern repeatedSecondTestsPattern = Pattern.compile(repeatedSecondTestsRegex);
-        for (Map.Entry<String, BaseHtsVisitAction> entry : map.entrySet()) {
-            String key = entry.getKey();
-            if (repeatedSecondTestsPattern.matcher(key).matches() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                actionList.putIfAbsent(entry.getKey(), entry.getValue());
-            }
-        }
-
-        if (map.containsKey(getString(R.string.hts_repeate_of_first_hiv_test_title))) {
-            actionList.put(getString(R.string.hts_repeate_of_first_hiv_test_title), map.get(getString(R.string.hts_repeate_of_first_hiv_test_title)));
-        }
-
-        if (map.containsKey(getString(R.string.hts_unigold_hiv_test_action_title))) {
-            actionList.put(getString(R.string.hts_unigold_hiv_test_action_title), map.get(getString(R.string.hts_unigold_hiv_test_action_title)));
-        }
-
-        if (map.containsKey(getString(R.string.hts_dna_pcr_sample_collection_action_title))) {
-            actionList.put(getString(R.string.hts_dna_pcr_sample_collection_action_title), map.get(getString(R.string.hts_dna_pcr_sample_collection_action_title)));
-        }
-
-        if (map.containsKey(getString(R.string.hts_post_test_services_action_title))) {
-            actionList.put(getString(R.string.hts_post_test_services_action_title), map.get(getString(R.string.hts_post_test_services_action_title)));
-        }
-
-        if (map.containsKey(getString(R.string.hts_linkage_to_prevention_services_action_title))) {
-            actionList.put(getString(R.string.hts_linkage_to_prevention_services_action_title), map.get(getString(R.string.hts_linkage_to_prevention_services_action_title)));
-        }
-        //====================End of Necessary evil ====================================
-
-
+        // Notify adapter and update UI
         if (mAdapter != null) {
             mAdapter.notifyDataSetChanged();
         }
         displayProgressBar(false);
     }
+
+    // Helper to add a specific action to the actionList
+    private void addActionToMap(Map<String, BaseHtsVisitAction> map, int stringResId) {
+        String key = getString(stringResId);
+        if (map.containsKey(key)) {
+            actionList.put(key, map.get(key));
+        }
+    }
+
+    // Helper to filter, sort, and add repeated actions to the actionList
+    private void addSortedRepeatedActions(Map<String, BaseHtsVisitAction> map,
+                                          int stringResId,
+                                          Map<String, BaseHtsVisitAction> targetMap) {
+        String regex = getString(stringResId).replace("%d", "\\d+");
+        Pattern pattern = Pattern.compile(regex);
+
+        // Temporary TreeMap for sorting
+        Map<String, BaseHtsVisitAction> tempMap = new TreeMap<>((key1, key2) -> {
+            int number1 = extractNumber(key1);
+            int number2 = extractNumber(key2);
+            return Integer.compare(number1, number2);
+        });
+
+        // Filter and collect matching actions
+        for (Map.Entry<String, BaseHtsVisitAction> entry : map.entrySet()) {
+            if (pattern.matcher(entry.getKey()).matches()) {
+                tempMap.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        // Add sorted entries to the target map
+        for (Map.Entry<String, BaseHtsVisitAction> entry : tempMap.entrySet()) {
+            targetMap.put(entry.getKey(), entry.getValue());
+        }
+    }
+
+    // Helper to extract numbers from a string
+    private int extractNumber(String input) {
+        String numberStr = input.replaceAll("\\D+", "");
+        return numberStr.isEmpty() ? 0 : Integer.parseInt(numberStr);
+    }
+
 
     @Override
     public Context getContext() {
@@ -291,7 +302,7 @@ public class BaseHtsVisitActivity extends SecuredActivity implements BaseHtsVisi
 
     @Override
     public void redrawVisitUI() {
-        boolean valid = actionList.size() > 0;
+        boolean valid = !actionList.isEmpty();
         for (Map.Entry<String, BaseHtsVisitAction> entry : actionList.entrySet()) {
             BaseHtsVisitAction action = entry.getValue();
             if (
