@@ -49,6 +49,8 @@ public class BaseHtsVisitInteractor implements BaseHtsVisitContract.Interactor {
     protected String visitType;
     protected Context context;
     protected MemberObject memberObject;
+    protected Visit lastVisit;
+    protected List<Visit> childVisits = new ArrayList<>();
 
     @VisibleForTesting
     public BaseHtsVisitInteractor(AppExecutors appExecutors, ECSyncHelper syncHelper) {
@@ -110,11 +112,13 @@ public class BaseHtsVisitInteractor implements BaseHtsVisitContract.Interactor {
 
     protected void getDetailsOnEdit(BaseHtsVisitContract.View view, MemberObject memberObject) {
         if (view.getEditMode()) {
-            Visit lastVisit = HtsLibrary.getInstance().visitRepository().getLatestVisit(memberObject.getBaseEntityId(), getCurrentVisitType());
+            lastVisit = HtsLibrary.getInstance().visitRepository().getLatestVisit(memberObject.getBaseEntityId(), getCurrentVisitType());
 
             if (lastVisit != null) {
                 details = VisitUtils.getVisitGroups(HtsLibrary.getInstance().visitDetailsRepository().getVisits(lastVisit.getVisitId()));
             }
+
+            childVisits = HtsLibrary.getInstance().visitRepository().getChildEvents(lastVisit.getVisitId());
         }
     }
 
