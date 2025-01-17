@@ -388,7 +388,6 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.REQUEST_CODE_GET_JSON && resultCode == RESULT_OK) {
             profilePresenter.saveForm(data.getStringExtra(Constants.JSON_FORM_EXTRA.JSON));
-            finish();
         }
     }
 
