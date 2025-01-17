@@ -1,6 +1,6 @@
 {
   "count": "1",
-  "encounter_type": "hiv_testing",
+  "encounter_type": "HTS First HIV Test",
   "entity_id": "",
   "relational_id": "",
   "validate_on_submit": true,
@@ -58,10 +58,10 @@
     "title": "HIV Testing",
     "fields": [
       {
-        "key": "hts_type_of_test_used",
+        "key": "type_of_test_kit_used",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_type_of_test_used",
+        "openmrs_entity_id": "type_of_test_kit_used",
         "type": "native_radio",
         "label": "Type of test used",
         "options": [
@@ -84,10 +84,10 @@
         }
       },
       {
-        "key": "hts_kit_batch_number",
+        "key": "test_kit_batch_number",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_kit_batch_number",
+        "openmrs_entity_id": "test_kit_batch_number",
         "type": "edit_text",
         "label": "Kit batch number",
         "hint": "Specify kit batch number",
@@ -97,10 +97,10 @@
         }
       },
       {
-        "key": "hts_kit_expire_date",
+        "key": "test_kit_expire_date",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_kit_expire_date",
+        "openmrs_entity_id": "test_kit_expire_date",
         "type": "date_picker",
         "min_date": "today",
         "max_date": "today+5y",
@@ -112,10 +112,10 @@
         }
       },
       {
-        "key": "hts_first_hiv_test_result",
+        "key": "test_result",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_first_hiv_test_result",
+        "openmrs_entity_id": "test_result",
         "type": "native_radio",
         "label": "First HIV Test result",
         "options": [
@@ -194,10 +194,10 @@
         }
       },
       {
-        "key": "hts_syphilis_test_results",
+        "key": "syphilis_test_results",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_syphilis_test_results",
+        "openmrs_entity_id": "syphilis_test_results",
         "type": "native_radio",
         "label": "Syphilis Test result ",
         "options": [
@@ -239,12 +239,21 @@
         }
       },
       {
+        "key": "test_type",
+        "type": "hidden",
+        "openmrs_entity_id": "test_type",
+        "openmrs_entity": "concept",
+        "openmrs_entity_parent": "",
+        "value": "First HIV Test"
+      },
+      {
         "key": "hts_first_hiv_test_completion_status",
         "type": "hidden",
         "openmrs_entity_id": "hts_first_hiv_test_completion_status",
         "openmrs_entity": "concept",
         "openmrs_entity_parent": ""
       }
+
     ]
   }
 }

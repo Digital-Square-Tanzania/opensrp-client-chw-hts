@@ -41,15 +41,18 @@ public class HtsVisitsUtil extends VisitUtils {
             if (daysDiff > 1) {
                 if (v.getVisitType().equalsIgnoreCase(Constants.EVENT_TYPE.HTS_SERVICES) && getHtsVisitStatus(v).equals(Complete)) {
                     prepFollowupVisit.add(v);
+
+                    List<Visit> childVisits = HtsLibrary.getInstance().visitRepository().getChildEvents(v.getVisitId());
+                    prepFollowupVisit.addAll(childVisits);
                 }
             }
         }
         if (!prepFollowupVisit.isEmpty()) {
             processVisits(prepFollowupVisit, visitRepository, visitDetailsRepository);
             for (Visit v : prepFollowupVisit) {
-                if (shouldCreateCloseVisitEvent(v)) {
-                    createCancelledEvent(v.getJson());
-                }
+//                if (shouldCreateCloseVisitEvent(v)) {
+//                    createCancelledEvent(v.getJson());
+//                }
             }
         }
 
@@ -71,10 +74,38 @@ public class HtsVisitsUtil extends VisitUtils {
             JSONArray obs = jsonObject.getJSONArray("obs");
 
             completionObject.put("isPreTestServicesDone", computeCompletionStatusForAction(obs, "pre_test_services_completion_status"));
-            completionObject.put("isFirstHivTestDone", computeCompletionStatusForAction(obs, "hts_first_hiv_test_completion_status"));
 
-            if (checkIfSecondTestShouldBePerformed(obs))
-                completionObject.put("isSecondHivTestDone", computeCompletionStatusForAction(obs, "hts_second_hiv_test_completion_status"));
+            List<Visit> childVisits = HtsLibrary.getInstance().visitRepository().getChildEvents(lastVisit.getVisitId());
+            if (childVisits != null && !childVisits.isEmpty()) {
+                for (Visit visit : childVisits) {
+                    if (visit.getVisitType().contains(Constants.EVENT_TYPE.HTS_FIRST_HIV_TEST)) {
+                        JSONObject childVisitJsonObject = new JSONObject(visit.getJson());
+                        JSONArray childVisitObs = childVisitJsonObject.getJSONArray("obs");
+
+                        if (computeCompletionStatusForAction(childVisitObs, "hts_first_hiv_test_completion_status")) {
+                            completionObject.put("isFirstHivTestDone", true);
+                            break;
+                        }
+                    }
+                    completionObject.put("isFirstHivTestDone", false);
+                }
+            }
+
+            if (checkIfSecondTestShouldBePerformed(obs)) {
+                if (childVisits != null && !childVisits.isEmpty()) {
+                    for (Visit visit : childVisits) {
+                        if (visit.getVisitType().contains(Constants.EVENT_TYPE.HTS_SECOND_HIV_TEST)) {
+                            JSONObject childVisitJsonObject = new JSONObject(visit.getJson());
+                            JSONArray childVisitObs = childVisitJsonObject.getJSONArray("obs");
+                            if (computeCompletionStatusForAction(childVisitObs, "hts_second_hiv_test_completion_status")) {
+                                completionObject.put("isSecondHivTestDone", true);
+                                break;
+                            }
+                        }
+                        completionObject.put("isSecondHivTestDone", false);
+                    }
+                }
+            }
 
         } catch (Exception e) {
             Timber.e(e);
@@ -123,10 +154,11 @@ public class HtsVisitsUtil extends VisitUtils {
         VisitDetailsRepository visitDetailsRepository = HtsLibrary.getInstance().visitDetailsRepository();
         VisitRepository visitRepository = HtsLibrary.getInstance().visitRepository();
         manualProcessedVisits.add(visit);
+
+        List<Visit> childVisits = HtsLibrary.getInstance().visitRepository().getChildEvents(visit.getVisitId());
+        manualProcessedVisits.addAll(childVisits);
+
         processVisits(manualProcessedVisits, visitRepository, visitDetailsRepository);
-        if (shouldCreateCloseVisitEvent(visit)) {
-            createCancelledEvent(visit.getJson());
-        }
     }
 
     public static boolean checkIfSecondTestShouldBePerformed(JSONArray obs) throws JSONException {
@@ -143,28 +175,5 @@ public class HtsVisitsUtil extends VisitUtils {
         return firstTestResults.equalsIgnoreCase("reactive");
     }
 
-    public static boolean checkIfShouldRemainToPrEP(JSONArray obs) throws JSONException {
-        String reasons_stopping_prep = "";
-        int size = obs.length();
-        for (int i = 0; i < size; i++) {
-            JSONObject checkObj = obs.getJSONObject(i);
-            if (checkObj.getString("fieldCode").equalsIgnoreCase("reasons_stopping_prep")) {
-                JSONArray values = checkObj.getJSONArray("values");
-                reasons_stopping_prep = values.toString();
-                break;
-            }
-        }
-        return reasons_stopping_prep.contains("hiv_positive");
-    }
 
-    private static boolean shouldCreateCloseVisitEvent(Visit v) {
-        try {
-            JSONObject jsonObject = new JSONObject(v.getJson());
-            JSONArray obs = jsonObject.getJSONArray("obs");
-            return checkIfShouldRemainToPrEP(obs);
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-        return false;
-    }
 }

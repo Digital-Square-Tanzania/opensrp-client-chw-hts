@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import org.smartregister.chw.hts.domain.MemberObject;
 import org.smartregister.chw.hts.domain.VisitDetail;
 import org.smartregister.chw.hts.model.BaseHtsVisitAction;
+import org.smartregister.chw.hts.util.HtsVisitsUtil;
 import org.smartregister.chw.hts.util.JsonFormUtils;
 
 import java.util.List;
@@ -59,8 +60,8 @@ public abstract class HivSecondHivTestActionHelper implements BaseHtsVisitAction
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
-            secondHivTestResults = JsonFormUtils.getValue(jsonObject, "hts_second_hiv_test_result");
-            secondTestKitBatchNumber = JsonFormUtils.getValue(jsonObject, "hts_second_kit_batch_number");
+            secondHivTestResults = JsonFormUtils.getValue(jsonObject, "test_result");
+            secondTestKitBatchNumber = JsonFormUtils.getValue(jsonObject, "test_kit_batch_number");
             processSecondHivTestResults(secondHivTestResults);
         } catch (JSONException e) {
             Timber.e(e);
@@ -85,7 +86,7 @@ public abstract class HivSecondHivTestActionHelper implements BaseHtsVisitAction
             try {
                 JSONObject form = new JSONObject(jsonPayload);
                 JSONObject preTestServicesCompletionStatus = JsonFormUtils.getFieldJSONObject(form.getJSONObject(JsonFormConstants.STEP1).getJSONArray(org.smartregister.util.JsonFormUtils.FIELDS), "hts_second_hiv_test_completion_status");
-                preTestServicesCompletionStatus.put(VALUE, true);
+                preTestServicesCompletionStatus.put(VALUE, HtsVisitsUtil.Complete);
                 return form.toString();
             } catch (Exception e) {
                 Timber.e(e);
