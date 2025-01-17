@@ -10,6 +10,8 @@ public interface Constants {
 
     interface HIV_TEST_RESULTS {
         String REACTIVE = "reactive";
+        String INVALID = "invalid";
+        String WASTAGE = "wastage";
         String NON_REACTIVE = "non_reactive";
         String POSITIVE = "positive";
         String NEGATIVE = "negative";
@@ -28,6 +30,8 @@ public interface Constants {
         String VOID_EVENT = "Void Event";
         String CLOSE_HTS_SERVICE = "Close Hts Service";
         String HTS_FIRST_HIV_TEST = "HTS First HIV Test";
+        String HTS_SECOND_HIV_TEST = "HTS Second HIV Test";
+        String HTS_UNIGOLD_HIV_TEST = "Uni-Gold HIV Test";
 
     }
 
