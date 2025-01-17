@@ -23,15 +23,11 @@ import timber.log.Timber;
 
 public abstract class HivRepeatFirstHivTestActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
 
-    protected String firstHivTestResults;
-
-    protected String jsonPayload;
-
-    protected Context context;
-
-    protected MemberObject memberObject;
-
     private final String visitType;
+    protected String firstHivTestResults;
+    protected String jsonPayload;
+    protected Context context;
+    protected MemberObject memberObject;
 
 
     public HivRepeatFirstHivTestActionHelper(Context context, MemberObject memberObject, String visitType) {
@@ -62,7 +58,7 @@ public abstract class HivRepeatFirstHivTestActionHelper implements BaseHtsVisitA
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
-            firstHivTestResults = JsonFormUtils.getValue(jsonObject, "hts_repeat_first_test_kit_batch_number");
+            firstHivTestResults = JsonFormUtils.getValue(jsonObject, "test_result");
             processFirstHivTestResults(firstHivTestResults);
         } catch (JSONException e) {
             Timber.e(e);
@@ -89,6 +85,8 @@ public abstract class HivRepeatFirstHivTestActionHelper implements BaseHtsVisitA
                 JSONArray fields = form.getJSONObject(JsonFormConstants.STEP1).getJSONArray(org.smartregister.util.JsonFormUtils.FIELDS);
                 if (firstHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.NON_REACTIVE)) {
                     fields.put(JsonFormUtils.generateFinalHivTestResults(Constants.HIV_TEST_RESULTS.NEGATIVE));
+                } else if (firstHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.REACTIVE)) {
+                    fields.put(JsonFormUtils.generateFinalHivTestResults(Constants.HIV_TEST_RESULTS.INCONCLUSIVE));
                 }
                 return form.toString();
             } catch (Exception e) {

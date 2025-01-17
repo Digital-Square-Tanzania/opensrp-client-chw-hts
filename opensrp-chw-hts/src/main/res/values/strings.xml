@@ -29,13 +29,18 @@
     <string name="hts_pre_test_services_action_title">Pre-Test Services</string>
     <string name="hts_first_hiv_test_action_title">First HIV Test Using Bioline/Dual Test</string>
     <string name="hts_repeate_of_first_hiv_test_action_title">First HIV Test Using Bioline/Dual : Test Number %d</string>
+    <string name="hts_first_hiv_test_action_entity_type">HTS First HIV Test %d</string>
     <string name="hts_second_hiv_test_action_title">Second HIV Test using First Response</string>
     <string name="hts_repeate_of_second_hiv_test_action_title">Second HIV Test Using First Response : Test Number %d</string>
+    <string name="hts_second_hiv_test_action_entity_type">HTS Second HIV Test %d</string>
     <string name="hts_unigold_hiv_test_action_title">Uni-Gold HIV Test</string>
+    <string name="hts_repeate_of_unigold_hiv_test_action_title">Uni-Gold HIV Test : Test Number %d</string>
+    <string name="hts_unigold_hiv_test_action_entity_type">Uni-Gold HIV Test %d</string>
     <string name="hts_post_test_services_action_title">Post-Test Services</string>
     <string name="hts_dna_pcr_sample_collection_action_title">DNA-PCR Sample Collection</string>
     <string name="hts_linkage_to_prevention_services_action_title">Linkage to Prevention Services</string>
     <string name="hts_repeate_of_first_hiv_test_title">Repeat of First HIV Test</string>
+    <string name="hts_repeate_of_first_hiv_test_action_entity_type">Repeat of First HIV Test %d</string>
 
     <string name="optional">Optional</string>
     <string name="error_unable_save_visit">Unable to save visit</string>

@@ -1,12 +1,15 @@
 package org.smartregister.chw.hts.interactor;
 
 
+import static org.smartregister.chw.hts.util.Constants.JSON_FORM_EXTRA.ENCOUNTER_TYPE;
+
 import android.content.Context;
 
 import androidx.annotation.StringRes;
 import androidx.annotation.VisibleForTesting;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 import org.smartregister.chw.hts.HtsLibrary;
 import org.smartregister.chw.hts.R;
 import org.smartregister.chw.hts.actionhelper.DnaPcrSampleCollectionActionHelper;
@@ -19,11 +22,15 @@ import org.smartregister.chw.hts.actionhelper.PostTestServicesActionHelper;
 import org.smartregister.chw.hts.actionhelper.PreTestServicesActionHelper;
 import org.smartregister.chw.hts.actionhelper.VisitTypeActionHelper;
 import org.smartregister.chw.hts.contract.BaseHtsVisitContract;
+import org.smartregister.chw.hts.domain.Visit;
 import org.smartregister.chw.hts.domain.VisitDetail;
 import org.smartregister.chw.hts.model.BaseHtsVisitAction;
 import org.smartregister.chw.hts.util.AppExecutors;
 import org.smartregister.chw.hts.util.Constants;
+import org.smartregister.chw.hts.util.JsonFormUtils;
+import org.smartregister.chw.hts.util.VisitUtils;
 import org.smartregister.sync.helper.ECSyncHelper;
+import org.smartregister.util.FormUtils;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -127,11 +134,21 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
 
         BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_visit_type_action_title))
                 .withOptional(false)
-                .withDetails(details)
                 .withHelper(actionHelper)
                 .withFormName(Constants.FORMS.HTS_VISIT_TYPE)
                 .build();
         actionList.put(context.getString(R.string.hts_visit_type_action_title), action);
+
+        JSONObject form = null;
+        try {
+            form = FormUtils.getInstance(mContext).getFormJson(Constants.FORMS.HTS_VISIT_TYPE);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        if (details != null && form != null) {
+            JsonFormUtils.populateForm(form, details);
+            action.setJsonPayload(form.toString());
+        }
     }
 
     /**
@@ -167,34 +184,35 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             public void processFirstHivTestResults(String firstHivTestResults) {
                 try {
                     if (firstHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.REACTIVE)) {
-                        evaluateSecondHivTest(details, 1);
-
                         //removing extra actions that are not required in this scenario
                         removeCommonActions();
                         removeExtraRepeatActions(R.string.hts_repeate_of_first_hiv_test_action_title, repeatNumber);
                         actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
+
+                        evaluateSecondHivTest(details, 1);
                     } else if (firstHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.NON_REACTIVE)) {
+                        //removing extra actions that are not required in this scenario
+                        actionList.remove(mContext.getString(R.string.hts_second_hiv_test_action_title));
+                        actionList.remove(mContext.getString(R.string.hts_unigold_hiv_test_action_title));
+                        removeExtraRepeatActions(R.string.hts_repeate_of_first_hiv_test_action_title, repeatNumber);
+
                         if (StringUtils.isNotBlank(mClientType) && mClientType.equalsIgnoreCase("verification")) {
                             evaluateDnaPcrSampleCollection(details);
                         } else {
                             evaluatePostTestServices(details);
                             evaluateLinkageToPreventionServices(details);
                         }
-
-                        //removing extra actions that are not required in this scenario
-                        actionList.remove(mContext.getString(R.string.hts_second_hiv_test_action_title));
-                        actionList.remove(mContext.getString(R.string.hts_unigold_hiv_test_action_title));
-                        removeExtraRepeatActions(R.string.hts_repeate_of_first_hiv_test_action_title, repeatNumber);
-
                     } else {
-                        if (StringUtils.isNotBlank(firstHivTestResults))
-                            evaluateFirstHivTest(details, repeatNumber + 1);
-
                         //removing extra actions that are not required in this scenario
                         removeCommonActions();
                         actionList.remove(mContext.getString(R.string.hts_second_hiv_test_action_title));
                         actionList.remove(mContext.getString(R.string.hts_unigold_hiv_test_action_title));
                         actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
+
+                        if (StringUtils.isNotBlank(firstHivTestResults))
+                            evaluateFirstHivTest(details, repeatNumber + 1);
+
+
                     }
                 } catch (Exception e) {
                     Timber.e(e);
@@ -207,13 +225,37 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
         if (repeatNumber != 1) {
             actionTitle = String.format(context.getString(R.string.hts_repeate_of_first_hiv_test_action_title), repeatNumber);
         }
-        BaseHtsVisitAction action = getBuilder(actionTitle)
-                .withOptional(true)
-                .withDetails(details)
-                .withHelper(actionHelper)
-                .withFormName(Constants.FORMS.HTS_FIRST_HIV_TEST)
-                .build();
-        actionList.put(actionTitle, action);
+
+        Map<String, List<VisitDetail>> mDetails = null;
+        for (Visit visit : childVisits) {
+            if (visit.getVisitType().equalsIgnoreCase(String.format(context.getString(R.string.hts_first_hiv_test_action_entity_type), repeatNumber))) {
+                mDetails = VisitUtils.getVisitGroups(HtsLibrary.getInstance().visitDetailsRepository().getVisits(visit.getVisitId()));
+            }
+        }
+
+        try {
+            JSONObject firstHivTest = FormUtils.getInstance(mContext).getFormJson(Constants.FORMS.HTS_FIRST_HIV_TEST);
+            firstHivTest.put(ENCOUNTER_TYPE, String.format(context.getString(R.string.hts_first_hiv_test_action_entity_type), repeatNumber));
+
+            BaseHtsVisitAction action = getBuilder(actionTitle)
+                    .withOptional(true)
+                    .withJsonPayload(firstHivTest.toString())
+                    .withHelper(actionHelper)
+                    .withProcessingMode(BaseHtsVisitAction.ProcessingMode.SEPARATE)
+                    .withFormName(Constants.FORMS.HTS_FIRST_HIV_TEST)
+                    .build();
+            actionList.put(actionTitle, action);
+
+
+            if (mDetails != null) {
+                JsonFormUtils.populateForm(firstHivTest, mDetails);
+                action.setJsonPayload(firstHivTest.toString());
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
+
     }
 
     /**
@@ -230,7 +272,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             public void processSecondHivTestResults(String secondHivTestResults) {
                 try {
                     if (secondHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.REACTIVE)) {
-                        evaluateUnigoldHivTest(details);
+                        evaluateUnigoldHivTest(details, 1);
 
                         //removing extra actions that are not required in this scenario
                         removeExtraRepeatActions(R.string.hts_repeate_of_second_hiv_test_action_title, repeatNumber);
@@ -266,13 +308,36 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             actionTitle = String.format(context.getString(R.string.hts_repeate_of_second_hiv_test_action_title), repeatNumber);
         }
 
-        BaseHtsVisitAction action = getBuilder(actionTitle)
-                .withOptional(true)
-                .withDetails(details)
-                .withHelper(actionHelper)
-                .withFormName(Constants.FORMS.HTS_SECOND_HIV_TEST)
-                .build();
-        actionList.put(actionTitle, action);
+
+        Map<String, List<VisitDetail>> mDetails = null;
+        for (Visit visit : childVisits) {
+            if (visit.getVisitType().equalsIgnoreCase(String.format(context.getString(R.string.hts_second_hiv_test_action_entity_type), repeatNumber))) {
+                mDetails = VisitUtils.getVisitGroups(HtsLibrary.getInstance().visitDetailsRepository().getVisits(visit.getVisitId()));
+            }
+        }
+
+        try {
+            JSONObject secondHivTest = FormUtils.getInstance(mContext).getFormJson(Constants.FORMS.HTS_SECOND_HIV_TEST);
+            secondHivTest.put(ENCOUNTER_TYPE, String.format(context.getString(R.string.hts_second_hiv_test_action_entity_type), repeatNumber));
+
+            BaseHtsVisitAction action = getBuilder(actionTitle)
+                    .withOptional(true)
+                    .withJsonPayload(secondHivTest.toString())
+                    .withHelper(actionHelper)
+                    .withProcessingMode(BaseHtsVisitAction.ProcessingMode.SEPARATE)
+                    .withFormName(Constants.FORMS.HTS_SECOND_HIV_TEST)
+                    .build();
+            actionList.put(actionTitle, action);
+
+
+            if (mDetails != null) {
+                JsonFormUtils.populateForm(secondHivTest, mDetails);
+                action.setJsonPayload(secondHivTest.toString());
+            }
+
+        } catch (Exception e) {
+            Timber.e(e);
+        }
     }
 
     /**
@@ -282,21 +347,26 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
      * @param details A map of visit details, containing key-value pairs of information about the visit.
      * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
      */
-    private void evaluateUnigoldHivTest(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
+    private void evaluateUnigoldHivTest(Map<String, List<VisitDetail>> details, int repeatNumber) throws BaseHtsVisitAction.ValidationException {
         HivUnigoldHivTestActionHelper actionHelper = new HivUnigoldHivTestActionHelper(mContext, memberObject, mClientType, mVisitType) {
             @Override
             public void processUnigoldHivTestResults(String unigoldHivTestResults) {
                 try {
                     if (unigoldHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.REACTIVE)) {
                         evaluatePostTestServices(details);
+                    }else if (unigoldHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.INVALID) || unigoldHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.WASTAGE)) {
+                        actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
+                        removeCommonActions();
+                        if (StringUtils.isNotBlank(unigoldHivTestResults))
+                            evaluateSecondHivTest(details, repeatNumber + 1);
                     } else {
                         if (StringUtils.isNotBlank(mClientType) && mClientType.equalsIgnoreCase("verification")) {
-                            evaluateDnaPcrSampleCollection(details);
                             removeCommonActions();
+                            evaluateDnaPcrSampleCollection(details);
                         } else {
+                            actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
                             evaluatePostTestServices(details);
                             evaluateLinkageToPreventionServices(details);
-                            actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
                         }
                     }
                 } catch (Exception e) {
@@ -306,13 +376,39 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             }
         };
 
-        BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_unigold_hiv_test_action_title))
-                .withOptional(true)
-                .withDetails(details)
-                .withHelper(actionHelper)
-                .withFormName(Constants.FORMS.HTS_UNIGOLD_HIV_TEST)
-                .build();
-        actionList.put(context.getString(R.string.hts_unigold_hiv_test_action_title), action);
+
+        String actionTitle = context.getString(R.string.hts_unigold_hiv_test_action_title);
+        if (repeatNumber != 1) {
+            actionTitle = String.format(context.getString(R.string.hts_repeate_of_unigold_hiv_test_action_title), repeatNumber);
+        }
+
+
+        Map<String, List<VisitDetail>> mDetails = null;
+        for (Visit visit : childVisits) {
+            if (visit.getVisitType().equalsIgnoreCase(String.format(context.getString(R.string.hts_unigold_hiv_test_action_entity_type), repeatNumber))) {
+                mDetails = VisitUtils.getVisitGroups(HtsLibrary.getInstance().visitDetailsRepository().getVisits(visit.getVisitId()));
+            }
+        }
+
+        try {
+            JSONObject unigoldHivTest = FormUtils.getInstance(mContext).getFormJson(Constants.FORMS.HTS_UNIGOLD_HIV_TEST);
+            unigoldHivTest.put(ENCOUNTER_TYPE, String.format(context.getString(R.string.hts_unigold_hiv_test_action_entity_type), repeatNumber));
+
+            BaseHtsVisitAction action = getBuilder(actionTitle)
+                    .withOptional(true)
+                    .withHelper(actionHelper)
+                    .withFormName(Constants.FORMS.HTS_UNIGOLD_HIV_TEST)
+                    .withProcessingMode(BaseHtsVisitAction.ProcessingMode.SEPARATE)
+                    .build();
+            actionList.put(context.getString(R.string.hts_unigold_hiv_test_action_title), action);
+
+            if (mDetails != null) {
+                JsonFormUtils.populateForm(unigoldHivTest, mDetails);
+                action.setJsonPayload(unigoldHivTest.toString());
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        }
     }
 
 
@@ -349,6 +445,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                 .withDetails(details)
                 .withHelper(actionHelper)
                 .withFormName(Constants.FORMS.HTS_REPEAT_FIRST_HIV_TEST)
+                .withProcessingMode(BaseHtsVisitAction.ProcessingMode.SEPARATE)
                 .build();
         actionList.put(context.getString(R.string.hts_repeate_of_first_hiv_test_title), action);
     }

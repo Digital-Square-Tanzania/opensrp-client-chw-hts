@@ -114,7 +114,7 @@ public class BaseHtsRegisterActivity extends BaseRegisterActivity implements Hts
     protected void onActivityResultExtended(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODE_GET_JSON && resultCode == RESULT_OK) {
             presenter().saveForm(data.getStringExtra(Constants.JSON_FORM_EXTRA.JSON));
-            finish();
+//            finish();
         }
     }
 
