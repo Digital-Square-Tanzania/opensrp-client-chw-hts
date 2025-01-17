@@ -1,5 +1,5 @@
 {
-  "count": "5",
+  "count": "6",
   "encounter_type": "hts_screening_clients_aged_above_15",
   "entity_id": "",
   "relational_id": "",
@@ -183,10 +183,10 @@
         }
       },
       {
-        "key": "hts_last_hiv_test_results_are_known_or_were_indeterminate_inconclusive",
+        "key": "hts_last_hiv_test_results_are_unknown_or_were_indeterminate_inconclusive",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "hts_last_hiv_test_results_are_known_or_were_indeterminate_inconclusive",
+        "openmrs_entity_id": "hts_last_hiv_test_results_are_unknown_or_were_indeterminate_inconclusive",
         "type": "native_radio",
         "label": "Were the last HIV test results unknown or were indeterminate/Inconclusive?",
         "options": [
@@ -264,6 +264,7 @@
         "label_text_style": "bold",
         "text_color": "#000000",
         "combine_checkbox_option_values": "true",
+        "exclusive": ["none"],
         "options": [
           {
             "key": "swollen_glands_lymph_nodes",
@@ -282,6 +283,12 @@
             "text": "Recurrent Skin Diseases",
             "openmrs_entity": "concept",
             "openmrs_entity_id": "recurrent_skin_diseases"
+          },
+          {
+            "key": "none",
+            "text": "None",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "none"
           }
         ],
         "v_required": {
@@ -305,6 +312,7 @@
         "label": "Does the client have any of the following?",
         "label_text_style": "bold",
         "text_color": "#000000",
+        "exclusive": ["none"],
         "options": [
           {
             "key": "cough_for_more_than_two_weeks",
@@ -335,6 +343,12 @@
             "text": "Blood stained sputum",
             "openmrs_entity": "concept",
             "openmrs_entity_id": "blood_stained_sputum"
+          },
+          {
+            "key": "none",
+            "text": "None",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "none"
           }
         ],
         "v_required": {
@@ -396,6 +410,7 @@
   },
   "step5": {
     "title": "HIV Exposure Assessment",
+    "next": "step6",
     "fields": [
       {
         "key": "hts_has_the_client_had_sexual_intercourse_with_a_person_with_hiv_or_with_a_person_whose_hiv_status_is_unknown",
@@ -473,6 +488,87 @@
         "v_required": {
           "value": "true",
           "err": "Please select a value"
+        }
+      }
+    ]
+  },
+  "step6": {
+    "title": "HIV Testing Eligibility",
+    "fields": [
+      {
+        "key": "eligibility_for_testing",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "eligibility_for_testing",
+        "type": "hidden",
+        "calculation": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_screening_rules_15_and_above.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "prompt_for_eligibility_to_test_for_hiv",
+        "type": "toaster_notes",
+        "text": "The client is eligible for an HIV test. Refer or provide HTS services",
+        "openmrs_entity_id": "prompt_for_eligibility_to_test_for_hiv",
+        "openmrs_entity": "concept",
+        "openmrs_entity_parent": "",
+        "toaster_type": "problem",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_screening_rules_15_and_above.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "prompt_for_clients_with_lower_hiv_risk",
+        "type": "toaster_notes",
+        "text": "The client is not eligible for an HIV test. Provide other services as appropriate.",
+        "toaster_type": "info",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_screening_rules_15_and_above.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "does_the_client_still_want_to_test",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "does_the_client_still_want_to_test",
+        "type": "native_radio",
+        "label": "Does the client still want to test for HIV?",
+        "options": [
+          {
+            "key": "yes",
+            "text": "Yes",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "yes"
+          },
+          {
+            "key": "no",
+            "text": "No",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "no"
+          }
+        ],
+        "v_required": {
+          "value": "true",
+          "err": "Please select a value"
+        },
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "hts_screening_rules_15_and_above.yml"
+            }
+          }
         }
       }
     ]
