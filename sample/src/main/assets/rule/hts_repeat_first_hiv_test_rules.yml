@@ -2,27 +2,27 @@
 name: step1_prompt_for_hiv_negative
 description:
 priority: 1
-condition: "step1_hts_repeat_first_hiv_test_result == 'non_reactive'"
+condition: "step1_test_result == 'non_reactive'"
 actions:
   - "isRelevant = true"
 ---
 name: step1_prompt_for_repeat_test_after_14_days
 description:
 priority: 1
-condition: "global_visit_type != 'repeat' && step1_hts_repeat_first_hiv_test_result == 'reactive'"
+condition: "global_visit_type != 'repeat' && step1_test_result == 'reactive'"
 actions:
   - "isRelevant = true"
 ---
 name: step1_prompt_for_conducting_dna_pcr
 description:
 priority: 1
-condition: "global_visit_type == 'repeat' && step1_hts_repeat_first_hiv_test_result == 'reactive'"
+condition: "global_visit_type == 'repeat' && step1_test_result == 'reactive'"
 actions:
   - "isRelevant = true"
 ---
 name: step1_prompt_repeat_the_test_using_another_test_kit
 description:
 priority: 1
-condition: "step1_hts_repeat_first_hiv_test_result == 'invalid' || step1_hts_repeat_first_hiv_test_result == 'wastage'"
+condition: "step1_test_result == 'invalid' || step1_test_result == 'wastage'"
 actions:
   - "isRelevant = true"
