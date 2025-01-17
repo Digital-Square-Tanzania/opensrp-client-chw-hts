@@ -95,6 +95,8 @@ public abstract class HivUnigoldHivTestActionHelper implements BaseHtsVisitActio
                 JSONArray fields = form.getJSONObject(JsonFormConstants.STEP1).getJSONArray(org.smartregister.util.JsonFormUtils.FIELDS);
                 if (unigoldHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.REACTIVE)) {
                     fields.put(JsonFormUtils.generateFinalHivTestResults(Constants.HIV_TEST_RESULTS.POSITIVE));
+                }else if (unigoldHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.NON_REACTIVE)) {
+                    fields.put(JsonFormUtils.generateFinalHivTestResults(Constants.HIV_TEST_RESULTS.INCONCLUSIVE));
                 }
                 return form.toString();
             } catch (Exception e) {
