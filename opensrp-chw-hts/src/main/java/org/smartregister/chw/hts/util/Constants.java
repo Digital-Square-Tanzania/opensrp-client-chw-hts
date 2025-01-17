@@ -27,6 +27,7 @@ public interface Constants {
         String HTS_SERVICES = "Hts Services";
         String VOID_EVENT = "Void Event";
         String CLOSE_HTS_SERVICE = "Close Hts Service";
+        String HTS_FIRST_HIV_TEST = "HTS First HIV Test";
 
     }
 
