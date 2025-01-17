@@ -68,7 +68,7 @@ public abstract class HivUnigoldHivTestActionHelper implements BaseHtsVisitActio
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
-            unigoldHivTestResults = JsonFormUtils.getValue(jsonObject, "hts_unigold_hiv_test_result");
+            unigoldHivTestResults = JsonFormUtils.getValue(jsonObject, "test_result");
             processUnigoldHivTestResults(unigoldHivTestResults);
         } catch (JSONException e) {
             Timber.e(e);

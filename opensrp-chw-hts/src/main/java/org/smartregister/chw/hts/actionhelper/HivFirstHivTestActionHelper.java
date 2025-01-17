@@ -15,6 +15,7 @@ import org.smartregister.chw.hts.domain.MemberObject;
 import org.smartregister.chw.hts.domain.VisitDetail;
 import org.smartregister.chw.hts.model.BaseHtsVisitAction;
 import org.smartregister.chw.hts.util.Constants;
+import org.smartregister.chw.hts.util.HtsVisitsUtil;
 import org.smartregister.chw.hts.util.JsonFormUtils;
 
 import java.util.List;
@@ -61,9 +62,9 @@ public abstract class HivFirstHivTestActionHelper implements BaseHtsVisitAction.
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
-            firstHivTestResults = JsonFormUtils.getValue(jsonObject, "hts_first_hiv_test_result");
-            syphilisTestResults = JsonFormUtils.getValue(jsonObject, "hts_syphilis_test_results");
-            typeOfTestUsed = JsonFormUtils.getValue(jsonObject, "hts_type_of_test_used");
+            firstHivTestResults = JsonFormUtils.getValue(jsonObject, "test_result");
+            syphilisTestResults = JsonFormUtils.getValue(jsonObject, "syphilis_test_results");
+            typeOfTestUsed = JsonFormUtils.getValue(jsonObject, "type_of_test_kit_used");
             processFirstHivTestResults(firstHivTestResults);
         } catch (JSONException e) {
             Timber.e(e);
@@ -84,12 +85,12 @@ public abstract class HivFirstHivTestActionHelper implements BaseHtsVisitAction.
 
     @Override
     public String postProcess(String jsonPayload) {
-        if (StringUtils.isNotBlank(firstHivTestResults) && (StringUtils.isNotBlank(syphilisTestResults) || (StringUtils.isNotBlank(syphilisTestResults) && typeOfTestUsed.equalsIgnoreCase("bioline")))) {
+        if (StringUtils.isNotBlank(firstHivTestResults) && (StringUtils.isNotBlank(syphilisTestResults) || (StringUtils.isBlank(syphilisTestResults) && typeOfTestUsed.equalsIgnoreCase("bioline")))) {
             try {
                 JSONObject form = new JSONObject(jsonPayload);
                 JSONArray fields = form.getJSONObject(JsonFormConstants.STEP1).getJSONArray(org.smartregister.util.JsonFormUtils.FIELDS);
                 JSONObject preTestServicesCompletionStatus = JsonFormUtils.getFieldJSONObject(fields, "hts_first_hiv_test_completion_status");
-                preTestServicesCompletionStatus.put(VALUE, true);
+                preTestServicesCompletionStatus.put(VALUE, HtsVisitsUtil.Complete);
 
                 if (firstHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.NON_REACTIVE)) {
                     fields.put(JsonFormUtils.generateFinalHivTestResults(Constants.HIV_TEST_RESULTS.NEGATIVE));

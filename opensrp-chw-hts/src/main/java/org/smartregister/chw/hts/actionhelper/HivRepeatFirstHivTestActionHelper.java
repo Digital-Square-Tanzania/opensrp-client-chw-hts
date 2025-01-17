@@ -62,7 +62,7 @@ public abstract class HivRepeatFirstHivTestActionHelper implements BaseHtsVisitA
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
-            firstHivTestResults = JsonFormUtils.getValue(jsonObject, "hts_repeat_first_test_kit_batch_number");
+            firstHivTestResults = JsonFormUtils.getValue(jsonObject, "test_result");
             processFirstHivTestResults(firstHivTestResults);
         } catch (JSONException e) {
             Timber.e(e);
