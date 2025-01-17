@@ -34,6 +34,8 @@
     <string name="hts_repeate_of_second_hiv_test_action_title">Second HIV Test Using First Response : Test Number %d</string>
     <string name="hts_second_hiv_test_action_entity_type">HTS Second HIV Test %d</string>
     <string name="hts_unigold_hiv_test_action_title">Uni-Gold HIV Test</string>
+    <string name="hts_repeate_of_unigold_hiv_test_action_title">Uni-Gold HIV Test : Test Number %d</string>
+    <string name="hts_unigold_hiv_test_action_entity_type">Uni-Gold HIV Test %d</string>
     <string name="hts_post_test_services_action_title">Post-Test Services</string>
     <string name="hts_dna_pcr_sample_collection_action_title">DNA-PCR Sample Collection</string>
     <string name="hts_linkage_to_prevention_services_action_title">Linkage to Prevention Services</string>
