@@ -1,5 +1,7 @@
 package org.smartregister.chw.hts.activity;
 
+import static org.smartregister.client.utils.constants.JsonFormConstants.JSON_FORM_KEY.GLOBAL;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,6 +47,7 @@ public class BaseHtsRegisterActivity extends BaseRegisterActivity implements Hts
     protected String BASE_ENTITY_ID;
     protected String FAMILY_BASE_ENTITY_ID;
     protected String FORM_NAME;
+    protected String sex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class BaseHtsRegisterActivity extends BaseRegisterActivity implements Hts
         BASE_ENTITY_ID = getIntent().getStringExtra(Constants.ACTIVITY_PAYLOAD.BASE_ENTITY_ID);
         FAMILY_BASE_ENTITY_ID = getIntent().getStringExtra(Constants.ACTIVITY_PAYLOAD.FAMILY_BASE_ENTITY_ID);
         FORM_NAME = getIntent().getStringExtra(Constants.ACTIVITY_PAYLOAD.HTS_FORM_NAME);
+        sex = getIntent().getStringExtra(Constants.ACTIVITY_PAYLOAD.SEX);
         onStartActivityWithAction();
     }
 
@@ -84,6 +88,14 @@ public class BaseHtsRegisterActivity extends BaseRegisterActivity implements Hts
 
     @Override
     public void startFormActivity(JSONObject jsonForm) {
+        if(FORM_NAME.equals(Constants.FORMS.HTS_SCREENING_15_AND_ABOVE)){
+            try {
+                jsonForm.getJSONObject(GLOBAL).put("sex",sex);
+            } catch (JSONException e) {
+                Timber.e(e);
+            }
+        }
+
         Intent intent = new Intent(this, BaseHtsRegisterActivity.class);
         intent.putExtra(Constants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
 

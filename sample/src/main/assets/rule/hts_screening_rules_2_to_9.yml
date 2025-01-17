@@ -5,3 +5,123 @@ priority: 1
 condition: "step3_hts_are_one_or_both_biological_parents_of_the_child_diseased.equals('no')"
 actions:
   - "isRelevant = true"
+---
+name: step4_prompt_for_eligibility_to_test_for_hiv
+description: relevance rule to control the visibility of (step4_prompt_for_eligibility_to_test_for_hiv)
+priority: 1
+condition: "(step1_hts_has_the_child_had_a_recurrent_illness_in_the_last_3_months != null && step1_hts_has_the_child_had_a_recurrent_illness_in_the_last_3_months.equals('yes')) ||
+(step1_hts_does_the_child_have_recurrent_skin_problems != null && step1_hts_does_the_child_have_recurrent_skin_problems.equals('yes')) ||
+(step1_hts_has_the_child_ever_been_admitted_to_hospital_before != null && step1_hts_has_the_child_ever_been_admitted_to_hospital_before.equals('yes')) ||
+(step1_hts_has_the_child_ever_received_blood_transfusion != null && step1_hts_has_the_child_ever_received_blood_transfusion.equals('yes')) ||
+(step2_hts_has_the_child_had_cough_for_two_weeks_or_more != null && step2_hts_has_the_child_had_cough_for_two_weeks_or_more.equals('yes')) ||
+(step2_hts_has_the_child_had_fever_for_two_weeks_or_more != null && step2_hts_has_the_child_had_fever_for_two_weeks_or_more.equals('yes')) ||
+(step2_hts_has_the_child_had_noticeable_weight_loss != null && step2_hts_has_the_child_had_noticeable_weight_loss.equals('yes')) ||
+(step2_hts_has_the_child_had_night_sweats_for_any_duration != null && step2_hts_has_the_child_had_night_sweats_for_any_duration.equals('yes')) ||
+(step2_hts_has_the_child_had_a_history_of_enlargement_of_lymph_nodes != null && step2_hts_has_the_child_had_a_history_of_enlargement_of_lymph_nodes.equals('yes')) ||
+(step3_hts_are_one_or_both_biological_parents_of_the_child_diseased != null && step3_hts_are_one_or_both_biological_parents_of_the_child_diseased.equals('yes')) ||
+(step3_hts_is_the_biological_mother_of_the_child_hiv_positive != null && step3_hts_is_the_biological_mother_of_the_child_hiv_positive.equals('yes')) ||
+(step3_hts_has_the_child_been_sexually_abused != null && step3_hts_has_the_child_been_sexually_abused.equals('yes'))
+"
+actions:
+  - "isRelevant = true"
+---
+name: step4_eligibility_for_testing
+description: Eligibility for testing
+priority: 1
+condition: "true"
+actions:
+  - "def checkEligibility(
+                          hasTheChildHadRecurrentIllnessInThePast3Months,
+                          doesTheChildHaveRecurrentSkinProblems,
+                          hasTheChildEverBeenAdmittedToHospitalBefore,
+                          hasTheChildEverReceivedBloodTransfusion,
+                          hasTheChildHadCoughForTwoWeeksOrMore,
+                          hasTheChildHadFeverForTwoWeeksOrMore,
+                          hasTheChildHadNoticeableWeightLoss,
+                          hasTheChildHadNightSweatsForAnyDuration,
+                          hasTheChildHadHistoryOfEnlargementOfLymphNodes,
+                          areNoneOrBothBiologicalParentsOfTheChildDiseased,
+                          isTheBiologicalMotherOfTheChildHivPositive,
+                          hasTheChildBeenSexuallyAbused
+                          ){
+      boolean eligibility = false;
+      if(hasTheChildHadRecurrentIllnessInThePast3Months != null && hasTheChildHadRecurrentIllnessInThePast3Months.equals('yes')){
+        eligibility = true;
+      } else if(doesTheChildHaveRecurrentSkinProblems != null && doesTheChildHaveRecurrentSkinProblems.equals('yes')){
+        eligibility = true;
+      } else if(hasTheChildEverBeenAdmittedToHospitalBefore != null && hasTheChildEverBeenAdmittedToHospitalBefore.equals('yes')){
+        eligibility = true;
+      } else if(hasTheChildEverReceivedBloodTransfusion != null && hasTheChildEverReceivedBloodTransfusion.equals('yes')){
+        eligibility = true;
+      } else if (hasTheChildHadCoughForTwoWeeksOrMore != null && hasTheChildHadCoughForTwoWeeksOrMore.equals('yes')){
+        eligibility = true;
+      } else if (hasTheChildHadFeverForTwoWeeksOrMore != null && hasTheChildHadFeverForTwoWeeksOrMore.equals('yes')){
+        eligibility = true;
+      } else if (hasTheChildHadNoticeableWeightLoss != null && hasTheChildHadNoticeableWeightLoss.equals('yes')){
+        eligibility = true;
+      } else if (hasTheChildHadNightSweatsForAnyDuration != null && hasTheChildHadNightSweatsForAnyDuration.equals('yes')){
+        eligibility = true;
+      } else if (hasTheChildHadHistoryOfEnlargementOfLymphNodes != null && hasTheChildHadHistoryOfEnlargementOfLymphNodes.equals('yes')){
+        eligibility = true;
+      } else if (areNoneOrBothBiologicalParentsOfTheChildDiseased != null && areNoneOrBothBiologicalParentsOfTheChildDiseased.equals('yes')){
+        eligibility = true;
+      } else if (isTheBiologicalMotherOfTheChildHivPositive != null && isTheBiologicalMotherOfTheChildHivPositive.equals('yes')){
+        eligibility = true;
+      } else if (hasTheChildBeenSexuallyAbused != null && hasTheChildBeenSexuallyAbused.equals('yes')){
+        eligibility = true;
+      }
+      
+      return eligibility;
+  }"
+  - "calculation = checkEligibility(
+                       step1_hts_has_the_child_had_a_recurrent_illness_in_the_last_3_months,
+                       step1_hts_does_the_child_have_recurrent_skin_problems,
+                       step1_hts_has_the_child_ever_been_admitted_to_hospital_before,
+                       step1_hts_has_the_child_ever_received_blood_transfusion,
+                       step2_hts_has_the_child_had_cough_for_two_weeks_or_more,
+                       step2_hts_has_the_child_had_fever_for_two_weeks_or_more,
+                       step2_hts_has_the_child_had_noticeable_weight_loss,
+                       step2_hts_has_the_child_had_night_sweats_for_any_duration,
+                       step2_hts_has_the_child_had_a_history_of_enlargement_of_lymph_nodes,
+                       step3_hts_are_one_or_both_biological_parents_of_the_child_diseased,
+                       step3_hts_is_the_biological_mother_of_the_child_hiv_positive,
+                       step3_hts_has_the_child_been_sexually_abused                       
+                   )"
+---
+name: step4_prompt_for_clients_with_lower_hiv_risk
+description: Show test to notify that the client is not eligible for test
+priority: 1
+condition: "!((step1_hts_has_the_child_had_a_recurrent_illness_in_the_last_3_months != null && step1_hts_has_the_child_had_a_recurrent_illness_in_the_last_3_months.equals('yes')) ||
+(step1_hts_does_the_child_have_recurrent_skin_problems != null && step1_hts_does_the_child_have_recurrent_skin_problems.equals('yes')) ||
+(step1_hts_has_the_child_ever_been_admitted_to_hospital_before != null && step1_hts_has_the_child_ever_been_admitted_to_hospital_before.equals('yes')) ||
+(step1_hts_has_the_child_ever_received_blood_transfusion != null && step1_hts_has_the_child_ever_received_blood_transfusion.equals('yes')) ||
+(step2_hts_has_the_child_had_cough_for_two_weeks_or_more != null && step2_hts_has_the_child_had_cough_for_two_weeks_or_more.equals('yes')) ||
+(step2_hts_has_the_child_had_fever_for_two_weeks_or_more != null && step2_hts_has_the_child_had_fever_for_two_weeks_or_more.equals('yes')) ||
+(step2_hts_has_the_child_had_noticeable_weight_loss != null && step2_hts_has_the_child_had_noticeable_weight_loss.equals('yes')) ||
+(step2_hts_has_the_child_had_night_sweats_for_any_duration != null && step2_hts_has_the_child_had_night_sweats_for_any_duration.equals('yes')) ||
+(step2_hts_has_the_child_had_a_history_of_enlargement_of_lymph_nodes != null && step2_hts_has_the_child_had_a_history_of_enlargement_of_lymph_nodes.equals('yes')) ||
+(step3_hts_are_one_or_both_biological_parents_of_the_child_diseased != null && step3_hts_are_one_or_both_biological_parents_of_the_child_diseased.equals('yes')) ||
+(step3_hts_is_the_biological_mother_of_the_child_hiv_positive != null && step3_hts_is_the_biological_mother_of_the_child_hiv_positive.equals('yes')) ||
+(step3_hts_has_the_child_been_sexually_abused != null && step3_hts_has_the_child_been_sexually_abused.equals('yes')))
+"
+actions:
+  - "isRelevant = true"
+---
+name: step4_does_the_client_still_want_to_test
+description: Ask clients if they still want to test despite not likely being HIV positive
+priority: 1
+condition: "!((step1_hts_has_the_child_had_a_recurrent_illness_in_the_last_3_months != null && step1_hts_has_the_child_had_a_recurrent_illness_in_the_last_3_months.equals('yes')) ||
+(step1_hts_does_the_child_have_recurrent_skin_problems != null && step1_hts_does_the_child_have_recurrent_skin_problems.equals('yes')) ||
+(step1_hts_has_the_child_ever_been_admitted_to_hospital_before != null && step1_hts_has_the_child_ever_been_admitted_to_hospital_before.equals('yes')) ||
+(step1_hts_has_the_child_ever_received_blood_transfusion != null && step1_hts_has_the_child_ever_received_blood_transfusion.equals('yes')) ||
+(step2_hts_has_the_child_had_cough_for_two_weeks_or_more != null && step2_hts_has_the_child_had_cough_for_two_weeks_or_more.equals('yes')) ||
+(step2_hts_has_the_child_had_fever_for_two_weeks_or_more != null && step2_hts_has_the_child_had_fever_for_two_weeks_or_more.equals('yes')) ||
+(step2_hts_has_the_child_had_noticeable_weight_loss != null && step2_hts_has_the_child_had_noticeable_weight_loss.equals('yes')) ||
+(step2_hts_has_the_child_had_night_sweats_for_any_duration != null && step2_hts_has_the_child_had_night_sweats_for_any_duration.equals('yes')) ||
+(step2_hts_has_the_child_had_a_history_of_enlargement_of_lymph_nodes != null && step2_hts_has_the_child_had_a_history_of_enlargement_of_lymph_nodes.equals('yes')) ||
+(step3_hts_are_one_or_both_biological_parents_of_the_child_diseased != null && step3_hts_are_one_or_both_biological_parents_of_the_child_diseased.equals('yes')) ||
+(step3_hts_is_the_biological_mother_of_the_child_hiv_positive != null && step3_hts_is_the_biological_mother_of_the_child_hiv_positive.equals('yes')) ||
+(step3_hts_has_the_child_been_sexually_abused != null && step3_hts_has_the_child_been_sexually_abused.equals('yes')))
+"
+actions:
+  - "isRelevant = true"
