@@ -1,7 +1,6 @@
 package org.smartregister.chw.hts.actionhelper;
 
 import static org.smartregister.client.utils.constants.JsonFormConstants.JSON_FORM_KEY.GLOBAL;
-import static org.smartregister.client.utils.constants.JsonFormConstants.VALUE;
 
 import android.content.Context;
 
@@ -24,17 +23,12 @@ import timber.log.Timber;
 
 public abstract class HivUnigoldHivTestActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
 
-    protected String unigoldHivTestResults;
-
-    protected String jsonPayload;
-
-    protected Context context;
-
-    protected MemberObject memberObject;
-
     private final String clientType;
-
     private final String visitType;
+    protected String unigoldHivTestResults;
+    protected String jsonPayload;
+    protected Context context;
+    protected MemberObject memberObject;
 
 
     public HivUnigoldHivTestActionHelper(Context context, MemberObject memberObject, String clientType, String visitType) {
@@ -95,7 +89,7 @@ public abstract class HivUnigoldHivTestActionHelper implements BaseHtsVisitActio
                 JSONArray fields = form.getJSONObject(JsonFormConstants.STEP1).getJSONArray(org.smartregister.util.JsonFormUtils.FIELDS);
                 if (unigoldHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.REACTIVE)) {
                     fields.put(JsonFormUtils.generateFinalHivTestResults(Constants.HIV_TEST_RESULTS.POSITIVE));
-                }else if (unigoldHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.NON_REACTIVE)) {
+                } else if (unigoldHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.NON_REACTIVE)) {
                     fields.put(JsonFormUtils.generateFinalHivTestResults(Constants.HIV_TEST_RESULTS.INCONCLUSIVE));
                 }
                 return form.toString();
