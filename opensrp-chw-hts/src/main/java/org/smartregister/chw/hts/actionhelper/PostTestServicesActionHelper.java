@@ -17,7 +17,7 @@ import timber.log.Timber;
 
 public class PostTestServicesActionHelper implements BaseHtsVisitAction.HtsVisitActionHelper {
 
-    protected String htsPostTestServices;
+    protected String hasPostTestCounsellingBeenProvided;
 
     protected String jsonPayload;
 
@@ -45,7 +45,7 @@ public class PostTestServicesActionHelper implements BaseHtsVisitAction.HtsVisit
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
-            htsPostTestServices = JsonFormUtils.getValue(jsonObject, "hts_post_test_services");
+            hasPostTestCounsellingBeenProvided = JsonFormUtils.getValue(jsonObject, "hts_has_post_test_counselling_been_provided");
         } catch (JSONException e) {
             Timber.e(e);
         }
@@ -73,7 +73,7 @@ public class PostTestServicesActionHelper implements BaseHtsVisitAction.HtsVisit
 
     @Override
     public BaseHtsVisitAction.Status evaluateStatusOnPayload() {
-        if (StringUtils.isNotBlank(htsPostTestServices)) {
+        if (StringUtils.isNotBlank(hasPostTestCounsellingBeenProvided)) {
             return BaseHtsVisitAction.Status.COMPLETED;
         }
         return BaseHtsVisitAction.Status.PENDING;
