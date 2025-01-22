@@ -2,12 +2,7 @@ package org.smartregister.chw.hts.actionhelper;
 
 import android.content.Context;
 
-import com.vijay.jsonwizard.constants.JsonFormConstants;
-
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.chw.hts.domain.MemberObject;
@@ -50,7 +45,7 @@ public class DnaPcrSampleCollectionActionHelper implements BaseHtsVisitAction.Ht
     public void onPayloadReceived(String jsonPayload) {
         try {
             JSONObject jsonObject = new JSONObject(jsonPayload);
-            wasSampleCollectedForDnaPcr = JsonFormUtils.getValue(jsonObject, "was_sample_collected_for_dna_pcr");
+            wasSampleCollectedForDnaPcr = JsonFormUtils.getValue(jsonObject, "hts_sample_collection_for_dna_pcr_test");
         } catch (JSONException e) {
             Timber.e(e);
         }

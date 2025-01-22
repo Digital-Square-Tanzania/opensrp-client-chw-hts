@@ -18,4 +18,9 @@ public class BaseTestHtsProfileActivity extends BaseHtsProfileActivity {
     public void continueDischarge() {
 
     }
+
+    @Override
+    public void startDnaPcrSampleCollection() {
+
+    }
 }

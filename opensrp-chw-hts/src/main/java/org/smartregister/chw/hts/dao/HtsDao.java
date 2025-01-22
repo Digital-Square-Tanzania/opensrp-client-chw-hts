@@ -1,5 +1,6 @@
 package org.smartregister.chw.hts.dao;
 
+import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.hts.domain.MemberObject;
 import org.smartregister.chw.hts.util.Constants;
 import org.smartregister.dao.AbstractDao;
@@ -83,11 +84,11 @@ public class HtsDao extends AbstractDao {
         return "";
     }
 
-    public static String getEnrollmentDate(String baseEntityId) {
-        String sql = "SELECT enrollment_date FROM ec_hts_enrollment p " +
-                " WHERE p.base_entity_id = '" + baseEntityId + "' ORDER BY enrollment_date DESC LIMIT 1";
+    public static String getClientUniqueId(String baseEntityId) {
+        String sql = "SELECT unique_id FROM ec_family_member p " +
+                " WHERE p.base_entity_id = '" + baseEntityId + "' LIMIT 1";
 
-        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "enrollment_date");
+        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "unique_id");
 
         List<String> res = readData(sql, dataMap);
         if (res != null && res.size() != 0 && res.get(0) != null) {
@@ -207,6 +208,41 @@ public class HtsDao extends AbstractDao {
                 "where mr.is_closed = 0 ";
 
         return readData(sql, memberObjectMap);
+    }
+
+
+
+    //TODO update implementation for checking whether DNA PCR should be collected
+    public static boolean shouldCollectDnaPCR(String baseEntityID) {
+        String sql = "SELECT sample_collection_for_dna_pcr_test, hts_visit_id FROM ec_hts_services p " +
+                "LEFT JOIN ec_lab_requests requests ON requests.hts_visit_id = p.visit_id " +
+                "WHERE p.entity_id = '" + baseEntityID + "' ORDER BY p.last_interacted_with DESC LIMIT 1 ";
+
+        DataMap<String> sampleCollectionForDnaPcrTestMap = cursor -> getCursorValue(cursor, "sample_collection_for_dna_pcr_test");
+        DataMap<String> visitIdMap = cursor -> getCursorValue(cursor, "hts_visit_id");
+
+        List<String> sampleCollectionRes = readData(sql, sampleCollectionForDnaPcrTestMap);
+        List<String> htsVisitId = readData(sql, visitIdMap);
+
+        if (sampleCollectionRes == null || sampleCollectionRes.size() != 1)
+            return false;
+        else if(StringUtils.isNotBlank(sampleCollectionRes.get(0))){
+            return sampleCollectionRes.get(0).equalsIgnoreCase("yes") && (htsVisitId == null || htsVisitId.isEmpty() || StringUtils.isBlank(htsVisitId.get(0)));
+        }
+        return false;
+    }
+
+    public static String getClientLastVisitId(String baseEntityID) {
+        String sql = "SELECT visit_id FROM ec_hts_services p " +
+                "WHERE p.entity_id = '" + baseEntityID + "' ORDER BY last_interacted_with DESC LIMIT 1";
+
+        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "visit_id");
+
+        List<String> res = readData(sql, dataMap);
+        if (res == null || res.size() != 1)
+            return null;
+
+        return res.get(0);
     }
 
 }

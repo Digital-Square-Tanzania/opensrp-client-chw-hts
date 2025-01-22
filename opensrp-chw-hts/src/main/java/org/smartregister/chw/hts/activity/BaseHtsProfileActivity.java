@@ -208,6 +208,12 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
                     htsServiceInProgress.setVisibility(View.GONE);
                 }
 
+                if (HtsDao.shouldCollectDnaPCR(memberObject.getBaseEntityId())) {
+                    textViewRecordHts.setText(R.string.collect_dna_pcr);
+                } else {
+                    textViewRecordHts.setText(R.string.record_hts);
+                }
+
                 processHtsService();
             }
 
@@ -242,7 +248,11 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
         } else if (id == R.id.rlFamilyServicesDue) {
             this.openFamilyDueServices();
         } else if (id == R.id.textview_record_hts) {
-            this.openFollowupVisit();
+            if (((TextView) view).getText().toString().equalsIgnoreCase(getString(R.string.collect_dna_pcr))) {
+                this.startDnaPcrSampleCollection();
+            } else {
+                this.openFollowupVisit();
+            }
         } else if (id == R.id.continue_hts_service) {
             this.continueService();
         }
@@ -274,6 +284,7 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
     public void openFollowupVisit() {
         //Implement in application
     }
+
 
     @SuppressLint("DefaultLocale")
     @Override

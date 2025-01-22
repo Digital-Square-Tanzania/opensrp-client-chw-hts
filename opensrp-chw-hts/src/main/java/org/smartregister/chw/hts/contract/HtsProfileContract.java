@@ -25,6 +25,8 @@ public interface HtsProfileContract {
 
         void openFollowupVisit();
 
+        void startDnaPcrSampleCollection();
+
     }
 
     interface Presenter {

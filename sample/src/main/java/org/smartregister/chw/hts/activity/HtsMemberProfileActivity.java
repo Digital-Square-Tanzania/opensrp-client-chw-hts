@@ -45,6 +45,11 @@ public class HtsMemberProfileActivity extends BaseHtsProfileActivity {
     }
 
     @Override
+    public void startDnaPcrSampleCollection() {
+
+    }
+
+    @Override
     public void startServiceForm() {
         HtsServiceActivity.startHtsVisitActivity(this, memberObject.getBaseEntityId(), false);
     }
