@@ -89,6 +89,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:visibility="gone"
         android:background="@drawable/grey_left_border"
         android:paddingStart="@dimen/register_list_item_padding"
         android:paddingLeft="@dimen/register_list_item_padding"

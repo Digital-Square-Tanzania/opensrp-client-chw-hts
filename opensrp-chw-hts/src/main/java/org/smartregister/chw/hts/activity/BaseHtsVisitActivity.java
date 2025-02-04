@@ -1,9 +1,10 @@
 package org.smartregister.chw.hts.activity;
 
+import static org.smartregister.chw.hts.dao.HtsDao.getIndexContactMember;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -77,7 +78,11 @@ public class BaseHtsVisitActivity extends SecuredActivity implements BaseHtsVisi
             isEditMode = getIntent().getBooleanExtra(Constants.ACTIVITY_PAYLOAD.EDIT_MODE, false);
             baseEntityID = getIntent().getStringExtra(Constants.ACTIVITY_PAYLOAD.BASE_ENTITY_ID);
             profileType = getIntent().getStringExtra(Constants.ACTIVITY_PAYLOAD.PROFILE_TYPE);
-            memberObject = getMemberObject(baseEntityID);
+            if (profileType != null && profileType.equalsIgnoreCase(Constants.INDEX_CLIENT_PROFILE_TYPE)) {
+                memberObject = getIndexContactMember(baseEntityID);
+            } else {
+                memberObject = getMemberObject(baseEntityID);
+            }
 
         }
 

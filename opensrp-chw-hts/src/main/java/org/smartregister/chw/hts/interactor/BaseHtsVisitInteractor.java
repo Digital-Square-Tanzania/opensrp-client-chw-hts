@@ -94,6 +94,8 @@ public class BaseHtsVisitInteractor implements BaseHtsVisitContract.Interactor {
      */
     @Override
     public MemberObject getMemberClient(String memberID, String profileType) {
+        if(profileType != null && profileType.equalsIgnoreCase(Constants.INDEX_CLIENT_PROFILE_TYPE))
+            return HtsDao.getIndexContactMember(memberID);
         return HtsDao.getMember(memberID);
     }
 

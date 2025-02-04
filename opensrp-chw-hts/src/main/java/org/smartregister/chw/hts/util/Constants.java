@@ -6,7 +6,7 @@ public interface Constants {
     String ENCOUNTER_TYPE = "encounter_type";
     String STEP_ONE = "step1";
     String Hts_VISIT_GROUP = "hts_visit_group";
-
+    String INDEX_CLIENT_PROFILE_TYPE = "Index Client Profile";
 
     interface HIV_TEST_RESULTS {
         String REACTIVE = "reactive";
@@ -50,6 +50,7 @@ public interface Constants {
         String HTS_SCREENING_15_AND_ABOVE = "hts_screening_15_and_above_form";
         String HTS_SCREENING_2_TO_9 = "hts_screening_children_aged_2_to_9_form";
         String HTS_SCREENING_10_TO_14 = "hts_screening_children_aged_10_to_14_form";
+        String HTS_SAMPLE_REGISTRATION = "hts_sample_registration";
     }
 
     interface TABLES {
