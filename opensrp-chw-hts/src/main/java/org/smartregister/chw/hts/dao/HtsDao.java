@@ -211,7 +211,6 @@ public class HtsDao extends AbstractDao {
     }
 
 
-
     //TODO update implementation for checking whether DNA PCR should be collected
     public static boolean shouldCollectDnaPCR(String baseEntityID) {
         String sql = "SELECT sample_collection_for_dna_pcr_test, hts_visit_id FROM ec_hts_services p " +
@@ -226,7 +225,7 @@ public class HtsDao extends AbstractDao {
 
         if (sampleCollectionRes == null || sampleCollectionRes.size() != 1)
             return false;
-        else if(StringUtils.isNotBlank(sampleCollectionRes.get(0))){
+        else if (StringUtils.isNotBlank(sampleCollectionRes.get(0))) {
             return sampleCollectionRes.get(0).equalsIgnoreCase("yes") && (htsVisitId == null || htsVisitId.isEmpty() || StringUtils.isBlank(htsVisitId.get(0)));
         }
         return false;
@@ -245,5 +244,40 @@ public class HtsDao extends AbstractDao {
         return res.get(0);
     }
 
+    public static boolean hasAnyVisit(String baseEntityID) {
+        String sql = "SELECT COUNT(*) AS count FROM ec_hts_services s " +
+                "WHERE s.entity_id = '" + baseEntityID + "' ";
+        DataMap<Integer> countMap = cursor -> getCursorIntValue(cursor, "count");
+        List<Integer> countResults = readData(sql, countMap);
+        return !countResults.isEmpty() && countResults.get(0) > 0;
+    }
+
+    public static boolean hasRecentlyTestedWithHivst(String baseEntityID) {
+        String sql = "SELECT COUNT(*) AS count FROM ec_hivst_followup s " +
+                "WHERE s.entity_id = '" + baseEntityID + "' ";
+        DataMap<Integer> countMap = cursor -> getCursorIntValue(cursor, "count");
+        List<Integer> countResults = readData(sql, countMap);
+        return !countResults.isEmpty() && countResults.get(0) > 0;
+    }
+
+    public static String fetchKitType(String baseEntityID){
+        String sql = "SELECT client_kit_type FROM ec_hivst_followup s " +
+                "WHERE s.entity_id = '" + baseEntityID + "' ";
+        DataMap<String> countMap = cursor -> getCursorValue(cursor, "client_kit_type");
+        List<String> kitTypeResult = readData(sql, countMap);
+        if(!kitTypeResult.isEmpty()){
+            return kitTypeResult.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public static Boolean isClientAnIndexContact(String baseEntityID){
+        String sql = "SELECT count(*) as count FROM ec_hiv_index_hf s " +
+                "WHERE s.base_entity_id = '" + baseEntityID + "' ";
+        DataMap<Integer> countMap = cursor -> getCursorIntValue(cursor, "count");
+        List<Integer> countResults = readData(sql, countMap);
+        return !countResults.isEmpty() && countResults.get(0) > 0;
+    }
 }
 
