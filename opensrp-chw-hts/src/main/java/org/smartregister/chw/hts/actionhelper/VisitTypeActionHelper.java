@@ -1,10 +1,18 @@
 package org.smartregister.chw.hts.actionhelper;
 
+import static org.smartregister.client.utils.constants.JsonFormConstants.EDITABLE;
+import static org.smartregister.client.utils.constants.JsonFormConstants.FIELDS;
+import static org.smartregister.client.utils.constants.JsonFormConstants.READ_ONLY;
+import static org.smartregister.client.utils.constants.JsonFormConstants.STEP1;
+import static org.smartregister.client.utils.constants.JsonFormConstants.VALUE;
+
 import android.content.Context;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.smartregister.chw.hts.dao.HtsDao;
 import org.smartregister.chw.hts.domain.MemberObject;
 import org.smartregister.chw.hts.domain.VisitDetail;
 import org.smartregister.chw.hts.model.BaseHtsVisitAction;
@@ -69,6 +77,77 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
      */
     @Override
     public String getPreProcessed() {
+        /**
+         * Handle visit type
+         */
+        if (HtsDao.hasAnyVisit(memberObject.getBaseEntityId())) {
+            try {
+                JSONObject jsonObject = new JSONObject(jsonPayload);
+                JSONArray fieldsArrayStep1 = jsonObject.getJSONObject(STEP1).getJSONArray(FIELDS);
+                JSONObject visitType = JsonFormUtils.getFieldJSONObject(fieldsArrayStep1, "hts_visit_type");
+                visitType.put(VALUE, "returning");
+                visitType.put(READ_ONLY, true);
+                visitType.put(EDITABLE, false);
+
+                jsonPayload = jsonObject.toString();
+            } catch (JSONException e) {
+                Timber.e(e);
+            }
+        }
+        ;
+
+        /**
+         * Handle has client recently tested with HIVST
+         */
+        if (HtsDao.hasRecentlyTestedWithHivst(memberObject.getBaseEntityId())) {
+            try {
+                JSONObject jsonObject = new JSONObject(jsonPayload);
+                JSONArray fieldsArrayStep1 = jsonObject.getJSONObject(STEP1).getJSONArray(FIELDS);
+                JSONObject hasTheClientRecentlyTestedWithHivst = JsonFormUtils.getFieldJSONObject(fieldsArrayStep1, "hts_has_the_client_recently_tested_with_hivst");
+                hasTheClientRecentlyTestedWithHivst.put(VALUE, "yes");
+                hasTheClientRecentlyTestedWithHivst.put(READ_ONLY, true);
+                hasTheClientRecentlyTestedWithHivst.put(EDITABLE, false);
+
+                JSONObject htsPreviousHivstClientType = JsonFormUtils.getFieldJSONObject(fieldsArrayStep1, "hts_previous_hivst_client_type");
+                htsPreviousHivstClientType.put(VALUE, "self");
+                htsPreviousHivstClientType.put(READ_ONLY, true);
+                htsPreviousHivstClientType.put(EDITABLE, false);
+
+                //Populate kit type on form
+                String kitType = HtsDao.fetchKitType(memberObject.getBaseEntityId());
+                if(kitType != null){
+                    JSONObject clientKitType = JsonFormUtils.getFieldJSONObject(fieldsArrayStep1, "hts_previous_hivst_test_type");
+                    clientKitType.put(VALUE, kitType);
+                    clientKitType.put(READ_ONLY, true);
+                    clientKitType.put(EDITABLE, false);
+                }
+
+                jsonPayload = jsonObject.toString();
+            } catch (JSONException e) {
+                Timber.e(e);
+            }
+        }
+
+        /**
+         * Handle has client type field
+         * If the client is an index contact and does not have any visit then the client is an index contact
+         */
+        if (HtsDao.isClientAnIndexContact(memberObject.getBaseEntityId()) && !HtsDao.hasAnyVisit(memberObject.getBaseEntityId())) {
+            try {
+                JSONObject jsonObject = new JSONObject(jsonPayload);
+                JSONArray fieldsArrayStep1 = jsonObject.getJSONObject(STEP1).getJSONArray(FIELDS);
+                JSONObject hasTheClientRecentlyTestedWithHivst = JsonFormUtils.getFieldJSONObject(fieldsArrayStep1, "hts_client_type");
+                hasTheClientRecentlyTestedWithHivst.put(VALUE, "index_contact");
+                hasTheClientRecentlyTestedWithHivst.put(READ_ONLY, true);
+                hasTheClientRecentlyTestedWithHivst.put(EDITABLE, false);
+
+                jsonPayload = jsonObject.toString();
+            } catch (JSONException e) {
+                Timber.e(e);
+            }
+        }
+
+
         return jsonPayload;
     }
 
@@ -139,7 +218,7 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
      * Processes the specific HTS visit type.
      * This method is abstract and must be implemented by subclasses to handle visit type-specific logic.
      *
-     * @param visitType The type of the visit to process.
+     * @param visitType  The type of the visit to process.
      * @param clientType The type of client.
      */
     public abstract void processVisitAndClientTypes(String visitType, String clientType);
