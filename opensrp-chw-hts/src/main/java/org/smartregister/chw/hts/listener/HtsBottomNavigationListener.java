@@ -23,8 +23,10 @@ public class HtsBottomNavigationListener extends BottomNavigationListener {
 
         BaseRegisterActivity baseRegisterActivity = (BaseRegisterActivity) context;
 
-        if (item.getItemId() == R.id.action_family) {
+        if (item.getItemId() == R.id.action_home) {
             baseRegisterActivity.switchToBaseFragment();
+        }else{
+            baseRegisterActivity.switchToFragment(1);
         }
 
         return true;

@@ -1,5 +1,7 @@
 package org.smartregister.chw.hts.actionhelper;
 
+import static org.smartregister.client.utils.constants.JsonFormConstants.FIELDS;
+import static org.smartregister.client.utils.constants.JsonFormConstants.STEP1;
 import static org.smartregister.client.utils.constants.JsonFormConstants.VALUE;
 
 import android.content.Context;
@@ -7,8 +9,10 @@ import android.content.Context;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.smartregister.chw.hts.dao.HtsDao;
 import org.smartregister.chw.hts.domain.MemberObject;
 import org.smartregister.chw.hts.domain.VisitDetail;
 import org.smartregister.chw.hts.model.BaseHtsVisitAction;
@@ -43,6 +47,18 @@ public class PreTestServicesActionHelper implements BaseHtsVisitAction.HtsVisitA
 
     @Override
     public String getPreProcessed() {
+        try {
+            String tbScreening = HtsDao.getTbSymptomsAssessment(memberObject.getBaseEntityId());
+            if (StringUtils.isNotBlank(tbScreening) && !tbScreening.contains("none")) {
+                JSONObject jsonObject = new JSONObject(jsonPayload);
+                JSONArray fieldsArrayStep1 = jsonObject.getJSONObject(STEP1).getJSONArray(FIELDS);
+                JSONObject tbScreeningOutcome = JsonFormUtils.getFieldJSONObject(fieldsArrayStep1, "hts_clients_tb_screening_outcome");
+                tbScreeningOutcome.put(VALUE, "tb_suspect");
+                return jsonObject.toString();
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        }
         return null;
     }
 

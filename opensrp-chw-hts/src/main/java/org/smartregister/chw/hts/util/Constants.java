@@ -33,6 +33,7 @@ public interface Constants {
         String HTS_SECOND_HIV_TEST = "HTS Second HIV Test";
         String HTS_UNIGOLD_HIV_TEST = "Uni-Gold HIV Test";
         String REPEAT_FIRST_HIV_TEST = "Repeat of First HIV Test";
+        String SAMPLE_TESTING = "Sample Testing";
 
     }
 
@@ -55,6 +56,7 @@ public interface Constants {
 
     interface TABLES {
         String HTS_REGISTER = "ec_hts_register";
+        String HTS_SAMPLE_REGISTER = "ec_hts_samples_register";
         String HTS_SERVICES = "ec_hts_services";
     }
 

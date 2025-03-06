@@ -1,11 +1,6 @@
 package org.smartregister.chw.hts.domain;
 
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.smartregister.util.Utils;
-
 import java.io.Serializable;
-import java.util.Date;
 
 public class SampleRegistrationObject implements Serializable {
 

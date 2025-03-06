@@ -28,7 +28,10 @@ public class DBConstants {
         public static final String VISIT_NOT_DONE = "visit_not_done";
         public static final String FAMILY_NAME = "family_name";
         public static final String PHONE_NUMBER = "phone_number";
-        public static final String CHILD = "ec_child";
+
+        public static final String SAMPLE_TYPE = "sample_type";
+        public static final String IQC_TYPE = "iqc_type";
+        public static final String PITC_TESTING_POINT = "pitc_testing_point";
 
     }
 }

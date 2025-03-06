@@ -87,5 +87,6 @@
     <string name="number_not_filled">client phone number, not filled</string>
     <string name="hts_visit">Hts Visits</string>
     <string name="collect_dna_pcr">Collect DNA PCR Sample</string>
+    <string name="hts_samples">Hts Samples</string>
 
 </resources>

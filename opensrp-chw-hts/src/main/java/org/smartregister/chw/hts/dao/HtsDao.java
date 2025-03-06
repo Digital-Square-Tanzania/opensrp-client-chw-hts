@@ -1,5 +1,7 @@
 package org.smartregister.chw.hts.dao;
 
+import static org.smartregister.chw.hts.util.Constants.TABLES.HTS_SAMPLE_REGISTER;
+
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.chw.hts.domain.MemberObject;
 import org.smartregister.chw.hts.util.Constants;
@@ -299,24 +301,53 @@ public class HtsDao extends AbstractDao {
         return !countResults.isEmpty() && countResults.get(0) > 0;
     }
 
-    public static String fetchKitType(String baseEntityID){
+    public static String fetchKitType(String baseEntityID) {
         String sql = "SELECT client_kit_type FROM ec_hivst_followup s " +
                 "WHERE s.entity_id = '" + baseEntityID + "' ";
         DataMap<String> countMap = cursor -> getCursorValue(cursor, "client_kit_type");
         List<String> kitTypeResult = readData(sql, countMap);
-        if(!kitTypeResult.isEmpty()){
+        if (!kitTypeResult.isEmpty()) {
             return kitTypeResult.get(0);
         } else {
             return null;
         }
     }
 
-    public static Boolean isClientAnIndexContact(String baseEntityID){
+    public static String getTbSymptomsAssessment(String baseEntityID) {
+        String sql = "SELECT does_the_client_have_any_of_the_following_tuberculosis_symptoms_assessment FROM ec_hts_register s " +
+                "WHERE s.base_entity_id = '" + baseEntityID + "' ";
+        DataMap<String> countMap = cursor -> getCursorValue(cursor, "does_the_client_have_any_of_the_following_tuberculosis_symptoms_assessment");
+        List<String> tbSymptomsAssessment = readData(sql, countMap);
+        if (!tbSymptomsAssessment.isEmpty()) {
+            return tbSymptomsAssessment.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public static Boolean isClientAnIndexContact(String baseEntityID) {
         String sql = "SELECT count(*) as count FROM ec_hiv_index_hf s " +
                 "WHERE s.base_entity_id = '" + baseEntityID + "' ";
         DataMap<Integer> countMap = cursor -> getCursorIntValue(cursor, "count");
         List<Integer> countResults = readData(sql, countMap);
         return !countResults.isEmpty() && countResults.get(0) > 0;
+    }
+
+    public static void saveSampleRegistration(String baseEntityId,
+                                              String sampleType,
+                                              String iqcType,
+                                              String testingPoint,
+                                              long lastInteractedWith) {
+        String sql = "INSERT INTO " + HTS_SAMPLE_REGISTER +
+                "    (base_entity_id, sample_type, iqc_type, pitc_testing_point, last_interacted_with) " +
+                "VALUES ('" + baseEntityId + "', '" + sampleType + "', '" + iqcType + "', '" + testingPoint + "', " + lastInteractedWith + ") " +
+                "ON CONFLICT (base_entity_id) DO UPDATE " +
+                "SET sample_type = '" + sampleType + "', " +
+                "    iqc_type = '" + iqcType + "', " +
+                "    pitc_testing_point = '" + testingPoint + "', " +
+                "    last_interacted_with = " + lastInteractedWith;
+
+        updateDB(sql);
     }
 }
 
