@@ -1,5 +1,7 @@
 package org.smartregister.chw.hts.actionhelper;
 
+import static org.smartregister.client.utils.constants.JsonFormConstants.JSON_FORM_KEY.GLOBAL;
+
 import android.content.Context;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,10 +27,13 @@ public class PostTestServicesActionHelper implements BaseHtsVisitAction.HtsVisit
 
     protected MemberObject memberObject;
 
+    protected String hivTestResults;
 
-    public PostTestServicesActionHelper(Context context, MemberObject memberObject) {
+
+    public PostTestServicesActionHelper(Context context, MemberObject memberObject, String hivTestResults) {
         this.context = context;
         this.memberObject = memberObject;
+        this.hivTestResults = hivTestResults;
     }
 
     @Override
@@ -38,6 +43,15 @@ public class PostTestServicesActionHelper implements BaseHtsVisitAction.HtsVisit
 
     @Override
     public String getPreProcessed() {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonPayload);
+            JSONObject global = jsonObject.getJSONObject(GLOBAL);
+            global.put("hiv_test_results", hivTestResults);
+            return jsonObject.toString();
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
         return null;
     }
 
