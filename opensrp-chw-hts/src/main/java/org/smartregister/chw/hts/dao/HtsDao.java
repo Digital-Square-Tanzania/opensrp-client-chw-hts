@@ -325,6 +325,18 @@ public class HtsDao extends AbstractDao {
         }
     }
 
+    public static String getHasTheClientEverTestedForHiv(String baseEntityID) {
+        String sql = "SELECT has_the_client_ever_tested_for_hiv FROM ec_hts_register s " +
+                "WHERE s.base_entity_id = '" + baseEntityID + "' ";
+        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "has_the_client_ever_tested_for_hiv");
+        List<String> everTestedForHiv = readData(sql, dataMap);
+        if (!everTestedForHiv.isEmpty()) {
+            return everTestedForHiv.get(0);
+        } else {
+            return null;
+        }
+    }
+
     public static Boolean isClientAnIndexContact(String baseEntityID) {
         String sql = "SELECT count(*) as count FROM ec_hiv_index_hf s " +
                 "WHERE s.base_entity_id = '" + baseEntityID + "' ";
@@ -350,4 +362,3 @@ public class HtsDao extends AbstractDao {
         updateDB(sql);
     }
 }
-
