@@ -80,7 +80,7 @@ public class HtsDao extends AbstractDao {
         DataMap<String> dataMap = cursor -> getCursorValue(cursor, "hts_client_id");
 
         List<String> res = readData(sql, dataMap);
-        if (res != null && res.size() != 0 && res.get(0) != null) {
+        if (res != null && !res.isEmpty() && res.get(0) != null) {
             return res.get(0);
         }
         return "";
@@ -93,7 +93,7 @@ public class HtsDao extends AbstractDao {
         DataMap<String> dataMap = cursor -> getCursorValue(cursor, "unique_id");
 
         List<String> res = readData(sql, dataMap);
-        if (res != null && res.size() != 0 && res.get(0) != null) {
+        if (res != null && !res.isEmpty() && res.get(0) != null) {
             return res.get(0);
         }
         return "";
@@ -104,7 +104,7 @@ public class HtsDao extends AbstractDao {
         DataMap<Integer> map = cursor -> getCursorIntValue(cursor, "visit_number");
         List<Integer> res = readData(sql, map);
 
-        if (res != null && res.size() > 0 && res.get(0) != null) {
+        if (res != null && !res.isEmpty() && res.get(0) != null) {
             return res.get(0) + 1;
         } else
             return 0;
@@ -132,7 +132,7 @@ public class HtsDao extends AbstractDao {
         DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
 
         List<Integer> res = readData(sql, dataMap);
-        if (res == null || res.size() == 0)
+        if (res == null || res.isEmpty())
             return 0;
         return res.get(0);
     }
