@@ -358,7 +358,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                         actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
                         removeCommonActions();
                         if (StringUtils.isNotBlank(unigoldHivTestResults))
-                            evaluateSecondHivTest(details, repeatNumber + 1);
+                            evaluateUnigoldHivTest(details, repeatNumber + 1);
                     } else {
                         if (StringUtils.isNotBlank(mClientType) && mClientType.equalsIgnoreCase("verification")) {
                             removeCommonActions();
@@ -396,11 +396,12 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
 
             BaseHtsVisitAction action = getBuilder(actionTitle)
                     .withOptional(true)
+                    .withJsonPayload(unigoldHivTest.toString())
                     .withHelper(actionHelper)
                     .withFormName(Constants.FORMS.HTS_UNIGOLD_HIV_TEST)
                     .withProcessingMode(BaseHtsVisitAction.ProcessingMode.SEPARATE)
                     .build();
-            actionList.put(context.getString(R.string.hts_unigold_hiv_test_action_title), action);
+            actionList.put(actionTitle, action);
 
             if (mDetails != null) {
                 JsonFormUtils.populateForm(unigoldHivTest, mDetails);

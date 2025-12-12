@@ -153,6 +153,11 @@ public class BaseHtsVisitActivity extends SecuredActivity implements BaseHtsVisi
         // Add remaining actions
         addActionToMap(map, R.string.hts_repeate_of_first_hiv_test_title);
         addActionToMap(map, R.string.hts_unigold_hiv_test_action_title);
+
+        addSortedRepeatedActions(map,
+                R.string.hts_repeate_of_unigold_hiv_test_action_title,
+                actionList);
+
         addActionToMap(map, R.string.hts_dna_pcr_sample_collection_action_title);
         addActionToMap(map, R.string.hts_post_test_services_action_title);
         addActionToMap(map, R.string.hts_linkage_to_prevention_services_action_title);
