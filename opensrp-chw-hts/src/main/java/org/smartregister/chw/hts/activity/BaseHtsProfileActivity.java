@@ -217,6 +217,12 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
                 processHtsService();
             }
 
+            if (HtsDao.hasReactiveVerificationTest(memberObject.getBaseEntityId())) {
+                textViewRecordHts.setVisibility(View.GONE);
+            } else {
+                textViewRecordHts.setVisibility(View.VISIBLE);
+            }
+
         } catch (Exception e) {
             Timber.d(e);
         }
