@@ -293,6 +293,30 @@ public class HtsDao extends AbstractDao {
         return !countResults.isEmpty() && countResults.get(0) > 0;
     }
 
+    public static boolean hasReactiveVerificationTest(String baseEntityID) {
+        String lastClientTypeSql = "SELECT client_type FROM ec_hts_services s " +
+                "WHERE s.entity_id = '" + baseEntityID + "' " +
+                "ORDER BY s.last_interacted_with DESC LIMIT 1";
+        DataMap<String> clientTypeMap = cursor -> getCursorValue(cursor, "client_type");
+        List<String> clientTypeResult = readData(lastClientTypeSql, clientTypeMap);
+        if (clientTypeResult == null || clientTypeResult.isEmpty() || !StringUtils.equalsIgnoreCase(clientTypeResult.get(0), "verification")) {
+            return false;
+        }
+
+        String unigoldTestSql = "SELECT test_type, test_result FROM ec_hts_tests s " +
+                "WHERE s.entity_id = '" + baseEntityID + "' " +
+                "ORDER BY s.last_interacted_with DESC LIMIT 1";
+        DataMap<Boolean> verificationTestMap = cursor -> {
+            String testType = getCursorValue(cursor, "test_type");
+            String testResult = getCursorValue(cursor, "test_result");
+            return StringUtils.equalsIgnoreCase(testType, "Unigold HIV Test") &&
+                    StringUtils.equalsIgnoreCase(testResult, Constants.HIV_TEST_RESULTS.REACTIVE);
+        };
+        List<Boolean> testResultMatches = readData(unigoldTestSql, verificationTestMap);
+
+        return testResultMatches != null && !testResultMatches.isEmpty() && Boolean.TRUE.equals(testResultMatches.get(0));
+    }
+
     public static boolean hasRecentlyTestedWithHivst(String baseEntityID) {
         String sql = "SELECT COUNT(*) AS count FROM ec_hivst_followup s " +
                 "WHERE s.entity_id = '" + baseEntityID + "' ";
