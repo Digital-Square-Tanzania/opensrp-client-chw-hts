@@ -186,6 +186,7 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
 
             if (getServiceVisit() != null) {
                 if (!getServiceVisit().getProcessed() && HtsVisitsUtil.getHtsVisitStatus(getServiceVisit()).equalsIgnoreCase(HtsVisitsUtil.Complete)) {
+                    textViewRecordHts.setVisibility(View.GONE);
                     manualProcessVisit.setVisibility(View.VISIBLE);
                     textViewContinueHtsService.setText(R.string.edit_visit);
                     manualProcessVisit.setOnClickListener(view -> {
