@@ -184,7 +184,9 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
     protected void setupButtons() {
         try {
 
-            if (getServiceVisit() != null) {
+            if (HtsDao.hasReactiveVerificationTest(memberObject.getBaseEntityId())) {
+                textViewRecordHts.setVisibility(View.GONE);
+            }else if (getServiceVisit() != null) {
                 if (!getServiceVisit().getProcessed() && HtsVisitsUtil.getHtsVisitStatus(getServiceVisit()).equalsIgnoreCase(HtsVisitsUtil.Complete)) {
                     textViewRecordHts.setVisibility(View.GONE);
                     manualProcessVisit.setVisibility(View.VISIBLE);
@@ -214,14 +216,7 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
                 } else {
                     textViewRecordHts.setText(R.string.record_hts);
                 }
-
                 processHtsService();
-            }
-
-            if (HtsDao.hasReactiveVerificationTest(memberObject.getBaseEntityId())) {
-                textViewRecordHts.setVisibility(View.GONE);
-            } else {
-                textViewRecordHts.setVisibility(View.VISIBLE);
             }
 
         } catch (Exception e) {
