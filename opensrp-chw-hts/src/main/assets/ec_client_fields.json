@@ -4,6 +4,14 @@
       "name": "ec_hts_register",
       "columns": [
         {
+          "column_name": "chw_referral_service",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.formSubmissionField",
+            "concept": "chw_referral_service"
+          }
+        },
+        {
           "column_name": "base_entity_id",
           "type": "Event",
           "json_mapping": {
@@ -24,179 +32,352 @@
           "json_mapping": {
             "field": "version"
           }
-        }
-      ]
-    },
-    {
-      "name": "ec_family",
-      "columns": [
-        {
-          "column_name": "base_entity_id",
-          "type": "Client",
-          "json_mapping": {
-            "field": "baseEntityId"
-          }
         },
         {
-          "column_name": "unique_id",
-          "type": "Client",
-          "json_mapping": {
-            "field": "identifiers.opensrp_id"
-          }
-        },
-        {
-          "column_name": "first_name",
-          "type": "Client",
-          "json_mapping": {
-            "field": "firstName"
-          }
-        },
-        {
-          "column_name": "last_name",
-          "type": "Client",
-          "json_mapping": {
-            "field": "lastName"
-          }
-        },
-        {
-          "column_name": "village_town",
-          "type": "Client",
-          "json_mapping": {
-            "field": "addresses.cityVillage"
-          }
-        },
-        {
-          "column_name": "family_head",
-          "type": "Client",
-          "json_mapping": {
-            "field": "relationships.family_head"
-          }
-        },
-        {
-          "column_name": "primary_caregiver",
-          "type": "Client",
-          "json_mapping": {
-            "field": "relationships.primary_caregiver"
-          }
-        },
-        {
-          "column_name": "last_interacted_with",
+          "column_name": "ctc_number",
           "type": "Event",
           "json_mapping": {
-            "field": "version"
+            "field": "obs.fieldCode",
+            "concept": "ctc_number"
           }
         },
         {
-          "column_name": "date_removed",
-          "type": "Client",
+          "column_name": "cbhs_number",
+          "type": "Event",
           "json_mapping": {
-            "field": "attributes.dateRemoved"
+            "field": "obs.fieldCode",
+            "concept": "cbhs_number"
+          }
+        },
+        {
+          "column_name": "client_hiv_status_during_registration",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.formSubmissionField",
+            "concept": "client_hiv_status_during_registration"
+          }
+        },
+        {
+          "column_name": "client_hiv_status_after_testing",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.formSubmissionField",
+            "concept": "test_results"
+          }
+        },
+        {
+          "column_name": "hiv_registration_date",
+          "type": "Event",
+          "data_type": "date",
+          "json_mapping": {
+            "field": "obs.formSubmissionField",
+            "concept": "hiv_registration_date"
+          }
+        },
+        {
+          "column_name": "does_the_client_still_want_to_test",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "does_the_client_still_want_to_test"
+          }
+        },
+        {
+          "column_name": "is_client_pregnant",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_is_client_pregnant"
+          }
+        },
+        {
+          "column_name": "is_client_breastfeeding",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_is_client_breastfeeding"
+          }
+        },
+        {
+          "column_name": "has_the_client_ever_tested_for_hiv",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_has_the_client_ever_tested_for_hiv"
+          }
+        },
+        {
+          "column_name": "has_testing_been_done_more_than_12_months_ago",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_has_testing_been_done_more_than_12_months_ago"
+          }
+        },
+        {
+          "column_name": "last_hiv_test_results_are_unknown_or_were_indeterminate_inconclusive",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_last_hiv_test_results_are_unknown_or_were_indeterminate_inconclusive"
+          }
+        },
+        {
+          "column_name": "does_the_client_have_any_of_the_following_general_health_assessment",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_does_the_client_have_any_of_the_following_general_health_assessment"
+          }
+        },
+        {
+          "column_name": "does_the_client_have_any_of_the_following_tuberculosis_symptoms_assessment",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_does_the_client_have_any_of_the_following_tuberculosis_symptoms_assessment"
+          }
+        },
+        {
+          "column_name": "does_the_client_have_any_of_the_following_sti_symptoms_assessment",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_does_the_client_have_any_of_the_following_sti_symptoms_assessment"
+          }
+        },
+        {
+          "column_name": "the_client_had_sexual_intercourse_with_a_person_with_hiv_or_with_a_person_whose_hiv_status_is_unknown",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_has_the_client_had_sexual_intercourse_with_a_person_with_hiv_or_with_a_person_whose_hiv_status_is_unknown"
+          }
+        },
+        {
+          "column_name": "the_client_had_sex_under_the_influence_of_drugs_or_alcohol",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_has_the_client_had_sex_under_the_influence_of_drugs_or_alcohol"
+          }
+        },
+        {
+          "column_name": "has_the_client_had_more_than_one_sexual_partner_in_the_last_12_months",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_has_the_client_had_more_than_one_sexual_partner_in_the_last_12_months"
+          }
+        },
+        {
+          "column_name": "eligibility_for_testing",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "eligibility_for_testing"
+          }
+        },
+        {
+          "column_name": "does_the_child_have_abnormal_discharge_from_the_vagina_or_penis",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_does_the_child_have_abnormal_discharge_from_the_vagina_or_penis"
+          }
+        },
+        {
+          "column_name": "does_the_child_have_burning_itching_or_pain_when_urinating_or_peeing",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_does_the_child_have_burning_itching_or_pain_when_urinating_or_peeing"
+          }
+        },
+        {
+          "column_name": "does_the_child_have_any_ulcer_sore_warts_in_his_or_her_genital_areas",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_does_the_child_have_any_ulcer_sore_warts_in_his_or_her_genital_areas"
           }
         }
       ]
     },
     {
-      "name": "ec_family_member",
+      "name": "ec_hts_services",
       "columns": [
         {
-          "column_name": "base_entity_id",
-          "type": "Client",
+          "column_name": "entity_id",
+          "type": "Event",
           "json_mapping": {
             "field": "baseEntityId"
           }
         },
         {
-          "column_name": "unique_id",
-          "type": "Client",
+          "column_name": "base_entity_id",
+          "type": "Event",
           "json_mapping": {
-            "field": "identifiers.opensrp_id"
+            "field": "formSubmissionId"
           }
         },
         {
           "column_name": "relational_id",
-          "type": "Client",
-          "json_mapping": {
-            "field": "relationships.family"
-          }
-        },
-        {
-          "column_name": "first_name",
-          "type": "Client",
-          "json_mapping": {
-            "field": "firstName"
-          }
-        },
-        {
-          "column_name": "middle_name",
-          "type": "Client",
-          "json_mapping": {
-            "field": "middleName"
-          }
-        },
-        {
-          "column_name": "last_name",
-          "type": "Client",
-          "json_mapping": {
-            "field": "lastName"
-          }
-        },
-        {
-          "column_name": "dob",
-          "type": "Client",
-          "json_mapping": {
-            "field": "birthdate"
-          }
-        },
-        {
-          "column_name": "dod",
-          "type": "Client",
-          "json_mapping": {
-            "field": "deathdate"
-          }
-        },
-        {
-          "column_name": "dob_unknown",
-          "type": "Client",
-          "json_mapping": {
-            "field": "birthdateApprox"
-          }
-        },
-        {
-          "column_name": "gender",
-          "type": "Client",
-          "json_mapping": {
-            "field": "gender"
-          }
-        },
-        {
-          "column_name": "phone_number",
           "type": "Event",
           "json_mapping": {
             "field": "obs.fieldCode",
-            "concept": "159635AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            "concept": "relational_id"
           }
         },
         {
-          "column_name": "other_phone_number",
+          "column_name": "visit_id",
+          "type": "Event",
+          "json_mapping": {
+            "field": "details.hts_visit_group"
+          }
+        },
+        {
+          "column_name": "visit_type",
           "type": "Event",
           "json_mapping": {
             "field": "obs.fieldCode",
-            "concept": "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            "concept": "hts_visit_type"
           }
         },
         {
-          "column_name": "highest_edu_level",
+          "column_name": "has_the_client_recently_tested_with_hivst",
           "type": "Event",
           "json_mapping": {
             "field": "obs.fieldCode",
-            "concept": "1712AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            "concept": "hts_has_the_client_recently_tested_with_hivst"
           }
         },
         {
-          "column_name": "entity_type",
+          "column_name": "previous_hivst_client_type",
           "type": "Event",
           "json_mapping": {
-            "field": "entityType"
+            "field": "obs.fieldCode",
+            "concept": "hts_previous_hivst_client_type"
+          }
+        },
+        {
+          "column_name": "previous_hivst_test_type",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_previous_hivst_test_type"
+          }
+        },
+        {
+          "column_name": "client_type",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_client_type"
+          }
+        },
+        {
+          "column_name": "testing_point",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_testing_point"
+          }
+        },
+        {
+          "column_name": "has_pre_test_counselling_been_provided",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_has_pre_test_counselling_been_provided"
+          }
+        },
+        {
+          "column_name": "type_of_counselling_provided",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_type_of_counselling_provided"
+          }
+        },
+        {
+          "column_name": "clients_tb_screening_outcome",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_clients_tb_screening_outcome"
+          }
+        },
+        {
+          "column_name": "does_client_need_hiv_self_test_kits",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_does_client_need_hiv_self_test_kits"
+          }
+        },
+        {
+          "column_name": "hts_has_post_test_counselling_been_provided",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_has_post_test_counselling_been_provided"
+          }
+        },
+        {
+          "column_name": "hiv_results_disclosure",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_hiv_results_disclosure"
+          }
+        },
+        {
+          "column_name": "preventive_services",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_preventive_services"
+          }
+        },
+        {
+          "column_name": "were_condoms_distributed",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_were_condoms_distributed"
+          }
+        },
+        {
+          "column_name": "condom_distribution",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_condom_distribution"
+          }
+        },
+        {
+          "column_name": "number_of_male_condoms_provided",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_number_of_male_condoms_provided"
+          }
+        },
+        {
+          "column_name": "number_of_female_condoms_provided",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_number_of_female_condoms_provided"
+          }
+        },
+        {
+          "column_name": "sample_collection_for_dna_pcr_test",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_sample_collection_for_dna_pcr_test"
           }
         },
         {
@@ -205,12 +386,94 @@
           "json_mapping": {
             "field": "version"
           }
+        }
+      ]
+    },
+    {
+      "name": "ec_hts_tests",
+      "columns": [
+        {
+          "column_name": "entity_id",
+          "type": "Event",
+          "json_mapping": {
+            "field": "baseEntityId"
+          }
         },
         {
-          "column_name": "date_removed",
-          "type": "Client",
+          "column_name": "base_entity_id",
+          "type": "Event",
           "json_mapping": {
-            "field": "attributes.dateRemoved"
+            "field": "formSubmissionId"
+          }
+        },
+        {
+          "column_name": "visit_id",
+          "type": "Event",
+          "json_mapping": {
+            "field": "details.hts_visit_group"
+          }
+        },
+        {
+          "column_name": "test_type",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "test_type"
+          }
+        },
+        {
+          "column_name": "type_of_test_kit_used",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "type_of_test_kit_used"
+          }
+        },
+        {
+          "column_name": "syphilis_test_results",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "syphilis_test_results"
+          }
+        },
+        {
+          "column_name": "test_kit_batch_number",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "test_kit_batch_number"
+          }
+        },
+        {
+          "column_name": "test_kit_expire_date",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "test_kit_expire_date"
+          }
+        },
+        {
+          "column_name": "test_result",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "test_result"
+          }
+        },
+        {
+          "column_name": "final_hiv_status",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "hts_final_hiv_status"
+          }
+        },
+        {
+          "column_name": "last_interacted_with",
+          "type": "Event",
+          "json_mapping": {
+            "field": "version"
           }
         }
       ]
