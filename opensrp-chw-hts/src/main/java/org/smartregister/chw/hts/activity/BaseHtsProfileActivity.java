@@ -184,9 +184,14 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
     protected void setupButtons() {
         try {
 
+            if (HtsDao.isHtsRegisterClosed(memberObject.getBaseEntityId())) {
+                textViewRecordHts.setVisibility(View.GONE);
+                return;
+            }
+
             if (HtsDao.hasReactiveVerificationTest(memberObject.getBaseEntityId())) {
                 textViewRecordHts.setVisibility(View.GONE);
-            }else if (getServiceVisit() != null) {
+            } else if (getServiceVisit() != null) {
                 if (!getServiceVisit().getProcessed() && HtsVisitsUtil.getHtsVisitStatus(getServiceVisit()).equalsIgnoreCase(HtsVisitsUtil.Complete)) {
                     textViewRecordHts.setVisibility(View.GONE);
                     manualProcessVisit.setVisibility(View.VISIBLE);
