@@ -123,6 +123,24 @@ public class HtsDao extends AbstractDao {
         return res.get(0) > 0;
     }
 
+    public static boolean isHtsRegisterClosed(String baseEntityId) {
+        if (StringUtils.isBlank(baseEntityId)) {
+            return false;
+        }
+
+        String sql = "SELECT is_closed FROM ec_hts_register " +
+                "WHERE base_entity_id = '" + baseEntityId + "' ORDER BY last_interacted_with DESC LIMIT 1";
+
+        DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "is_closed");
+        List<Integer> res = readData(sql, dataMap);
+        if (res == null || res.isEmpty()) {
+            return false;
+        }
+
+        Integer isClosed = res.get(0);
+        return isClosed != null && isClosed == 1;
+    }
+
     public static Integer getHtsFamilyMembersCount(String familyBaseEntityId) {
         String sql = "SELECT count(emc.base_entity_id) count FROM ec_hts_enrollment emc " +
                 "INNER Join ec_family_member fm on fm.base_entity_id = emc.base_entity_id " +
@@ -315,6 +333,47 @@ public class HtsDao extends AbstractDao {
         List<Boolean> testResultMatches = readData(unigoldTestSql, verificationTestMap);
 
         return testResultMatches != null && !testResultMatches.isEmpty() && Boolean.TRUE.equals(testResultMatches.get(0));
+    }
+
+    /**
+     * Close HTS records when the latest test outcome indicates final disposition based on
+     * predefined result/type combinations.
+     */
+    public static void closeHtsClientsWithFinalTestResults() {
+        String baseEntitySubQuery = "SELECT latest.entity_id FROM ec_hts_tests latest " +
+                " WHERE latest.is_closed = 0 AND latest.last_interacted_with = (" +
+                "   SELECT MAX(inner_tbl.last_interacted_with) FROM ec_hts_tests inner_tbl " +
+                "   WHERE inner_tbl.entity_id = latest.entity_id AND inner_tbl.is_closed = 0" +
+                " )" +
+                " AND ((" +
+                "   lower(ifnull(latest.test_result, '')) = '" + Constants.HIV_TEST_RESULTS.REACTIVE + "' " +
+                "   AND lower(ifnull(latest.test_type, '')) = 'unigold hiv test'" +
+                " ) OR (" +
+                "   lower(ifnull(latest.test_result, '')) = '" + Constants.HIV_TEST_RESULTS.NON_REACTIVE + "' " +
+                "   AND lower(ifnull(latest.test_type, '')) = 'first hiv test'" +
+                " ) OR (" +
+                "   lower(ifnull(latest.test_result, '')) = '" + Constants.HIV_TEST_RESULTS.NON_REACTIVE + "' " +
+                "   AND lower(ifnull(latest.test_type, '')) = 'repeat first hiv test'" +
+                " ))";
+
+        List<String> baseEntityIds = readData(baseEntitySubQuery, cursor -> getCursorValue(cursor, "entity_id"));
+        if (baseEntityIds == null || baseEntityIds.isEmpty()) {
+            return;
+        }
+
+        String joinedIds = "'" + String.join("','", baseEntityIds) + "'";
+
+        String closeTestsSql = "UPDATE ec_hts_tests SET is_closed = 1 " +
+                "WHERE is_closed = 0 AND entity_id IN (" + joinedIds + ")";
+        updateDB(closeTestsSql);
+
+        String closeServicesSql = "UPDATE ec_hts_services SET is_closed = 1 " +
+                "WHERE is_closed = 0 AND entity_id IN (" + joinedIds + ")";
+        updateDB(closeServicesSql);
+
+        String closeRegisterSql = "UPDATE ec_hts_register SET is_closed = 1 " +
+                "WHERE is_closed = 0 AND base_entity_id IN (" + joinedIds + ")";
+        updateDB(closeRegisterSql);
     }
 
     public static boolean hasRecentlyTestedWithHivst(String baseEntityID) {
