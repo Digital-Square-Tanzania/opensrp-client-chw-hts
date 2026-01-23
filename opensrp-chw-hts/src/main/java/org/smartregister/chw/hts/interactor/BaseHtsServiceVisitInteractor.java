@@ -199,7 +199,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                         if (StringUtils.isNotBlank(mClientType) && mClientType.equalsIgnoreCase("verification")) {
                             evaluateDnaPcrSampleCollection(details);
                         } else {
-                            evaluatePostTestServices(details);
+                            evaluatePostTestServices(details, firstHivTestResults);
                             evaluateLinkageToPreventionServices(details);
                         }
                     } else {
@@ -353,19 +353,19 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             public void processUnigoldHivTestResults(String unigoldHivTestResults) {
                 try {
                     if (unigoldHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.REACTIVE)) {
-                        evaluatePostTestServices(details);
-                    }else if (unigoldHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.INVALID) || unigoldHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.WASTAGE)) {
+                        evaluatePostTestServices(details, unigoldHivTestResults);
+                    } else if (unigoldHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.INVALID) || unigoldHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.WASTAGE)) {
                         actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
                         removeCommonActions();
                         if (StringUtils.isNotBlank(unigoldHivTestResults))
-                            evaluateSecondHivTest(details, repeatNumber + 1);
+                            evaluateUnigoldHivTest(details, repeatNumber + 1);
                     } else {
                         if (StringUtils.isNotBlank(mClientType) && mClientType.equalsIgnoreCase("verification")) {
                             removeCommonActions();
                             evaluateDnaPcrSampleCollection(details);
                         } else {
                             actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
-                            evaluatePostTestServices(details);
+                            evaluatePostTestServices(details, unigoldHivTestResults);
                             evaluateLinkageToPreventionServices(details);
                         }
                     }
@@ -396,11 +396,12 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
 
             BaseHtsVisitAction action = getBuilder(actionTitle)
                     .withOptional(true)
+                    .withJsonPayload(unigoldHivTest.toString())
                     .withHelper(actionHelper)
                     .withFormName(Constants.FORMS.HTS_UNIGOLD_HIV_TEST)
                     .withProcessingMode(BaseHtsVisitAction.ProcessingMode.SEPARATE)
                     .build();
-            actionList.put(context.getString(R.string.hts_unigold_hiv_test_action_title), action);
+            actionList.put(actionTitle, action);
 
             if (mDetails != null) {
                 JsonFormUtils.populateForm(unigoldHivTest, mDetails);
@@ -425,7 +426,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             public void processFirstHivTestResults(String firstHivTestResults) {
                 try {
                     if (firstHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.NON_REACTIVE)) {
-                        evaluatePostTestServices(details);
+                        evaluatePostTestServices(details, firstHivTestResults);
                         evaluateLinkageToPreventionServices(details);
 
                         actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
@@ -454,11 +455,12 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
      * Evaluates and initializes the post-test services action for the HTS visit.
      * This includes counseling and guidance based on the HIV test results.
      *
-     * @param details A map of visit details, containing key-value pairs of information about the visit.
+     * @param details        A map of visit details, containing key-value pairs of information about the visit.
+     * @param hivTestResults The HIV test results for the visit.
      * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
      */
-    private void evaluatePostTestServices(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
-        PostTestServicesActionHelper actionHelper = new PostTestServicesActionHelper(mContext, memberObject);
+    private void evaluatePostTestServices(Map<String, List<VisitDetail>> details, String hivTestResults) throws BaseHtsVisitAction.ValidationException {
+        PostTestServicesActionHelper actionHelper = new PostTestServicesActionHelper(mContext, memberObject, hivTestResults);
         BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_post_test_services_action_title))
                 .withOptional(true)
                 .withDetails(details)

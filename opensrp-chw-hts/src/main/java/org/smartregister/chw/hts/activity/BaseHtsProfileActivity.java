@@ -184,8 +184,16 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
     protected void setupButtons() {
         try {
 
-            if (getServiceVisit() != null) {
+            if (HtsDao.isHtsRegisterClosed(memberObject.getBaseEntityId())) {
+                textViewRecordHts.setVisibility(View.GONE);
+                return;
+            }
+
+            if (HtsDao.hasReactiveVerificationTest(memberObject.getBaseEntityId())) {
+                textViewRecordHts.setVisibility(View.GONE);
+            } else if (getServiceVisit() != null) {
                 if (!getServiceVisit().getProcessed() && HtsVisitsUtil.getHtsVisitStatus(getServiceVisit()).equalsIgnoreCase(HtsVisitsUtil.Complete)) {
+                    textViewRecordHts.setVisibility(View.GONE);
                     manualProcessVisit.setVisibility(View.VISIBLE);
                     textViewContinueHtsService.setText(R.string.edit_visit);
                     manualProcessVisit.setOnClickListener(view -> {
@@ -213,7 +221,6 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
                 } else {
                     textViewRecordHts.setText(R.string.record_hts);
                 }
-
                 processHtsService();
             }
 
@@ -289,8 +296,7 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
     @SuppressLint("DefaultLocale")
     @Override
     public void setProfileViewWithData() {
-        int age = new Period(new DateTime(memberObject.getAge()), new DateTime()).getYears();
-        textViewName.setText(String.format("%s %s %s, %d", memberObject.getFirstName(), memberObject.getMiddleName(), memberObject.getLastName(), age));
+        textViewName.setText(String.format("%s %s %s, %d", memberObject.getFirstName(), memberObject.getMiddleName(), memberObject.getLastName(), memberObject.getAge()));
         textViewGender.setText(HtsUtil.getGenderTranslated(this, memberObject.getGender()));
         textViewLocation.setText(memberObject.getAddress());
         textViewUniqueID.setText(memberObject.getUniqueId());

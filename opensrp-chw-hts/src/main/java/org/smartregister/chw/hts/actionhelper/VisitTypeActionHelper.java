@@ -80,6 +80,8 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
         /**
          * Handle visit type
          */
+        String hasTheClientEverTestedForHiv = HtsDao.getHasTheClientEverTestedForHiv(memberObject.getBaseEntityId());
+
         if (HtsDao.hasAnyVisit(memberObject.getBaseEntityId())) {
             try {
                 JSONObject jsonObject = new JSONObject(jsonPayload);
@@ -93,8 +95,34 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
             } catch (JSONException e) {
                 Timber.e(e);
             }
+        } else if ("yes".equalsIgnoreCase(hasTheClientEverTestedForHiv)) {
+            try {
+                JSONObject jsonObject = new JSONObject(jsonPayload);
+                JSONArray fieldsArrayStep1 = jsonObject.getJSONObject(STEP1).getJSONArray(FIELDS);
+                JSONObject visitType = JsonFormUtils.getFieldJSONObject(fieldsArrayStep1, "hts_visit_type");
+                visitType.put(VALUE, "returning");
+                visitType.put(READ_ONLY, true);
+                visitType.put(EDITABLE, false);
+
+                jsonPayload = jsonObject.toString();
+            } catch (JSONException e) {
+                Timber.e(e);
+            }
+        } else if ("no".equalsIgnoreCase(hasTheClientEverTestedForHiv)) {
+            try {
+                JSONObject jsonObject = new JSONObject(jsonPayload);
+                JSONArray fieldsArrayStep1 = jsonObject.getJSONObject(STEP1).getJSONArray(FIELDS);
+                JSONObject visitType = JsonFormUtils.getFieldJSONObject(fieldsArrayStep1, "hts_visit_type");
+                visitType.put(VALUE, "new_client");
+                visitType.put(READ_ONLY, true);
+                visitType.put(EDITABLE, false);
+
+                jsonPayload = jsonObject.toString();
+            } catch (JSONException e) {
+                Timber.e(e);
+            }
         }
-        ;
+
 
         /**
          * Handle has client recently tested with HIVST
@@ -115,7 +143,7 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
 
                 //Populate kit type on form
                 String kitType = HtsDao.fetchKitType(memberObject.getBaseEntityId());
-                if(kitType != null){
+                if (kitType != null) {
                     JSONObject clientKitType = JsonFormUtils.getFieldJSONObject(fieldsArrayStep1, "hts_previous_hivst_test_type");
                     clientKitType.put(VALUE, kitType);
                     clientKitType.put(READ_ONLY, true);

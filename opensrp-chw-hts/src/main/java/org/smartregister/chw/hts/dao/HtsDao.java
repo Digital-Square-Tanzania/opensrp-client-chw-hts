@@ -80,7 +80,7 @@ public class HtsDao extends AbstractDao {
         DataMap<String> dataMap = cursor -> getCursorValue(cursor, "hts_client_id");
 
         List<String> res = readData(sql, dataMap);
-        if (res != null && res.size() != 0 && res.get(0) != null) {
+        if (res != null && !res.isEmpty() && res.get(0) != null) {
             return res.get(0);
         }
         return "";
@@ -93,7 +93,7 @@ public class HtsDao extends AbstractDao {
         DataMap<String> dataMap = cursor -> getCursorValue(cursor, "unique_id");
 
         List<String> res = readData(sql, dataMap);
-        if (res != null && res.size() != 0 && res.get(0) != null) {
+        if (res != null && !res.isEmpty() && res.get(0) != null) {
             return res.get(0);
         }
         return "";
@@ -104,7 +104,7 @@ public class HtsDao extends AbstractDao {
         DataMap<Integer> map = cursor -> getCursorIntValue(cursor, "visit_number");
         List<Integer> res = readData(sql, map);
 
-        if (res != null && res.size() > 0 && res.get(0) != null) {
+        if (res != null && !res.isEmpty() && res.get(0) != null) {
             return res.get(0) + 1;
         } else
             return 0;
@@ -123,6 +123,24 @@ public class HtsDao extends AbstractDao {
         return res.get(0) > 0;
     }
 
+    public static boolean isHtsRegisterClosed(String baseEntityId) {
+        if (StringUtils.isBlank(baseEntityId)) {
+            return false;
+        }
+
+        String sql = "SELECT is_closed FROM ec_hts_register " +
+                "WHERE base_entity_id = '" + baseEntityId + "' ORDER BY last_interacted_with DESC LIMIT 1";
+
+        DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "is_closed");
+        List<Integer> res = readData(sql, dataMap);
+        if (res == null || res.isEmpty()) {
+            return false;
+        }
+
+        Integer isClosed = res.get(0);
+        return isClosed != null && isClosed == 1;
+    }
+
     public static Integer getHtsFamilyMembersCount(String familyBaseEntityId) {
         String sql = "SELECT count(emc.base_entity_id) count FROM ec_hts_enrollment emc " +
                 "INNER Join ec_family_member fm on fm.base_entity_id = emc.base_entity_id " +
@@ -132,7 +150,7 @@ public class HtsDao extends AbstractDao {
         DataMap<Integer> dataMap = cursor -> getCursorIntValue(cursor, "count");
 
         List<Integer> res = readData(sql, dataMap);
-        if (res == null || res.size() == 0)
+        if (res == null || res.isEmpty())
             return 0;
         return res.get(0);
     }
@@ -293,6 +311,71 @@ public class HtsDao extends AbstractDao {
         return !countResults.isEmpty() && countResults.get(0) > 0;
     }
 
+    public static boolean hasReactiveVerificationTest(String baseEntityID) {
+        String lastClientTypeSql = "SELECT client_type FROM ec_hts_services s " +
+                "WHERE s.entity_id = '" + baseEntityID + "' " +
+                "ORDER BY s.last_interacted_with DESC LIMIT 1";
+        DataMap<String> clientTypeMap = cursor -> getCursorValue(cursor, "client_type");
+        List<String> clientTypeResult = readData(lastClientTypeSql, clientTypeMap);
+        if (clientTypeResult == null || clientTypeResult.isEmpty() || !StringUtils.equalsIgnoreCase(clientTypeResult.get(0), "verification")) {
+            return false;
+        }
+
+        String unigoldTestSql = "SELECT test_type, test_result FROM ec_hts_tests s " +
+                "WHERE s.entity_id = '" + baseEntityID + "' " +
+                "ORDER BY s.last_interacted_with DESC LIMIT 1";
+        DataMap<Boolean> verificationTestMap = cursor -> {
+            String testType = getCursorValue(cursor, "test_type");
+            String testResult = getCursorValue(cursor, "test_result");
+            return StringUtils.equalsIgnoreCase(testType, "Unigold HIV Test") &&
+                    StringUtils.equalsIgnoreCase(testResult, Constants.HIV_TEST_RESULTS.REACTIVE);
+        };
+        List<Boolean> testResultMatches = readData(unigoldTestSql, verificationTestMap);
+
+        return testResultMatches != null && !testResultMatches.isEmpty() && Boolean.TRUE.equals(testResultMatches.get(0));
+    }
+
+    /**
+     * Close HTS records when the latest test outcome indicates final disposition based on
+     * predefined result/type combinations.
+     */
+    public static void closeHtsClientsWithFinalTestResults() {
+        String baseEntitySubQuery = "SELECT latest.entity_id FROM ec_hts_tests latest " +
+                " WHERE latest.is_closed = 0 AND latest.last_interacted_with = (" +
+                "   SELECT MAX(inner_tbl.last_interacted_with) FROM ec_hts_tests inner_tbl " +
+                "   WHERE inner_tbl.entity_id = latest.entity_id AND inner_tbl.is_closed = 0" +
+                " )" +
+                " AND ((" +
+                "   lower(ifnull(latest.test_result, '')) = '" + Constants.HIV_TEST_RESULTS.REACTIVE + "' " +
+                "   AND lower(ifnull(latest.test_type, '')) = 'unigold hiv test'" +
+                " ) OR (" +
+                "   lower(ifnull(latest.test_result, '')) = '" + Constants.HIV_TEST_RESULTS.NON_REACTIVE + "' " +
+                "   AND lower(ifnull(latest.test_type, '')) = 'first hiv test'" +
+                " ) OR (" +
+                "   lower(ifnull(latest.test_result, '')) = '" + Constants.HIV_TEST_RESULTS.NON_REACTIVE + "' " +
+                "   AND lower(ifnull(latest.test_type, '')) = 'repeat first hiv test'" +
+                " ))";
+
+        List<String> baseEntityIds = readData(baseEntitySubQuery, cursor -> getCursorValue(cursor, "entity_id"));
+        if (baseEntityIds == null || baseEntityIds.isEmpty()) {
+            return;
+        }
+
+        String joinedIds = "'" + String.join("','", baseEntityIds) + "'";
+
+        String closeTestsSql = "UPDATE ec_hts_tests SET is_closed = 1 " +
+                "WHERE is_closed = 0 AND entity_id IN (" + joinedIds + ")";
+        updateDB(closeTestsSql);
+
+        String closeServicesSql = "UPDATE ec_hts_services SET is_closed = 1 " +
+                "WHERE is_closed = 0 AND entity_id IN (" + joinedIds + ")";
+        updateDB(closeServicesSql);
+
+        String closeRegisterSql = "UPDATE ec_hts_register SET is_closed = 1 " +
+                "WHERE is_closed = 0 AND base_entity_id IN (" + joinedIds + ")";
+        updateDB(closeRegisterSql);
+    }
+
     public static boolean hasRecentlyTestedWithHivst(String baseEntityID) {
         String sql = "SELECT COUNT(*) AS count FROM ec_hivst_followup s " +
                 "WHERE s.entity_id = '" + baseEntityID + "' ";
@@ -325,6 +408,18 @@ public class HtsDao extends AbstractDao {
         }
     }
 
+    public static String getHasTheClientEverTestedForHiv(String baseEntityID) {
+        String sql = "SELECT has_the_client_ever_tested_for_hiv FROM ec_hts_register s " +
+                "WHERE s.base_entity_id = '" + baseEntityID + "' ";
+        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "has_the_client_ever_tested_for_hiv");
+        List<String> everTestedForHiv = readData(sql, dataMap);
+        if (!everTestedForHiv.isEmpty()) {
+            return everTestedForHiv.get(0);
+        } else {
+            return null;
+        }
+    }
+
     public static Boolean isClientAnIndexContact(String baseEntityID) {
         String sql = "SELECT count(*) as count FROM ec_hiv_index_hf s " +
                 "WHERE s.base_entity_id = '" + baseEntityID + "' ";
@@ -349,5 +444,17 @@ public class HtsDao extends AbstractDao {
 
         updateDB(sql);
     }
-}
 
+
+    public static boolean wereSelfTestingKitsDistributed(String baseEntityId) {
+        String sql = "SELECT does_client_need_hiv_self_test_kits FROM ec_hts_services p " +
+                " WHERE p.entity_id = '" + baseEntityId + "' ORDER BY last_interacted_with DESC LIMIT 1";
+        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "does_client_need_hiv_self_test_kits");
+
+        List<String> res = readData(sql, dataMap);
+        if (res != null && !res.isEmpty() && res.get(0) != null) {
+            return res.get(0).equalsIgnoreCase("yes");
+        }
+        return false;
+    }
+}
