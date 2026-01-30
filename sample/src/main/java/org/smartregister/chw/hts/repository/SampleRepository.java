@@ -72,40 +72,49 @@ public class SampleRepository extends Repository {
 
     @Override
     public SQLiteDatabase getReadableDatabase() {
-        return getReadableDatabase(password);
-    }
-
-    @Override
-    public SQLiteDatabase getWritableDatabase() {
-        return getWritableDatabase(password);
-    }
-
-    @Override
-    public synchronized SQLiteDatabase getReadableDatabase(String password) {
         try {
             if (readableDatabase == null || !readableDatabase.isOpen()) {
                 if (readableDatabase != null) {
                     readableDatabase.close();
                 }
-                readableDatabase = super.getReadableDatabase(password);
+                readableDatabase = super.getReadableDatabase();
             }
             return readableDatabase;
         } catch (Exception e) {
             Timber.e("Database Error. " + e.getMessage());
             return null;
         }
-
     }
 
     @Override
-    public synchronized SQLiteDatabase getWritableDatabase(String password) {
+    public SQLiteDatabase getWritableDatabase() {
         if (writableDatabase == null || !writableDatabase.isOpen()) {
             if (writableDatabase != null) {
                 writableDatabase.close();
             }
-            writableDatabase = super.getWritableDatabase(password);
+            writableDatabase = super.getWritableDatabase();
         }
         return writableDatabase;
+    }
+
+    public synchronized SQLiteDatabase getReadableDatabase(String password) {
+        if (!isPasswordValid(password)) {
+            Timber.e("Database Error. Invalid password");
+            return null;
+        }
+        return getReadableDatabase();
+    }
+
+    public synchronized SQLiteDatabase getWritableDatabase(String password) {
+        if (!isPasswordValid(password)) {
+            Timber.e("Database Error. Invalid password");
+            return null;
+        }
+        return getWritableDatabase();
+    }
+
+    private boolean isPasswordValid(String password) {
+        return this.password != null && this.password.equals(password);
     }
 
     @Override
