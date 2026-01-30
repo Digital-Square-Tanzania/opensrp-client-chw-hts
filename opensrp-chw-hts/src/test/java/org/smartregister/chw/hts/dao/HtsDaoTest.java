@@ -1,6 +1,6 @@
 package org.smartregister.chw.hts.dao;
 
-import net.sqlcipher.database.SQLiteDatabase;
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -54,4 +54,3 @@ public class HtsDaoTest extends HtsDao {
     }
 
 }
-
