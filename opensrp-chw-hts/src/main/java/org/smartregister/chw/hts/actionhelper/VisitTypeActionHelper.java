@@ -85,6 +85,8 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
                 global = new JSONObject();
                 jsonObject.put(GLOBAL, global);
             }
+            global.put("sex", memberObject.getGender());
+            global.put("age", memberObject.getAge());
             jsonPayload = jsonObject.toString();
         } catch (JSONException e) {
             Timber.e(e);
