@@ -2,6 +2,7 @@ package org.smartregister.chw.hts.actionhelper;
 
 import static org.smartregister.client.utils.constants.JsonFormConstants.EDITABLE;
 import static org.smartregister.client.utils.constants.JsonFormConstants.FIELDS;
+import static org.smartregister.client.utils.constants.JsonFormConstants.JSON_FORM_KEY.GLOBAL;
 import static org.smartregister.client.utils.constants.JsonFormConstants.READ_ONLY;
 import static org.smartregister.client.utils.constants.JsonFormConstants.STEP1;
 import static org.smartregister.client.utils.constants.JsonFormConstants.VALUE;
@@ -77,6 +78,18 @@ public abstract class VisitTypeActionHelper implements BaseHtsVisitAction.HtsVis
      */
     @Override
     public String getPreProcessed() {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonPayload);
+            JSONObject global = jsonObject.optJSONObject(GLOBAL);
+            if (global == null) {
+                global = new JSONObject();
+                jsonObject.put(GLOBAL, global);
+            }
+            jsonPayload = jsonObject.toString();
+        } catch (JSONException e) {
+            Timber.e(e);
+        }
+
         /**
          * Handle visit type
          */
