@@ -100,21 +100,28 @@
             "text": "Husband",
             "openmrs_entity_parent": "",
             "openmrs_entity": "concept",
-            "openmrs_entity_id": "husband"
+            "openmrs_entity_id": "husband",
+            "visibility_allowed_sex": "female",
+            "visibility_minimum_age": 10
           },
           {
             "key": "wife",
             "text": "Wife",
             "openmrs_entity_parent": "",
             "openmrs_entity": "concept",
-            "openmrs_entity_id": "wife"
+            "openmrs_entity_id": "wife",
+            "visibility_allowed_sex": "male",
+            "visibility_minimum_age": 18
           },
           {
             "key": "partner_who_is_not_wife_or_husband",
             "text": "Partner who is not wife/husband",
             "openmrs_entity_parent": "",
             "openmrs_entity": "concept",
-            "openmrs_entity_id": "partner_who_is_not_wife_or_husband"
+            "openmrs_entity_id": "partner_who_is_not_wife_or_husband",
+            "visibility_allowed_sex": "female,male",
+            "visibility_minimum_age_female": 10,
+            "visibility_minimum_age_male": 18
           },
           {
             "key": "relative",
@@ -275,5 +282,4 @@
     ]
   }
 }
-
 
