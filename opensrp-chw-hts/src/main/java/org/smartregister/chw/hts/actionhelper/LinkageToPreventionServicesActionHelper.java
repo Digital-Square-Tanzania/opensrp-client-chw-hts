@@ -32,6 +32,13 @@ public class LinkageToPreventionServicesActionHelper implements BaseHtsVisitActi
     private static final String VISIBILITY_MAXIMUM_AGE = "visibility_maximum_age";
     private static final String VISIBILITY_ONLY_TB_PRESUMPTIVE = "visibility_only_tb_presumptive";
 
+    public interface TbScreeningOutcomeProvider {
+        String getPreTestTbScreeningOutcome();
+    }
+
+    private final String preTestTbScreeningOutcome;
+    private final TbScreeningOutcomeProvider tbScreeningOutcomeProvider;
+
     protected String referralToPreventionServicesProvided;
 
     protected String jsonPayload;
@@ -44,8 +51,25 @@ public class LinkageToPreventionServicesActionHelper implements BaseHtsVisitActi
 
 
     public LinkageToPreventionServicesActionHelper(Context context, MemberObject memberObject) {
+        this(context, memberObject, null, null);
+    }
+
+    public LinkageToPreventionServicesActionHelper(Context context, MemberObject memberObject, String preTestTbScreeningOutcome) {
+        this(context, memberObject, preTestTbScreeningOutcome, null);
+    }
+
+    public LinkageToPreventionServicesActionHelper(Context context, MemberObject memberObject, TbScreeningOutcomeProvider tbScreeningOutcomeProvider) {
+        this(context, memberObject, null, tbScreeningOutcomeProvider);
+    }
+
+    private LinkageToPreventionServicesActionHelper(Context context,
+                                                    MemberObject memberObject,
+                                                    String preTestTbScreeningOutcome,
+                                                    TbScreeningOutcomeProvider tbScreeningOutcomeProvider) {
         this.context = context;
         this.memberObject = memberObject;
+        this.preTestTbScreeningOutcome = preTestTbScreeningOutcome;
+        this.tbScreeningOutcomeProvider = tbScreeningOutcomeProvider;
     }
 
     @Override
@@ -161,18 +185,38 @@ public class LinkageToPreventionServicesActionHelper implements BaseHtsVisitActi
     }
 
     private boolean isClientTbPresumptive() {
-        String preTestOutcome = getPreTestTbOutcomeFromDetails();
-        if (StringUtils.isNotBlank(preTestOutcome)) {
-            return TB_PRESUMPTIVE_RESULT.equalsIgnoreCase(preTestOutcome);
-        }
-
-        String latestTbOutcome = getLatestTbScreeningOutcome();
-        if (StringUtils.isNotBlank(latestTbOutcome)) {
-            return TB_PRESUMPTIVE_RESULT.equalsIgnoreCase(latestTbOutcome);
+        String latestPreTestOutcome = getLatestPreTestOutcome();
+        if (StringUtils.isNotBlank(latestPreTestOutcome)) {
+            return TB_PRESUMPTIVE_RESULT.equalsIgnoreCase(latestPreTestOutcome);
         }
 
         String tbSymptomsAssessment = getTbSymptomsAssessment();
         return StringUtils.isNotBlank(tbSymptomsAssessment) && !tbSymptomsAssessment.contains("none");
+    }
+
+    private String getLatestPreTestOutcome() {
+        String selectedPreTestOutcome = StringUtils.trimToNull(resolvePreTestTbScreeningOutcome());
+        if (selectedPreTestOutcome != null) {
+            return selectedPreTestOutcome;
+        }
+
+        String latestTbOutcome = StringUtils.trimToNull(getLatestTbScreeningOutcome());
+        if (latestTbOutcome != null) {
+            return latestTbOutcome;
+        }
+
+        return StringUtils.trimToNull(getPreTestTbOutcomeFromDetails());
+    }
+
+    private String resolvePreTestTbScreeningOutcome() {
+        if (tbScreeningOutcomeProvider != null) {
+            try {
+                return tbScreeningOutcomeProvider.getPreTestTbScreeningOutcome();
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+        }
+        return preTestTbScreeningOutcome;
     }
 
     private String getPreTestTbOutcomeFromDetails() {
@@ -211,7 +255,7 @@ public class LinkageToPreventionServicesActionHelper implements BaseHtsVisitActi
         return null;
     }
 
-    private String getLatestTbScreeningOutcome() {
+    protected String getLatestTbScreeningOutcome() {
         try {
             if (memberObject == null || StringUtils.isBlank(memberObject.getBaseEntityId())) {
                 return null;
@@ -223,7 +267,7 @@ public class LinkageToPreventionServicesActionHelper implements BaseHtsVisitActi
         }
     }
 
-    private String getTbSymptomsAssessment() {
+    protected String getTbSymptomsAssessment() {
         try {
             if (memberObject == null || StringUtils.isBlank(memberObject.getBaseEntityId())) {
                 return null;

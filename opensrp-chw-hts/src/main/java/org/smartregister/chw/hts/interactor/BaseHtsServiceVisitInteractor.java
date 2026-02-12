@@ -44,6 +44,8 @@ import timber.log.Timber;
  */
 public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
 
+    private static final String FIELD_TB_SCREENING_OUTCOME = "hts_clients_tb_screening_outcome";
+
     private final LinkedHashMap<String, BaseHtsVisitAction> actionList; // Stores all HTS actions for the visit
     protected BaseHtsVisitContract.InteractorCallBack callBack; // Callback interface to communicate with the presenter
     protected AppExecutors appExecutors; // Executor for managing asynchronous tasks
@@ -509,7 +511,11 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
      * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
      */
     private void evaluateLinkageToPreventionServices(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
-        LinkageToPreventionServicesActionHelper actionHelper = new LinkageToPreventionServicesActionHelper(mContext, memberObject);
+        LinkageToPreventionServicesActionHelper actionHelper = new LinkageToPreventionServicesActionHelper(
+                mContext,
+                memberObject,
+                this::getLatestPreTestTbScreeningOutcomeFromActionPayload
+        );
         BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_linkage_to_prevention_services_action_title))
                 .withOptional(true)
                 .withDetails(details)
@@ -517,6 +523,21 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                 .withFormName(Constants.FORMS.HTS_LINKAGE_TO_PREVENTION_SERVICES)
                 .build();
         actionList.put(context.getString(R.string.hts_linkage_to_prevention_services_action_title), action);
+    }
+
+    private String getLatestPreTestTbScreeningOutcomeFromActionPayload() {
+        try {
+            BaseHtsVisitAction preTestServicesAction = actionList.get(context.getString(R.string.hts_pre_test_services_action_title));
+            if (preTestServicesAction == null || StringUtils.isBlank(preTestServicesAction.getJsonPayload())) {
+                return null;
+            }
+
+            JSONObject preTestJsonPayload = new JSONObject(preTestServicesAction.getJsonPayload());
+            return StringUtils.trimToNull(JsonFormUtils.getValue(preTestJsonPayload, FIELD_TB_SCREENING_OUTCOME));
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        return null;
     }
 
     /**

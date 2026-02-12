@@ -35,6 +35,7 @@ import org.smartregister.chw.hts.interactor.BaseHtsVisitInteractor;
 import org.smartregister.chw.hts.model.BaseHtsVisitAction;
 import org.smartregister.chw.hts.presenter.BaseHtsVisitPresenter;
 import org.smartregister.chw.hts.util.Constants;
+import org.smartregister.chw.hts.util.JsonFormUtils;
 import org.smartregister.view.activity.SecuredActivity;
 
 import java.text.MessageFormat;
@@ -46,6 +47,8 @@ import java.util.regex.Pattern;
 import timber.log.Timber;
 
 public class BaseHtsVisitActivity extends SecuredActivity implements BaseHtsVisitContract.View, View.OnClickListener {
+    private static final String FIELD_PREVENTIVE_SERVICES = "hts_preventive_services";
+
     protected static String profileType;
     protected Map<String, BaseHtsVisitAction> actionList = new LinkedHashMap<>();
     protected BaseHtsVisitContract.Presenter presenter;
@@ -269,6 +272,7 @@ public class BaseHtsVisitActivity extends SecuredActivity implements BaseHtsVisi
 
     @Override
     public void startForm(BaseHtsVisitAction htsHomeVisitAction) {
+        refreshLinkageToPreventionServicesPayload(htsHomeVisitAction);
         current_action = htsHomeVisitAction.getTitle();
 
         if (StringUtils.isNotBlank(htsHomeVisitAction.getJsonPayload())) {
@@ -283,6 +287,30 @@ public class BaseHtsVisitActivity extends SecuredActivity implements BaseHtsVisi
         } else {
             String locationId = HtsLibrary.getInstance().context().allSharedPreferences().getPreference(AllConstants.CURRENT_LOCATION_ID);
             presenter().startForm(htsHomeVisitAction.getFormName(), memberObject.getBaseEntityId(), locationId);
+        }
+    }
+
+    private void refreshLinkageToPreventionServicesPayload(BaseHtsVisitAction htsHomeVisitAction) {
+        if (htsHomeVisitAction == null
+                || !Constants.FORMS.HTS_LINKAGE_TO_PREVENTION_SERVICES.equalsIgnoreCase(htsHomeVisitAction.getFormName())
+                || htsHomeVisitAction.getHtsVisitActionHelper() == null) {
+            return;
+        }
+
+        try {
+            if (StringUtils.isNotBlank(htsHomeVisitAction.getJsonPayload())) {
+                JSONObject existingPayload = new JSONObject(htsHomeVisitAction.getJsonPayload());
+                if (StringUtils.isNotBlank(JsonFormUtils.getValue(existingPayload, FIELD_PREVENTIVE_SERVICES))) {
+                    return;
+                }
+            }
+
+            String refreshedJsonPayload = htsHomeVisitAction.getHtsVisitActionHelper().getPreProcessed();
+            if (StringUtils.isNotBlank(refreshedJsonPayload)) {
+                htsHomeVisitAction.setProcessedJsonPayload(refreshedJsonPayload);
+            }
+        } catch (Exception e) {
+            Timber.e(e);
         }
     }
 
