@@ -1,0 +1,98 @@
+---
+name: step1_hts_previous_hivst_client_type
+description:
+priority: 1
+condition: "step1_hts_has_the_client_recently_tested_with_hivst.equals('yes')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_previous_hivst_test_type
+description:
+priority: 1
+condition: "step1_hts_has_the_client_recently_tested_with_hivst.equals('yes')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_previous_hivst_test_results
+description:
+priority: 1
+condition: "step1_hts_has_the_client_recently_tested_with_hivst.equals('yes')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_pitc_testing_point
+description:
+priority: 1
+condition: "step1_hts_testing_approach.equals('pitc')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_other_testing_point
+description:
+priority: 1
+condition: "step1_hts_pitc_testing_point.contains('other')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_type_of_index_client_female_below_11
+description:
+priority: 1
+condition: "step1_hts_client_type.equals('index_contact') && global_sex.equalsIgnoreCase('female') && global_age <= 10"
+actions:
+  - "isRelevant = true"
+---
+name: step1_type_of_index_client_female_11_to_18
+description:
+priority: 1
+condition: "step1_hts_client_type.equals('index_contact') && global_sex.equalsIgnoreCase('female') && global_age > 10 && global_age < 19"
+actions:
+  - "isRelevant = true"
+---
+name: step1_type_of_index_client_female_19_and_above
+description:
+priority: 1
+condition: "step1_hts_client_type.equals('index_contact') && global_sex.equalsIgnoreCase('female') && global_age >= 19"
+actions:
+  - "isRelevant = true"
+---
+name: step1_type_of_index_client_male_below_11
+description:
+priority: 1
+condition: "step1_hts_client_type.equals('index_contact') && global_sex.equalsIgnoreCase('male') && global_age <= 10"
+actions:
+  - "isRelevant = true"
+---
+name: step1_type_of_index_client_male_11_to_18
+description:
+priority: 1
+condition: "step1_hts_client_type.equals('index_contact') && global_sex.equalsIgnoreCase('male') && global_age > 10 && global_age < 19"
+actions:
+  - "isRelevant = true"
+---
+name: step1_type_of_index_client_male_19_and_above
+description:
+priority: 1
+condition: "step1_hts_client_type.equals('index_contact') && global_sex.equalsIgnoreCase('male') && global_age >= 19"
+actions:
+  - "isRelevant = true"
+---
+name: step1_type_of_index_client
+description:
+priority: 1
+condition: "true"
+actions:
+  - "calculation = (step1_type_of_index_client_female_below_11 != null && !step1_type_of_index_client_female_below_11.equals('')) ? step1_type_of_index_client_female_below_11 : (step1_type_of_index_client_female_11_to_18 != null && !step1_type_of_index_client_female_11_to_18.equals('')) ? step1_type_of_index_client_female_11_to_18 : (step1_type_of_index_client_female_19_and_above != null && !step1_type_of_index_client_female_19_and_above.equals('')) ? step1_type_of_index_client_female_19_and_above : (step1_type_of_index_client_male_below_11 != null && !step1_type_of_index_client_male_below_11.equals('')) ? step1_type_of_index_client_male_below_11 : (step1_type_of_index_client_male_11_to_18 != null && !step1_type_of_index_client_male_11_to_18.equals('')) ? step1_type_of_index_client_male_11_to_18 : (step1_type_of_index_client_male_19_and_above != null && !step1_type_of_index_client_male_19_and_above.equals('')) ? step1_type_of_index_client_male_19_and_above : ''"
+---
+name: step1_hts_testing_approach
+description:
+priority: 1
+condition: "!step1_hts_client_type.equals('verification')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_testing_point
+description:
+priority: 1
+condition: "true"
+actions:
+  - "calculation = step1_hts_testing_approach.equals('cbhts') ? 'cbhts' : step1_hts_testing_approach.equals('citc') ? 'citc' : step1_hts_pitc_testing_point"

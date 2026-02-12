@@ -1,0 +1,21 @@
+---
+name: step1_hts_hiv_results_disclosure
+description: HIV Results Disclosure
+priority: 1
+condition: "global_hiv_test_results.contains('reactive')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_other_people_results_have_been_disclosed_to
+description: Other People Results have been disclosed to
+priority: 1
+condition: "step1_hts_hiv_results_disclosure.contains('others')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_reasons_for_not_disclosing_results
+description: Reasons for not disclosing results
+priority: 1
+condition: "step1_hts_hiv_results_disclosure.contains('not_ready_to_share')"
+actions:
+  - "isRelevant = true"

@@ -1,0 +1,155 @@
+---
+name: step1_hts_has_testing_been_done_more_than_12_months_ago
+description: relevance rule to control the visibility of (tests done more than 12 years ago)
+priority: 1
+condition: "step1_hts_has_the_client_ever_tested_for_hiv.equals('yes')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_last_hiv_test_results_are_known_or_were_indeterminate_inconclusive
+description: relevance rule to control the visibility of (tests done more than 12 years ago)
+priority: 1
+condition: "step1_hts_has_the_client_ever_tested_for_hiv.equals('yes') && step1_hts_has_testing_been_done_more_than_12_months_ago.equals('yes')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_does_client_report_to_test_hiv_positive_but_no_evidence_ctc1_card_or_referral_form
+description: relevance rule to control the visibility of (tests done more than 12 years ago)
+priority: 1
+condition: "step1_hts_has_the_client_ever_tested_for_hiv.equals('yes') && step1_hts_has_testing_been_done_more_than_12_months_ago.equals('yes')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_is_client_pregnant
+description: Show question for females only
+priority: 1
+condition: "global_sex == 'Female'"
+actions:
+  - "isRelevant = true"
+---
+name: step6_does_the_client_still_want_to_test
+description: Show question for based on illegibility to test
+priority: 1
+condition: "!((step1_hts_is_client_pregnant != null && step1_hts_is_client_pregnant.equals('yes')) ||
+(step1_hts_is_client_breastfeeding != null && step1_hts_is_client_breastfeeding.equals('yes')) ||
+(step1_hts_has_the_client_ever_tested_for_hiv != null && step1_hts_has_the_client_ever_tested_for_hiv.equals('no')) ||
+(step1_hts_has_testing_been_done_more_than_12_months_ago != null && step1_hts_has_testing_been_done_more_than_12_months_ago.equals('yes')) ||
+(step1_hts_last_hiv_test_results_are_unknown_or_were_indeterminate_inconclusive != null && step1_hts_last_hiv_test_results_are_unknown_or_were_indeterminate_inconclusive.equals('yes')) ||
+(step1_hts_does_client_report_to_test_hiv_positive_but_no_evidence_ctc1_card_or_referral_form != null && step1_hts_does_client_report_to_test_hiv_positive_but_no_evidence_ctc1_card_or_referral_form.equals('yes')) ||
+(step5_hts_has_the_client_had_sexual_intercourse_with_a_person_with_hiv_or_with_a_person_whose_hiv_status_is_unknown != null && step5_hts_has_the_client_had_sexual_intercourse_with_a_person_with_hiv_or_with_a_person_whose_hiv_status_is_unknown.equals('yes')) ||
+(step5_hts_has_the_client_had_more_than_one_sexual_partner_in_the_last_12_months != null && step5_hts_has_the_client_had_more_than_one_sexual_partner_in_the_last_12_months.equals('yes')) ||
+(step5_hts_has_the_client_had_sex_under_the_influence_of_drugs_or_alcohol != null && step5_hts_has_the_client_had_sex_under_the_influence_of_drugs_or_alcohol.equals('yes')) ||
+(step4_hts_does_the_client_have_any_of_the_following_sti_symptoms_assessment != null && !step4_hts_does_the_client_have_any_of_the_following_sti_symptoms_assessment.contains('none')) ||
+(step3_hts_does_the_client_have_any_of_the_following_tuberculosis_symptoms_assessment != null && !step3_hts_does_the_client_have_any_of_the_following_tuberculosis_symptoms_assessment.contains('none')) ||
+(step2_hts_does_the_client_have_any_of_the_following_general_health_assessment != null && !step2_hts_does_the_client_have_any_of_the_following_general_health_assessment.contains('none')))
+  "
+actions:
+  - "isRelevant = true"
+---
+name: step1_hts_is_client_breastfeeding
+description: Show question for females only
+priority: 1
+condition: "global_sex == 'Female'"
+actions:
+  - "isRelevant = true"
+---
+name: step6_eligibility_for_testing
+description: Eligibility for testing
+priority: 1
+condition: "true"
+actions:
+  - "def checkEligibility(
+                          isPregnant,
+                          isBreastfeeding,
+                          hasEverTestedHiv,
+                          hasScreeningBeenDoneMoreThan12MonthAgo,
+                          lastHivTestResultsAreUnknownOrWereIndeterminateOrInconclusive,
+                          doesClientReportToTestPositiveButNoEvidenceCtcCardOrReferralForm,
+                          hasClientHadUnprotectedSex,
+                          hasClientHadMoreThanOneSexualPartner,
+                          hasClientHadSexWhileUnderTheInfluenceOfDrugsOrAlcohol,
+                          stiSymptomsAssessment,
+                          tbSymptomsAssessment,
+                          generalHealthAssessment
+                          ){
+      boolean eligibility = false;
+      if(isPregnant != null && isPregnant.equals('yes')){
+        eligibility = true;
+      } else if(isBreastfeeding != null && isBreastfeeding.equals('yes')){
+        eligibility = true;
+      } else if(hasEverTestedHiv != null && hasEverTestedHiv.equals('no')){
+        eligibility = true;
+      } else if(hasScreeningBeenDoneMoreThan12MonthAgo != null && hasScreeningBeenDoneMoreThan12MonthAgo.equals('yes')){
+        eligibility = true;
+      } else if (lastHivTestResultsAreUnknownOrWereIndeterminateOrInconclusive != null && lastHivTestResultsAreUnknownOrWereIndeterminateOrInconclusive.equals('yes')){
+        eligibility = true;
+      } else if (doesClientReportToTestPositiveButNoEvidenceCtcCardOrReferralForm != null && doesClientReportToTestPositiveButNoEvidenceCtcCardOrReferralForm.equals('yes')){
+        eligibility = true;
+      } else if (hasClientHadUnprotectedSex != null && hasClientHadUnprotectedSex.equals('yes')){
+        eligibility = true;
+      } else if (hasClientHadMoreThanOneSexualPartner != null && hasClientHadMoreThanOneSexualPartner.equals('yes')){
+        eligibility = true;
+      } else if (hasClientHadSexWhileUnderTheInfluenceOfDrugsOrAlcohol != null && hasClientHadSexWhileUnderTheInfluenceOfDrugsOrAlcohol.equals('yes')){
+        eligibility = true;
+      } else if (stiSymptomsAssessment != null && !stiSymptomsAssessment.contains('none')){
+        eligibility = true;
+      } else if (tbSymptomsAssessment != null && !tbSymptomsAssessment.contains('none')){
+        eligibility = true;
+      } else if (generalHealthAssessment != null && !generalHealthAssessment.contains('none')){
+        eligibility = true;
+      }
+      
+      return eligibility;
+  }"
+  - "calculation = checkEligibility(
+                       step1_hts_is_client_pregnant,
+                       step1_hts_is_client_breastfeeding,
+                       step1_hts_has_the_client_ever_tested_for_hiv,
+                       step1_hts_has_testing_been_done_more_than_12_months_ago,
+                       step1_hts_last_hiv_test_results_are_unknown_or_were_indeterminate_inconclusive,
+                       step1_hts_does_client_report_to_test_hiv_positive_but_no_evidence_ctc1_card_or_referral_form,
+                       step5_hts_has_the_client_had_sexual_intercourse_with_a_person_with_hiv_or_with_a_person_whose_hiv_status_is_unknown,
+                       step5_hts_has_the_client_had_more_than_one_sexual_partner_in_the_last_12_months,
+                       step5_hts_has_the_client_had_sex_under_the_influence_of_drugs_or_alcohol,
+                       step4_hts_does_the_client_have_any_of_the_following_sti_symptoms_assessment,
+                       step3_hts_does_the_client_have_any_of_the_following_tuberculosis_symptoms_assessment,
+                       step2_hts_does_the_client_have_any_of_the_following_general_health_assessment
+                   )"
+---
+name: step6_prompt_for_clients_with_lower_hiv_risk
+description: Show question for based on illegibility to test
+priority: 1
+condition: "!((step1_hts_is_client_pregnant != null && step1_hts_is_client_pregnant.equals('yes')) ||
+            (step1_hts_is_client_breastfeeding != null && step1_hts_is_client_breastfeeding.equals('yes')) ||
+            (step1_hts_has_the_client_ever_tested_for_hiv != null && step1_hts_has_the_client_ever_tested_for_hiv.equals('no')) ||
+            (step1_hts_has_testing_been_done_more_than_12_months_ago != null && step1_hts_has_testing_been_done_more_than_12_months_ago.equals('yes')) ||
+            (step1_hts_last_hiv_test_results_are_unknown_or_were_indeterminate_inconclusive != null && step1_hts_last_hiv_test_results_are_unknown_or_were_indeterminate_inconclusive.equals('yes')) ||
+            (step1_hts_does_client_report_to_test_hiv_positive_but_no_evidence_ctc1_card_or_referral_form != null && step1_hts_does_client_report_to_test_hiv_positive_but_no_evidence_ctc1_card_or_referral_form.equals('yes')) ||
+            (step5_hts_has_the_client_had_sexual_intercourse_with_a_person_with_hiv_or_with_a_person_whose_hiv_status_is_unknown != null && step5_hts_has_the_client_had_sexual_intercourse_with_a_person_with_hiv_or_with_a_person_whose_hiv_status_is_unknown.equals('yes')) ||
+            (step5_hts_has_the_client_had_more_than_one_sexual_partner_in_the_last_12_months != null && step5_hts_has_the_client_had_more_than_one_sexual_partner_in_the_last_12_months.equals('yes')) ||
+            (step5_hts_has_the_client_had_sex_under_the_influence_of_drugs_or_alcohol != null && step5_hts_has_the_client_had_sex_under_the_influence_of_drugs_or_alcohol.equals('yes')) ||
+            (step4_hts_does_the_client_have_any_of_the_following_sti_symptoms_assessment != null && !step4_hts_does_the_client_have_any_of_the_following_sti_symptoms_assessment.contains('none')) ||
+            (step3_hts_does_the_client_have_any_of_the_following_tuberculosis_symptoms_assessment != null && !step3_hts_does_the_client_have_any_of_the_following_tuberculosis_symptoms_assessment.contains('none')) ||
+            (step2_hts_does_the_client_have_any_of_the_following_general_health_assessment != null && !step2_hts_does_the_client_have_any_of_the_following_general_health_assessment.contains('none')))
+  "
+actions:
+  - "isRelevant = true"
+---
+name: step6_prompt_for_eligibility_to_test_for_hiv
+description: Show question for based on illegibility to test
+priority: 1
+condition: "((step1_hts_is_client_pregnant != null && step1_hts_is_client_pregnant.equals('yes')) ||
+            (step1_hts_is_client_breastfeeding != null && step1_hts_is_client_breastfeeding.equals('yes')) ||
+            (step1_hts_has_the_client_ever_tested_for_hiv != null && step1_hts_has_the_client_ever_tested_for_hiv.equals('no')) ||
+            (step1_hts_has_testing_been_done_more_than_12_months_ago != null && step1_hts_has_testing_been_done_more_than_12_months_ago.equals('yes')) ||
+            (step1_hts_last_hiv_test_results_are_unknown_or_were_indeterminate_inconclusive != null && step1_hts_last_hiv_test_results_are_unknown_or_were_indeterminate_inconclusive.equals('yes')) ||
+            (step1_hts_does_client_report_to_test_hiv_positive_but_no_evidence_ctc1_card_or_referral_form != null && step1_hts_does_client_report_to_test_hiv_positive_but_no_evidence_ctc1_card_or_referral_form.equals('yes')) ||
+            (step5_hts_has_the_client_had_sexual_intercourse_with_a_person_with_hiv_or_with_a_person_whose_hiv_status_is_unknown != null && step5_hts_has_the_client_had_sexual_intercourse_with_a_person_with_hiv_or_with_a_person_whose_hiv_status_is_unknown.equals('yes')) ||
+            (step5_hts_has_the_client_had_more_than_one_sexual_partner_in_the_last_12_months != null && step5_hts_has_the_client_had_more_than_one_sexual_partner_in_the_last_12_months.equals('yes')) ||
+            (step5_hts_has_the_client_had_sex_under_the_influence_of_drugs_or_alcohol != null && step5_hts_has_the_client_had_sex_under_the_influence_of_drugs_or_alcohol.equals('yes')) ||
+            (step4_hts_does_the_client_have_any_of_the_following_sti_symptoms_assessment != null && !step4_hts_does_the_client_have_any_of_the_following_sti_symptoms_assessment.contains('none')) ||
+            (step3_hts_does_the_client_have_any_of_the_following_tuberculosis_symptoms_assessment != null && !step3_hts_does_the_client_have_any_of_the_following_tuberculosis_symptoms_assessment.contains('none')) ||
+            (step2_hts_does_the_client_have_any_of_the_following_general_health_assessment != null && !step2_hts_does_the_client_have_any_of_the_following_general_health_assessment.contains('none')))
+  "
+actions:
+  - "isRelevant = true"
