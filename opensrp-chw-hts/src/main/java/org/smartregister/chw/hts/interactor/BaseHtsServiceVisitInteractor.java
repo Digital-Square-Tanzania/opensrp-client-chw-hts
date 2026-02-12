@@ -421,6 +421,10 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
      * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
      */
     private void evaluateRepeatOfFirstHivTest(Map<String, List<VisitDetail>> details) throws BaseHtsVisitAction.ValidationException {
+        evaluateRepeatOfFirstHivTest(details, 1);
+    }
+
+    private void evaluateRepeatOfFirstHivTest(Map<String, List<VisitDetail>> details, final int repeatNumber) throws BaseHtsVisitAction.ValidationException {
         HivRepeatFirstHivTestActionHelper actionHelper = new HivRepeatFirstHivTestActionHelper(mContext, memberObject, mVisitType) {
             @Override
             public void processFirstHivTestResults(String firstHivTestResults) {
@@ -430,6 +434,10 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
                         evaluateLinkageToPreventionServices(details);
 
                         actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
+                    } else if (isInvalidOrWastageResult(firstHivTestResults)) {
+                        removeCommonActions();
+                        actionList.remove(mContext.getString(R.string.hts_dna_pcr_sample_collection_action_title));
+                        evaluateRepeatOfFirstHivTest(details, repeatNumber + 1);
                     } else if (StringUtils.isNotBlank(mVisitType) && mClientType.equalsIgnoreCase("repeat") && firstHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.REACTIVE)) {
                         evaluateDnaPcrSampleCollection(details);
                         removeCommonActions();
@@ -441,14 +449,25 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             }
         };
 
-        BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_repeate_of_first_hiv_test_title))
+        String actionTitle = context.getString(R.string.hts_repeate_of_first_hiv_test_title);
+        if (repeatNumber != 1) {
+            actionTitle = String.format(context.getString(R.string.hts_repeate_of_first_hiv_test_action_entity_type), repeatNumber);
+        }
+
+        BaseHtsVisitAction action = getBuilder(actionTitle)
                 .withOptional(true)
                 .withDetails(details)
                 .withHelper(actionHelper)
                 .withFormName(Constants.FORMS.HTS_REPEAT_FIRST_HIV_TEST)
                 .withProcessingMode(BaseHtsVisitAction.ProcessingMode.SEPARATE)
                 .build();
-        actionList.put(context.getString(R.string.hts_repeate_of_first_hiv_test_title), action);
+        actionList.put(actionTitle, action);
+    }
+
+    private boolean isInvalidOrWastageResult(String hivTestResult) {
+        return StringUtils.isNotBlank(hivTestResult)
+                && (hivTestResult.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.INVALID)
+                || hivTestResult.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.WASTAGE));
     }
 
     /**
