@@ -81,7 +81,8 @@
             "key": "sputum_testing_laboratory",
             "text": "Sputum Testing Laboratory",
             "openmrs_entity": "concept",
-            "openmrs_entity_id": "sputum_testing_laboratory"
+            "openmrs_entity_id": "sputum_testing_laboratory",
+            "visibility_only_tb_presumptive": true
           },
           {
             "key": "prevention_of_mother_to_child_transmission",
@@ -93,31 +94,29 @@
             "key": "family_planning",
             "text": "Family Planning",
             "openmrs_entity": "concept",
-            "openmrs_entity_id": "family_planning"
+            "openmrs_entity_id": "family_planning",
+            "visibility_minimum_age": 15
           },
           {
             "key": "sexual_transmitted_infections_clinic",
             "text": "Sexual Transmitted Infections Clinic (STIs)",
             "openmrs_entity": "concept",
-            "openmrs_entity_id": "sexual_transmitted_infections_clinic"
-          },
-          {
-            "key": "care_and_treatment_clinic",
-            "text": "Care and Treatment Clinic",
-            "openmrs_entity": "concept",
-            "openmrs_entity_id": "care_and_treatment_clinic"
+            "openmrs_entity_id": "sexual_transmitted_infections_clinic",
+            "visibility_minimum_age": 15
           },
           {
             "key": "voluntary_medical_male_circumcision_vmmc",
             "text": "Voluntay Medical Male Circumcision (VMMC)",
             "openmrs_entity": "concept",
-            "openmrs_entity_id": "voluntary_medical_male_circumcision_vmmc"
+            "openmrs_entity_id": "voluntary_medical_male_circumcision_vmmc",
+            "visibility_allowed_sex": "male"
           },
           {
             "key": "prep_services",
             "text": "PrEP services",
             "openmrs_entity": "concept",
-            "openmrs_entity_id": "prep_services"
+            "openmrs_entity_id": "prep_services",
+            "visibility_minimum_age": 15
           },
           {
             "key": "gbv_services",
@@ -135,7 +134,9 @@
             "key": "adolescent_and_youth_people_friendly_services",
             "text": "Adolescent and Youth People Friendly Services",
             "openmrs_entity": "concept",
-            "openmrs_entity_id": "adolescent_and_youth_people_friendly_services"
+            "openmrs_entity_id": "adolescent_and_youth_people_friendly_services",
+            "visibility_minimum_age": 10,
+            "visibility_maximum_age": 24
           },
           {
             "key": "others",
@@ -291,5 +292,4 @@
     ]
   }
 }
-
 

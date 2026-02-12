@@ -408,6 +408,18 @@ public class HtsDao extends AbstractDao {
         }
     }
 
+    public static String getLatestTbScreeningOutcome(String baseEntityID) {
+        String sql = "SELECT clients_tb_screening_outcome FROM ec_hts_services s " +
+                "WHERE s.entity_id = '" + baseEntityID + "' ORDER BY s.last_interacted_with DESC LIMIT 1";
+        DataMap<String> dataMap = cursor -> getCursorValue(cursor, "clients_tb_screening_outcome");
+        List<String> tbScreeningOutcomes = readData(sql, dataMap);
+        if (!tbScreeningOutcomes.isEmpty()) {
+            return tbScreeningOutcomes.get(0);
+        } else {
+            return null;
+        }
+    }
+
     public static String getHasTheClientEverTestedForHiv(String baseEntityID) {
         String sql = "SELECT has_the_client_ever_tested_for_hiv FROM ec_hts_register s " +
                 "WHERE s.base_entity_id = '" + baseEntityID + "' ";
