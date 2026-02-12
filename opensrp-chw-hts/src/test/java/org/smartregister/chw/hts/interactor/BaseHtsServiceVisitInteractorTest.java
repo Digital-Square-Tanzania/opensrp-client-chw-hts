@@ -5,6 +5,8 @@ import android.content.Context;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.mockito.Mockito;
 import org.powermock.reflect.Whitebox;
 import org.smartregister.chw.hts.R;
@@ -31,6 +33,7 @@ public class BaseHtsServiceVisitInteractorTest {
     private String postTestActionTitle;
     private String linkageActionTitle;
     private String dnaActionTitle;
+    private String preTestActionTitle;
 
     @Before
     public void setUp() {
@@ -40,6 +43,7 @@ public class BaseHtsServiceVisitInteractorTest {
         when(context.getString(R.string.hts_post_test_services_action_title)).thenReturn("Post Test Services");
         when(context.getString(R.string.hts_linkage_to_prevention_services_action_title)).thenReturn("Linkage To Prevention Services");
         when(context.getString(R.string.hts_dna_pcr_sample_collection_action_title)).thenReturn("DNA PCR Sample Collection");
+        when(context.getString(R.string.hts_pre_test_services_action_title)).thenReturn("Pre-Test Services");
 
         AppExecutors instantExecutors = new AppExecutors(Runnable::run, Runnable::run, Runnable::run);
         interactor = Whitebox.newInstance(BaseHtsServiceVisitInteractor.class);
@@ -61,6 +65,7 @@ public class BaseHtsServiceVisitInteractorTest {
         postTestActionTitle = context.getString(R.string.hts_post_test_services_action_title);
         linkageActionTitle = context.getString(R.string.hts_linkage_to_prevention_services_action_title);
         dnaActionTitle = context.getString(R.string.hts_dna_pcr_sample_collection_action_title);
+        preTestActionTitle = context.getString(R.string.hts_pre_test_services_action_title);
     }
 
     @Test
@@ -124,7 +129,45 @@ public class BaseHtsServiceVisitInteractorTest {
         Assert.assertFalse(actionList.containsKey(dnaActionTitle));
     }
 
+    @Test
+    public void shouldReadLatestTbOutcomeFromPreTestActionPayload() throws Exception {
+        BaseHtsVisitAction preTestAction = Mockito.mock(BaseHtsVisitAction.class);
+        when(preTestAction.getJsonPayload()).thenReturn(createPreTestPayload("tb_suspect"));
+        actionList.put(preTestActionTitle, preTestAction);
+
+        String outcome = Whitebox.invokeMethod(interactor, "getLatestPreTestTbScreeningOutcomeFromActionPayload");
+
+        Assert.assertEquals("tb_suspect", outcome);
+    }
+
+    @Test
+    public void shouldReturnNullWhenPreTestOutcomeMissingFromPayload() throws Exception {
+        BaseHtsVisitAction preTestAction = Mockito.mock(BaseHtsVisitAction.class);
+        when(preTestAction.getJsonPayload()).thenReturn(createPreTestPayload(null));
+        actionList.put(preTestActionTitle, preTestAction);
+
+        String outcome = Whitebox.invokeMethod(interactor, "getLatestPreTestTbScreeningOutcomeFromActionPayload");
+
+        Assert.assertNull(outcome);
+    }
+
     private void evaluateRepeatFirstHivTestAction() throws Exception {
         Whitebox.invokeMethod(interactor, "evaluateRepeatOfFirstHivTest", new HashMap<String, List<VisitDetail>>());
+    }
+
+    private String createPreTestPayload(String tbOutcome) throws Exception {
+        JSONObject field = new JSONObject();
+        field.put("key", "hts_clients_tb_screening_outcome");
+        if (tbOutcome != null) {
+            field.put("value", tbOutcome);
+        }
+
+        JSONObject stepOne = new JSONObject();
+        stepOne.put("fields", new JSONArray().put(field));
+
+        return new JSONObject()
+                .put("count", "1")
+                .put("step1", stepOne)
+                .toString();
     }
 }

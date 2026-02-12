@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class LinkageToPreventionServicesActionHelperTest {
 
@@ -71,18 +72,146 @@ public class LinkageToPreventionServicesActionHelperTest {
         Assert.assertFalse(options.contains("adolescent_and_youth_people_friendly_services"));
     }
 
+    @Test
+    public void persistedTbPresumptiveOutcomeShouldOverrideNonPresumptiveDetails() throws Exception {
+        LinkageToPreventionServicesActionHelper helper = createHelper(
+                "Female",
+                20,
+                "screened_negative",
+                "tb_suspect",
+                (String) null,
+                null
+        );
+
+        Set<String> options = extractOptionKeys(helper.getPreProcessed());
+        Assert.assertTrue(options.contains("sputum_testing_laboratory"));
+    }
+
+    @Test
+    public void persistedNonTbOutcomeShouldOverrideTbPresumptiveDetails() throws Exception {
+        LinkageToPreventionServicesActionHelper helper = createHelper(
+                "Female",
+                20,
+                "tb_suspect",
+                "screened_negative",
+                (String) null,
+                null
+        );
+
+        Set<String> options = extractOptionKeys(helper.getPreProcessed());
+        Assert.assertFalse(options.contains("sputum_testing_laboratory"));
+    }
+
+    @Test
+    public void latestPreTestActionOutcomeShouldOverridePersistedOutcome() throws Exception {
+        LinkageToPreventionServicesActionHelper helper = createHelper(
+                "Female",
+                20,
+                "screened_negative",
+                "screened_negative",
+                "tb_suspect",
+                null
+        );
+
+        Set<String> options = extractOptionKeys(helper.getPreProcessed());
+        Assert.assertTrue(options.contains("sputum_testing_laboratory"));
+    }
+
+    @Test
+    public void shouldUseLatestOutcomeFromProviderAcrossRepeatedPreProcessing() throws Exception {
+        AtomicReference<String> latestOutcome = new AtomicReference<>("tb_suspect");
+
+        LinkageToPreventionServicesActionHelper helper = createHelper(
+                "Female",
+                20,
+                "screened_negative",
+                "screened_negative",
+                latestOutcome::get,
+                null
+        );
+
+        Set<String> firstOptions = extractOptionKeys(helper.getPreProcessed());
+        Assert.assertTrue(firstOptions.contains("sputum_testing_laboratory"));
+
+        latestOutcome.set("screened_negative");
+        Set<String> secondOptions = extractOptionKeys(helper.getPreProcessed());
+        Assert.assertFalse(secondOptions.contains("sputum_testing_laboratory"));
+    }
+
     private LinkageToPreventionServicesActionHelper createHelper(String gender, int age, String tbOutcome) throws JSONException {
+        return createHelper(gender, age, tbOutcome, null, null, null, null);
+    }
+
+    private LinkageToPreventionServicesActionHelper createHelper(String gender,
+                                                                 int age,
+                                                                 String detailsTbOutcome,
+                                                                 String latestTbOutcome,
+                                                                 String selectedPreTestOutcome,
+                                                                 String tbSymptomsAssessment) throws JSONException {
+        return createHelper(gender, age, detailsTbOutcome, latestTbOutcome, selectedPreTestOutcome, null, tbSymptomsAssessment);
+    }
+
+    private LinkageToPreventionServicesActionHelper createHelper(String gender,
+                                                                 int age,
+                                                                 String detailsTbOutcome,
+                                                                 String latestTbOutcome,
+                                                                 LinkageToPreventionServicesActionHelper.TbScreeningOutcomeProvider tbOutcomeProvider,
+                                                                 String tbSymptomsAssessment) throws JSONException {
+        return createHelper(gender, age, detailsTbOutcome, latestTbOutcome, null, tbOutcomeProvider, tbSymptomsAssessment);
+    }
+
+    private LinkageToPreventionServicesActionHelper createHelper(String gender,
+                                                                 int age,
+                                                                 String detailsTbOutcome,
+                                                                 String latestTbOutcome,
+                                                                 String selectedPreTestOutcome,
+                                                                 LinkageToPreventionServicesActionHelper.TbScreeningOutcomeProvider tbOutcomeProvider,
+                                                                 String tbSymptomsAssessment) throws JSONException {
         MemberObject memberObject = new MemberObject();
         memberObject.setGender(gender);
         memberObject.setDob(DateTime.now().minusYears(age).minusDays(1).toString());
 
-        LinkageToPreventionServicesActionHelper helper = new LinkageToPreventionServicesActionHelper(null, memberObject);
-        helper.onJsonFormLoaded(createPreventiveServicesPayload(), null, createDetailsMap(tbOutcome));
+        LinkageToPreventionServicesActionHelper helper = tbOutcomeProvider == null
+                ? new LinkageToPreventionServicesActionHelper(
+                null,
+                memberObject,
+                selectedPreTestOutcome
+        ) {
+            @Override
+            protected String getLatestTbScreeningOutcome() {
+                return latestTbOutcome;
+            }
+
+            @Override
+            protected String getTbSymptomsAssessment() {
+                return tbSymptomsAssessment;
+            }
+        }
+                : new LinkageToPreventionServicesActionHelper(
+                null,
+                memberObject,
+                tbOutcomeProvider
+        ) {
+            @Override
+            protected String getLatestTbScreeningOutcome() {
+                return latestTbOutcome;
+            }
+
+            @Override
+            protected String getTbSymptomsAssessment() {
+                return tbSymptomsAssessment;
+            }
+        };
+        helper.onJsonFormLoaded(createPreventiveServicesPayload(), null, createDetailsMap(detailsTbOutcome));
         return helper;
     }
 
     private Map<String, List<VisitDetail>> createDetailsMap(String tbOutcome) {
         Map<String, List<VisitDetail>> details = new HashMap<>();
+        if (tbOutcome == null) {
+            return details;
+        }
+
         VisitDetail visitDetail = new VisitDetail();
         visitDetail.setDetails(tbOutcome);
         List<VisitDetail> visitDetails = new ArrayList<>();
