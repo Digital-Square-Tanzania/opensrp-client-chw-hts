@@ -121,7 +121,7 @@
             "key": "self",
             "text": "Self",
             "openmrs_entity": "concept",
-            "openmrs_entity_id": "no"
+            "openmrs_entity_id": "self"
           },
           {
             "key": "peer_friend",
