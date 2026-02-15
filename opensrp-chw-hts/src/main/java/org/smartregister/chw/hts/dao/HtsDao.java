@@ -19,6 +19,30 @@ public class HtsDao extends AbstractDao {
             Locale.getDefault()
     );
 
+    public static class VerificationTestResult {
+        private final String verificationResult;
+        private final String verificationDate;
+        private final String ctcId;
+
+        public VerificationTestResult(String verificationResult, String verificationDate, String ctcId) {
+            this.verificationResult = verificationResult;
+            this.verificationDate = verificationDate;
+            this.ctcId = ctcId;
+        }
+
+        public String getVerificationResult() {
+            return verificationResult;
+        }
+
+        public String getVerificationDate() {
+            return verificationDate;
+        }
+
+        public String getCtcId() {
+            return ctcId;
+        }
+    }
+
     private static final DataMap<MemberObject> memberObjectMap = cursor -> {
 
         MemberObject memberObject = new MemberObject();
@@ -334,6 +358,30 @@ public class HtsDao extends AbstractDao {
         List<Boolean> testResultMatches = readData(unigoldTestSql, verificationTestMap);
 
         return testResultMatches != null && !testResultMatches.isEmpty() && Boolean.TRUE.equals(testResultMatches.get(0));
+    }
+
+    public static VerificationTestResult getLatestVerificationTestResult(String baseEntityID) {
+        if (StringUtils.isBlank(baseEntityID)) {
+            return null;
+        }
+
+        String sql = "SELECT hiv_final_verification_result_code, verification_date, ctc_id " +
+                "FROM ec_hts_verification_test_results p " +
+                "WHERE p.entity_id = '" + baseEntityID + "' " +
+                "ORDER BY p.last_interacted_with DESC LIMIT 1";
+
+        DataMap<VerificationTestResult> dataMap = cursor -> new VerificationTestResult(
+                getCursorValue(cursor, "hiv_final_verification_result_code"),
+                getCursorValue(cursor, "verification_date"),
+                getCursorValue(cursor, "ctc_id")
+        );
+
+        List<VerificationTestResult> results = readData(sql, dataMap);
+        if (results == null || results.isEmpty()) {
+            return null;
+        }
+
+        return results.get(0);
     }
 
     /**
