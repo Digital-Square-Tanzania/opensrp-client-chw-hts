@@ -34,6 +34,7 @@ public interface Constants {
         String HTS_UNIGOLD_HIV_TEST = "Uni-Gold HIV Test";
         String REPEAT_FIRST_HIV_TEST = "Repeat of First HIV Test";
         String SAMPLE_TESTING = "Sample Testing";
+        String HIV_VERIFICATION_TEST_RESULTS = "HIV Verification Test Results";
 
     }
 
