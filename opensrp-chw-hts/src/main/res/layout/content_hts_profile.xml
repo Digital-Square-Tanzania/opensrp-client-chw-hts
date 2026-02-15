@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white">
 
     <RelativeLayout
@@ -48,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
+                app:tint="@color/accent"
                 android:src="@drawable/childrow_history" />
 
             <ImageView
@@ -56,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                app:tint="@color/accent"
                 android:src="@drawable/row_goto" />
 
             <org.smartregister.view.customcontrols.CustomFontTextView
@@ -67,8 +70,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/tick_image"
                 android:text="@string/view_medical_history"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/light_grey_text" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
         </RelativeLayout>
 
         <View
@@ -283,7 +285,7 @@
             android:layout_height="1px"
             android:layout_below="@+id/rlHtsPositiveDate"
             android:background="@color/light_grey"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/rlFamilyServicesDue"
