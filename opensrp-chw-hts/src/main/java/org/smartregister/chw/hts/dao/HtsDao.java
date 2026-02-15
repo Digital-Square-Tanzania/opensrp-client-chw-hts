@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class HtsDao extends AbstractDao {
+    static final long FINAL_TEST_RESULT_CLOSURE_THRESHOLD_MILLIS = 7L * 24L * 60L * 60L * 1000L;
     private static final SimpleDateFormat df = new SimpleDateFormat(
             "dd-MM-yyyy",
             Locale.getDefault()
@@ -337,24 +338,10 @@ public class HtsDao extends AbstractDao {
 
     /**
      * Close HTS records when the latest test outcome indicates final disposition based on
-     * predefined result/type combinations.
+     * predefined result/type combinations and only after 7 full days since last interaction.
      */
     public static void closeHtsClientsWithFinalTestResults() {
-        String baseEntitySubQuery = "SELECT latest.entity_id FROM ec_hts_tests latest " +
-                " WHERE latest.is_closed = 0 AND latest.last_interacted_with = (" +
-                "   SELECT MAX(inner_tbl.last_interacted_with) FROM ec_hts_tests inner_tbl " +
-                "   WHERE inner_tbl.entity_id = latest.entity_id AND inner_tbl.is_closed = 0" +
-                " )" +
-                " AND ((" +
-                "   lower(ifnull(latest.test_result, '')) = '" + Constants.HIV_TEST_RESULTS.REACTIVE + "' " +
-                "   AND lower(ifnull(latest.test_type, '')) = 'unigold hiv test'" +
-                " ) OR (" +
-                "   lower(ifnull(latest.test_result, '')) = '" + Constants.HIV_TEST_RESULTS.NON_REACTIVE + "' " +
-                "   AND lower(ifnull(latest.test_type, '')) = 'first hiv test'" +
-                " ) OR (" +
-                "   lower(ifnull(latest.test_result, '')) = '" + Constants.HIV_TEST_RESULTS.NON_REACTIVE + "' " +
-                "   AND lower(ifnull(latest.test_type, '')) = 'repeat first hiv test'" +
-                " ))";
+        String baseEntitySubQuery = buildCloseHtsClientsWithFinalTestResultsSubQuery(System.currentTimeMillis());
 
         List<String> baseEntityIds = readData(baseEntitySubQuery, cursor -> getCursorValue(cursor, "entity_id"));
         if (baseEntityIds == null || baseEntityIds.isEmpty()) {
@@ -374,6 +361,27 @@ public class HtsDao extends AbstractDao {
         String closeRegisterSql = "UPDATE ec_hts_register SET is_closed = 1 " +
                 "WHERE is_closed = 0 AND base_entity_id IN (" + joinedIds + ")";
         updateDB(closeRegisterSql);
+    }
+
+    static String buildCloseHtsClientsWithFinalTestResultsSubQuery(long nowMillis) {
+        return "SELECT latest.entity_id FROM ec_hts_tests latest " +
+                " WHERE latest.is_closed = 0 AND latest.last_interacted_with = (" +
+                "   SELECT MAX(inner_tbl.last_interacted_with) FROM ec_hts_tests inner_tbl " +
+                "   WHERE inner_tbl.entity_id = latest.entity_id AND inner_tbl.is_closed = 0" +
+                " )" +
+                " AND trim(ifnull(latest.last_interacted_with, '')) != ''" +
+                " AND trim(ifnull(latest.last_interacted_with, '')) NOT GLOB '*[^0-9]*'" +
+                " AND (" + nowMillis + " - CAST(trim(latest.last_interacted_with) AS INTEGER)) > " + FINAL_TEST_RESULT_CLOSURE_THRESHOLD_MILLIS +
+                " AND ((" +
+                "   lower(ifnull(latest.test_result, '')) = '" + Constants.HIV_TEST_RESULTS.REACTIVE + "' " +
+                "   AND lower(ifnull(latest.test_type, '')) = 'unigold hiv test'" +
+                " ) OR (" +
+                "   lower(ifnull(latest.test_result, '')) = '" + Constants.HIV_TEST_RESULTS.NON_REACTIVE + "' " +
+                "   AND lower(ifnull(latest.test_type, '')) = 'first hiv test'" +
+                " ) OR (" +
+                "   lower(ifnull(latest.test_result, '')) = '" + Constants.HIV_TEST_RESULTS.NON_REACTIVE + "' " +
+                "   AND lower(ifnull(latest.test_type, '')) = 'repeat first hiv test'" +
+                " ))";
     }
 
     public static boolean hasRecentlyTestedWithHivst(String baseEntityID) {
