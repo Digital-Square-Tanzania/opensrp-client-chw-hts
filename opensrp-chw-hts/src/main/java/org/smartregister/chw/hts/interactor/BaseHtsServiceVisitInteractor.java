@@ -481,7 +481,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
      * @throws BaseHtsVisitAction.ValidationException If the action validation fails during initialization.
      */
     private void evaluatePostTestServices(Map<String, List<VisitDetail>> details, String hivTestResults) throws BaseHtsVisitAction.ValidationException {
-        PostTestServicesActionHelper actionHelper = new PostTestServicesActionHelper(mContext, memberObject, hivTestResults);
+        PostTestServicesActionHelper actionHelper = new PostTestServicesActionHelper(mContext, memberObject, hivTestResults, actionList);
         BaseHtsVisitAction action = getBuilder(context.getString(R.string.hts_post_test_services_action_title))
                 .withOptional(true)
                 .withDetails(details)
