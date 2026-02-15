@@ -181,8 +181,60 @@ public class PostTestServicesActionHelperTest {
                 extractFieldValue(preProcessed, "final_hiv_test_result"));
     }
 
+    @Test
+    public void shouldSetDisclosureVisibilityGlobalTrueForPositiveFinalResult() throws Exception {
+        PostTestServicesActionHelper helper = createHelper("Female", 20, createPriorActionsForFinalResult(
+                Constants.FORMS.HTS_UNIGOLD_HIV_TEST,
+                "Uni-Gold HIV Test",
+                Constants.HIV_TEST_RESULTS.REACTIVE
+        ));
+
+        String preProcessed = helper.getPreProcessed();
+
+        Assert.assertTrue(extractGlobalBooleanValue(preProcessed, "show_hiv_results_disclosure_fields"));
+    }
+
+    @Test
+    public void shouldSetDisclosureVisibilityGlobalTrueForNegativeFinalResult() throws Exception {
+        PostTestServicesActionHelper helper = createHelper("Female", 20, createPriorActionsForFinalResult(
+                Constants.FORMS.HTS_FIRST_HIV_TEST,
+                "First HIV Test Using Bioline/Dual Test",
+                Constants.HIV_TEST_RESULTS.NON_REACTIVE
+        ));
+
+        String preProcessed = helper.getPreProcessed();
+
+        Assert.assertTrue(extractGlobalBooleanValue(preProcessed, "show_hiv_results_disclosure_fields"));
+    }
+
+    @Test
+    public void shouldSetDisclosureVisibilityGlobalFalseForInconclusiveFinalResult() throws Exception {
+        PostTestServicesActionHelper helper = createHelper("Female", 20, createPriorActionsForFinalResult(
+                Constants.FORMS.HTS_REPEAT_FIRST_HIV_TEST,
+                "Repeat of First HIV Test",
+                Constants.HIV_TEST_RESULTS.REACTIVE
+        ));
+
+        String preProcessed = helper.getPreProcessed();
+
+        Assert.assertFalse(extractGlobalBooleanValue(preProcessed, "show_hiv_results_disclosure_fields"));
+    }
+
+    @Test
+    public void shouldSetDisclosureVisibilityGlobalFalseWhenFinalResultMissing() throws Exception {
+        PostTestServicesActionHelper helper = createHelper("Female", 20, null);
+
+        String preProcessed = helper.getPreProcessed();
+
+        Assert.assertFalse(extractGlobalBooleanValue(preProcessed, "show_hiv_results_disclosure_fields"));
+    }
+
     private PostTestServicesActionHelper createHelper(String gender, int age) throws JSONException {
-        return createHelper(gender, age, null);
+        return createHelper(gender, age, createPriorActionsForFinalResult(
+                Constants.FORMS.HTS_UNIGOLD_HIV_TEST,
+                "Uni-Gold HIV Test",
+                Constants.HIV_TEST_RESULTS.REACTIVE
+        ));
     }
 
     private PostTestServicesActionHelper createHelper(String gender, int age, Map<String, BaseHtsVisitAction> priorActions) throws JSONException {
@@ -236,13 +288,29 @@ public class PostTestServicesActionHelperTest {
                         .put("visibility_minimum_age_male", 18))
                 .put(createOption("relative")));
 
+        JSONObject otherPeopleResultsDisclosedTo = new JSONObject();
+        otherPeopleResultsDisclosedTo.put("key", "other_people_results_have_been_disclosed_to");
+
+        JSONObject reasonsForNotDisclosingResults = new JSONObject();
+        reasonsForNotDisclosingResults.put("key", "reasons_for_not_disclosing_results");
+
         JSONArray fields = new JSONArray()
                 .put(finalHivTestResultField)
-                .put(disclosureField);
+                .put(disclosureField)
+                .put(otherPeopleResultsDisclosedTo)
+                .put(reasonsForNotDisclosingResults);
         JSONObject stepOne = new JSONObject().put("fields", fields);
         jsonObject.put("step1", stepOne);
 
         return jsonObject.toString();
+    }
+
+    private Map<String, BaseHtsVisitAction> createPriorActionsForFinalResult(String formName,
+                                                                              String title,
+                                                                              String testResult) throws JSONException {
+        Map<String, BaseHtsVisitAction> priorActions = new LinkedHashMap<>();
+        priorActions.put(title, createPriorAction(formName, title, testResult));
+        return priorActions;
     }
 
     private JSONObject createOption(String key) throws JSONException {
@@ -284,5 +352,10 @@ public class PostTestServicesActionHelperTest {
             }
         }
         return null;
+    }
+
+    private boolean extractGlobalBooleanValue(String jsonPayload, String key) throws JSONException {
+        JSONObject jsonObject = new JSONObject(jsonPayload);
+        return jsonObject.getJSONObject("global").optBoolean(key, false);
     }
 }
