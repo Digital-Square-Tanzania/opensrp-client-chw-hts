@@ -58,6 +58,16 @@
     "title": "Post-Test Services",
     "fields": [
       {
+        "key": "final_hiv_test_result",
+        "type": "edit_text",
+        "hint": "HIV Test Results",
+        "openmrs_entity_id": "final_hiv_test_result",
+        "openmrs_entity": "concept",
+        "openmrs_entity_parent": "",
+        "read_only": true,
+        "editable": false
+      },
+      {
         "key": "hts_has_post_test_counselling_been_provided",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
