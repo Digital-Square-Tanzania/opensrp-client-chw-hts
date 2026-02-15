@@ -163,30 +163,37 @@
                 android:visibility="gone"
                 android:src="@drawable/row_goto" />
 
-            <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/textview_verification_results"
-                style="@style/CustomFontTextViewStyle.ListView.Normal.MultipleLines"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/verification_info_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_toLeftOf="@+id/iv_positive_date_arrow"
                 android:layout_toRightOf="@+id/cancel_image"
-                android:gravity="left|center_horizontal"
-                android:text="Hts positive 12 Jan 2018"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@android:color/black" />
+                android:orientation="vertical">
 
-            <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/ivViewCtcId"
-                style="@style/CustomFontTextViewStyle.ListView.Normal.MultipleLines"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textview_verification_results"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/cancel_image"
-                android:text="CTCID:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@android:color/darker_gray" />
+                <org.smartregister.view.customcontrols.CustomFontTextView
+                    android:id="@+id/textview_verification_results"
+                    style="@style/CustomFontTextViewStyle.ListView.Normal.MultipleLines"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|center_horizontal"
+                    android:text="Hts positive 12 Jan 2018"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="@android:color/black" />
+
+                <org.smartregister.view.customcontrols.CustomFontTextView
+                    android:id="@+id/ivViewCtcId"
+                    style="@style/CustomFontTextViewStyle.ListView.Normal.MultipleLines"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CTCID:"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@android:color/darker_gray"
+                    android:visibility="gone" />
+
+            </LinearLayout>
 
         </RelativeLayout>
 
