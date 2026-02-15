@@ -142,56 +142,136 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_positive_date_row"
-            android:background="@drawable/list_item_background_selctor"
-            android:padding="20dp"
+            android:background="@color/white"
+            android:paddingLeft="16dp"
+            android:paddingTop="12dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="12dp"
             android:visibility="gone">
 
-            <ImageView
-                android:id="@+id/cancel_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/childrow_upcoming" />
-
-            <ImageView
-                android:id="@+id/iv_positive_date_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:visibility="gone"
-                android:src="@drawable/row_goto" />
-
             <LinearLayout
-                android:id="@+id/verification_info_container"
+                android:id="@+id/verification_summary_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toLeftOf="@+id/iv_positive_date_arrow"
-                android:layout_toRightOf="@+id/cancel_image"
-                android:orientation="vertical">
+                android:background="@drawable/bg_verification_summary_card"
+                android:orientation="vertical"
+                android:paddingBottom="16dp">
 
                 <org.smartregister.view.customcontrols.CustomFontTextView
-                    android:id="@+id/textview_verification_results"
-                    style="@style/CustomFontTextViewStyle.ListView.Normal.MultipleLines"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/textview_verification_title"
+                    style="@style/CustomFontTextViewStyle.ListView.Normal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left|center_horizontal"
-                    android:text="Hts positive 12 Jan 2018"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:textColor="@android:color/black" />
+                    android:paddingLeft="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/hiv_verification_results_title"
+                    android:textColor="@color/verification_card_title"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-                <org.smartregister.view.customcontrols.CustomFontTextView
-                    android:id="@+id/ivViewCtcId"
-                    style="@style/CustomFontTextViewStyle.ListView.Normal.MultipleLines"
-                    android:layout_width="wrap_content"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/verification_card_divider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="CTCID:"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@android:color/darker_gray"
-                    android:visibility="gone" />
+                    android:layout_marginTop="14dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <org.smartregister.view.customcontrols.CustomFontTextView
+                        style="@style/CustomFontTextViewStyle.ListView.Normal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/verification_result_label"
+                        android:textColor="@color/verification_card_label"
+                        android:textSize="14sp" />
+
+                    <org.smartregister.view.customcontrols.CustomFontTextView
+                        android:id="@+id/textview_verification_results"
+                        style="@style/CustomFontTextViewStyle.ListView.Normal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_verification_status_chip_neutral"
+                        android:paddingLeft="12dp"
+                        android:paddingTop="4dp"
+                        android:paddingRight="12dp"
+                        android:paddingBottom="4dp"
+                        android:text="@string/verification_status_unknown"
+                        android:textColor="@color/verification_status_neutral_text"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row_verification_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <org.smartregister.view.customcontrols.CustomFontTextView
+                        style="@style/CustomFontTextViewStyle.ListView.Normal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/verification_result_date_label"
+                        android:textColor="@color/verification_card_label"
+                        android:textSize="14sp" />
+
+                    <org.smartregister.view.customcontrols.CustomFontTextView
+                        android:id="@+id/textview_verification_date"
+                        style="@style/CustomFontTextViewStyle.ListView.Normal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/verification_value_not_available"
+                        android:textColor="@color/verification_card_value"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row_verification_ctc_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:visibility="gone">
+
+                    <org.smartregister.view.customcontrols.CustomFontTextView
+                        style="@style/CustomFontTextViewStyle.ListView.Normal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/verification_ctc_id_label"
+                        android:textColor="@color/verification_card_label"
+                        android:textSize="14sp" />
+
+                    <org.smartregister.view.customcontrols.CustomFontTextView
+                        android:id="@+id/ivViewCtcId"
+                        style="@style/CustomFontTextViewStyle.ListView.Normal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/verification_value_not_available"
+                        android:textColor="@color/verification_card_value"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
