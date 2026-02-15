@@ -431,7 +431,7 @@ public class BaseHtsServiceVisitInteractor extends BaseHtsVisitInteractor {
             @Override
             public void processFirstHivTestResults(String firstHivTestResults) {
                 try {
-                    if (firstHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.NON_REACTIVE)) {
+                    if (firstHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.NON_REACTIVE) || firstHivTestResults.equalsIgnoreCase(Constants.HIV_TEST_RESULTS.REACTIVE)) {
                         evaluatePostTestServices(details, firstHivTestResults);
                         evaluateLinkageToPreventionServices(details);
 
