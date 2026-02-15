@@ -36,6 +36,7 @@ public class PostTestServicesActionHelper implements BaseHtsVisitAction.HtsVisit
     private static final String VISIBILITY_MINIMUM_AGE_MALE = "visibility_minimum_age_male";
     private static final String TEST_RESULT = "test_result";
     private static final String FINAL_HIV_TEST_RESULT = "final_hiv_test_result";
+    private static final String GLOBAL_SHOW_HIV_RESULTS_DISCLOSURE_FIELDS = "show_hiv_results_disclosure_fields";
     private static final Pattern ACTION_NUMBER_PATTERN = Pattern.compile("(\\d+)");
     private static final int HIV_FIRST_TEST_PRIORITY = 1;
     private static final int HIV_REPEAT_FIRST_TEST_PRIORITY = 2;
@@ -85,6 +86,7 @@ public class PostTestServicesActionHelper implements BaseHtsVisitAction.HtsVisit
             global.put("hiv_test_results", hivTestResults);
             String finalHivTestResult = resolveFinalHivTestResult();
             updateFinalHivTestResultField(jsonObject, finalHivTestResult);
+            global.put(GLOBAL_SHOW_HIV_RESULTS_DISCLOSURE_FIELDS, shouldShowDisclosureFields(finalHivTestResult));
             global.put("sex", memberObject != null ? memberObject.getGender() : "");
             global.put("age", getClientAge());
 
@@ -155,6 +157,11 @@ public class PostTestServicesActionHelper implements BaseHtsVisitAction.HtsVisit
         } catch (JSONException e) {
             Timber.e(e);
         }
+    }
+
+    private boolean shouldShowDisclosureFields(String finalHivTestResult) {
+        return StringUtils.equalsIgnoreCase(finalHivTestResult, Constants.HIV_TEST_RESULTS.POSITIVE)
+                || StringUtils.equalsIgnoreCase(finalHivTestResult, Constants.HIV_TEST_RESULTS.NEGATIVE);
     }
 
     private boolean shouldOverrideCandidate(HivTestResultCandidate currentCandidate, HivTestResultCandidate newCandidate) {
