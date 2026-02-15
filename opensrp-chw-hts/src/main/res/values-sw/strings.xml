@@ -17,7 +17,7 @@
     <string name="error_unable_save_visit">Imeshindwa kuitunza hii visit</string>
     <string name="return_to_previous_page">Rudi kwenye wateja wote wa hts</string>
     <string name="last_visit_40_days_ago">Tembeleo la mwisho %1$s uliyopita</string>
-    <string name="view_medical_history">Angalia historia ya huduma</string>
+    <string name="view_medical_history">Angalia Historia ya Upimaji</string>
     <string name="call_no_number_provided">(Hakuna namba iliyotolewa)</string>
     <string name="view_upcoming_services">Angalia huduma zinazokaribia</string>
     <string name="family_has_nothing_due">Muda wa huduma kwenye kaya haujafika</string>

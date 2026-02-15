@@ -46,7 +46,7 @@
     <string name="error_unable_save_visit">Unable to save visit</string>
     <string name="return_to_previous_page">Return all Hts Clients</string>
     <string name="last_visit_40_days_ago">Last visit %1$s ago</string>
-    <string name="view_medical_history">View medical history</string>
+    <string name="view_medical_history">View Medical History</string>
     <string name="call_no_number_provided">(no number provided)</string>
     <string name="view_upcoming_services">View upcoming services</string>
     <string name="family_has_nothing_due">Family has nothing due</string>
