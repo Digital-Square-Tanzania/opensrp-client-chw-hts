@@ -53,4 +53,11 @@ public class HtsDaoTest extends HtsDao {
         Assert.assertEquals(0, result);
     }
 
+    @Test
+    public void testGetLatestVerificationTestResult() {
+        Mockito.doReturn(database).when(repository).getReadableDatabase();
+        HtsDao.getLatestVerificationTestResult("entity-id");
+        Mockito.verify(database).rawQuery(Mockito.contains("FROM ec_hts_verification_test_results p WHERE p.entity_id = 'entity-id' ORDER BY p.last_interacted_with DESC LIMIT 1"), Mockito.any());
+    }
+
 }
