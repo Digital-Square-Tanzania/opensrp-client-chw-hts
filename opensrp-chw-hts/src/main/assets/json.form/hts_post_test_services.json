@@ -59,7 +59,7 @@
     "fields": [
       {
         "key": "final_hiv_test_result",
-        "type": "edit_text",
+        "type": "hidden",
         "hint": "HIV Test Results",
         "openmrs_entity_id": "final_hiv_test_result",
         "openmrs_entity": "concept",
