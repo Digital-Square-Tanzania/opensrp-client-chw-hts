@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import org.apache.commons.lang3.StringUtils;
@@ -76,6 +77,8 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
     protected TextView textViewVisitDoneEdit;
     protected TextView textViewRecordAncNotDone;
     protected TextView ivViewCtcId;
+    protected TextView textViewVerificationDate;
+    protected View rowVerificationCtcId;
     protected String profileType;
     protected BaseHtsFloatingMenu baseHtsFloatingMenu;
     private TextView tvUpComingServices;
@@ -124,6 +127,8 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
         tvFamilyStatus = findViewById(R.id.textview_family_has);
         textview_positive_date = findViewById(R.id.textview_verification_results);
         ivViewCtcId = findViewById(R.id.ivViewCtcId);
+        textViewVerificationDate = findViewById(R.id.textview_verification_date);
+        rowVerificationCtcId = findViewById(R.id.row_verification_ctc_id);
         rlLastVisit = findViewById(R.id.rlLastVisit);
         rlUpcomingServices = findViewById(R.id.rlUpcomingServices);
         rlFamilyServicesDue = findViewById(R.id.rlFamilyServicesDue);
@@ -304,60 +309,90 @@ public abstract class BaseHtsProfileActivity extends BaseProfileActivity impleme
     }
 
     private void refreshVerificationTestResults() {
-        rlHtsPositiveDate.setVisibility(View.GONE);
         if (memberObject == null || StringUtils.isBlank(memberObject.getBaseEntityId())) {
-            textview_positive_date.setText("");
-            clearCtcId();
-            return;
-        }
-
-        HtsDao.VerificationTestResult verificationTestResult = HtsDao.getLatestVerificationTestResult(memberObject.getBaseEntityId());
-        if (verificationTestResult == null) {
-            textview_positive_date.setText("");
-            clearCtcId();
+            rlHtsPositiveDate.setVisibility(View.GONE);
             return;
         }
 
         rlHtsPositiveDate.setVisibility(View.VISIBLE);
-        String verificationResult = StringUtils.trimToEmpty(verificationTestResult.getVerificationResult());
-        String verificationDate = StringUtils.trimToEmpty(verificationTestResult.getVerificationDate());
+        HtsDao.VerificationTestResult verificationTestResult = HtsDao.getLatestVerificationTestResult(memberObject.getBaseEntityId());
+        String verificationResult = verificationTestResult == null
+                ? ""
+                : StringUtils.trimToEmpty(verificationTestResult.getVerificationResult());
+        String verificationDate = verificationTestResult == null
+                ? ""
+                : StringUtils.trimToEmpty(verificationTestResult.getVerificationDate());
+        String ctcId = verificationTestResult == null
+                ? ""
+                : StringUtils.trimToEmpty(verificationTestResult.getCtcId());
 
-        textview_positive_date.setText(buildVerificationResultsText(verificationResult, verificationDate));
+        VerificationStatus status = getVerificationStatus(verificationResult);
+        applyVerificationStatusStyle(status);
 
-        if (isHivPositive(verificationResult) && StringUtils.isNotBlank(verificationTestResult.getCtcId())) {
-            ivViewCtcId.setText("CTCID: " + verificationTestResult.getCtcId().trim());
-            ivViewCtcId.setVisibility(View.VISIBLE);
+        if (StringUtils.isNotBlank(verificationDate)) {
+            textViewVerificationDate.setText(verificationDate);
+        } else {
+            textViewVerificationDate.setText(R.string.verification_value_not_available);
+        }
+
+        if (status == VerificationStatus.POSITIVE && StringUtils.isNotBlank(ctcId)) {
+            ivViewCtcId.setText(ctcId);
+            rowVerificationCtcId.setVisibility(View.VISIBLE);
         } else {
             clearCtcId();
         }
     }
 
-    private String buildVerificationResultsText(String verificationResult, String verificationDate) {
-        if (StringUtils.isNotBlank(verificationResult) && StringUtils.isNotBlank(verificationDate)) {
-            return verificationResult + " - " + verificationDate;
-        }
-
-        if (StringUtils.isNotBlank(verificationResult)) {
-            return verificationResult;
-        }
-
-        return verificationDate;
+    private void clearCtcId() {
+        ivViewCtcId.setText(R.string.verification_value_not_available);
+        rowVerificationCtcId.setVisibility(View.GONE);
     }
 
-    private boolean isHivPositive(String verificationResult) {
+    private VerificationStatus getVerificationStatus(String verificationResult) {
         if (StringUtils.isBlank(verificationResult)) {
-            return false;
+            return VerificationStatus.UNKNOWN;
         }
 
         String normalizedResult = verificationResult.trim().replace("_", " ").toLowerCase(Locale.getDefault());
-        return StringUtils.equals(normalizedResult, Constants.HIV_TEST_RESULTS.POSITIVE)
+        if (StringUtils.equals(normalizedResult, Constants.HIV_TEST_RESULTS.POSITIVE)
                 || StringUtils.equals(normalizedResult, "hiv positive")
-                || StringUtils.equals(normalizedResult, "hts positive");
+                || StringUtils.equals(normalizedResult, "hts positive")) {
+            return VerificationStatus.POSITIVE;
+        }
+
+        if (StringUtils.equals(normalizedResult, Constants.HIV_TEST_RESULTS.NEGATIVE)
+                || StringUtils.equals(normalizedResult, "hiv negative")
+                || StringUtils.equals(normalizedResult, "hts negative")) {
+            return VerificationStatus.NEGATIVE;
+        }
+
+        return VerificationStatus.UNKNOWN;
     }
 
-    private void clearCtcId() {
-        ivViewCtcId.setText("");
-        ivViewCtcId.setVisibility(View.GONE);
+    private void applyVerificationStatusStyle(VerificationStatus status) {
+        if (status == VerificationStatus.POSITIVE) {
+            textview_positive_date.setText(R.string.verification_status_positive);
+            textview_positive_date.setTextColor(ContextCompat.getColor(this, R.color.verification_status_positive_text));
+            textview_positive_date.setBackgroundResource(R.drawable.bg_verification_status_chip_positive);
+            return;
+        }
+
+        if (status == VerificationStatus.NEGATIVE) {
+            textview_positive_date.setText(R.string.verification_status_negative);
+            textview_positive_date.setTextColor(ContextCompat.getColor(this, R.color.verification_status_negative_text));
+            textview_positive_date.setBackgroundResource(R.drawable.bg_verification_status_chip_negative);
+            return;
+        }
+
+        textview_positive_date.setText(R.string.verification_status_unknown);
+        textview_positive_date.setTextColor(ContextCompat.getColor(this, R.color.verification_status_neutral_text));
+        textview_positive_date.setBackgroundResource(R.drawable.bg_verification_status_chip_neutral);
+    }
+
+    private enum VerificationStatus {
+        POSITIVE,
+        NEGATIVE,
+        UNKNOWN
     }
 
     @Override
