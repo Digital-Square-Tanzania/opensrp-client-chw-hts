@@ -160,10 +160,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:visibility="gone"
                 android:src="@drawable/row_goto" />
 
             <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/textview_positive_date"
+                android:id="@+id/textview_verification_results"
                 style="@style/CustomFontTextViewStyle.ListView.Normal.MultipleLines"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -176,14 +177,14 @@
                 android:textColor="@android:color/black" />
 
             <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/ivViewPostiveDateArrow"
+                android:id="@+id/ivViewCtcId"
                 style="@style/CustomFontTextViewStyle.ListView.Normal.MultipleLines"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textview_positive_date"
+                android:layout_below="@+id/textview_verification_results"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/cancel_image"
-                android:text="@string/view_hts_test_result"
+                android:text="CTCID:"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@android:color/darker_gray" />
 
