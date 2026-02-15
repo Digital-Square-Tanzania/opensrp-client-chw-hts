@@ -88,5 +88,13 @@
     <string name="hts_visit">Hts Visits</string>
     <string name="collect_dna_pcr">Collect DNA PCR Sample</string>
     <string name="hts_samples">Hts Samples</string>
+    <string name="hiv_verification_results_title">HIV Verification Results</string>
+    <string name="verification_result_label">Result</string>
+    <string name="verification_result_date_label">Result Date</string>
+    <string name="verification_ctc_id_label">CTC ID</string>
+    <string name="verification_status_positive">Positive</string>
+    <string name="verification_status_negative">Negative</string>
+    <string name="verification_status_unknown">Unknown</string>
+    <string name="verification_value_not_available">Not available</string>
 
 </resources>
